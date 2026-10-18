@@ -1,0 +1,1003 @@
+<!--
+  CleanHub — калькулятор стоимости уборки (v1.0)
+  Вставляется целиком в блок Тильды «HTML-код» (T123).
+  Цены и настройки — в начале скрипта ниже (CONFIG, SERVICES, SUBSCRIPTION, EXTRAS).
+  Инструкция: calculator/README.md
+-->
+<div id="cleanhub-calc" class="chc"></div>
+
+<style>
+/* В GothamPro нет знака «²» — подставляем его из UA-brand (только этот символ) */
+@font-face{font-family:'chc-sup';src:url('https://static.tildacdn.com/tild3434-3839-4830-a366-326661663237/ua-BRAND-regular.woff') format('woff'),local('Arial'),local('Helvetica');font-weight:100 900;unicode-range:U+00B2}
+#cleanhub-calc{--chc-green:#00b14f;--chc-green-h:#009c45;--chc-ink:#0b2517;--chc-text:#111;--chc-muted:#66756d;--chc-line:#dce5df;--chc-soft:#f4f7f5;--chc-tint:#eaf8f0;--chc-r:24px;--chc-sticky-top:100px;--chc-font:'chc-sup',var(--t-text-font,'GothamPro',Arial,sans-serif);
+  font-family:var(--chc-font);color:var(--chc-text);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;padding:64px 0}
+#cleanhub-calc *,#cleanhub-calc *::before,#cleanhub-calc *::after{box-sizing:border-box}
+#cleanhub-calc [hidden]{display:none!important}
+#cleanhub-calc button,#cleanhub-calc input{font:inherit;color:inherit;margin:0}
+#cleanhub-calc button{cursor:pointer;background:none;border:0;padding:0;text-align:inherit;-webkit-tap-highlight-color:transparent}
+#cleanhub-calc button:focus-visible,#cleanhub-calc a:focus-visible,#cleanhub-calc input:focus-visible{outline:2px solid var(--chc-green);outline-offset:2px}
+#cleanhub-calc h2,#cleanhub-calc h3,#cleanhub-calc p{margin:0}
+
+#cleanhub-calc .chc__wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+#cleanhub-calc .chc__head{max-width:760px;margin-bottom:40px}
+#cleanhub-calc .chc__eyebrow{display:inline-block;padding:6px 14px;border-radius:30px;background:var(--chc-tint);color:var(--chc-green-h);font-size:13px;font-weight:500;margin-bottom:16px}
+#cleanhub-calc .chc__title{font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:700;font-size:40px;line-height:1.1;color:#000;text-wrap:balance}
+#cleanhub-calc .chc__lead{margin-top:14px;font-size:17px;color:var(--chc-muted);text-wrap:pretty}
+#cleanhub-calc .chc__grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:32px;align-items:start}
+#cleanhub-calc .chc__side{position:sticky;top:var(--chc-sticky-top)}
+
+#cleanhub-calc .chc-step{padding:28px;border:1px solid var(--chc-line);border-radius:var(--chc-r);background:#fff}
+#cleanhub-calc .chc-step+.chc-step{margin-top:16px}
+#cleanhub-calc .chc-step__title{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:700;font-size:20px;line-height:1.2;color:#000;margin-bottom:18px}
+#cleanhub-calc .chc-step__num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--chc-green);color:#fff;font-size:14px;flex:none}
+#cleanhub-calc .chc-step__aside{margin-left:auto;font-family:var(--chc-font);font-weight:500;font-size:13px;color:var(--chc-green-h);background:var(--chc-tint);padding:5px 12px;border-radius:30px}
+#cleanhub-calc .chc-step__hint{margin-top:14px;font-size:14px;color:var(--chc-muted)}
+#cleanhub-calc .chc-step__hint:empty{display:none}
+
+/* варианты-кнопки */
+#cleanhub-calc .chc-opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#cleanhub-calc .chc-opt{display:flex;flex-direction:column;justify-content:center;gap:2px;min-height:64px;padding:12px 16px;border:1.5px solid var(--chc-line);border-radius:18px;background:#fff;transition:border-color .15s,background-color .15s,box-shadow .15s}
+#cleanhub-calc .chc-opt:hover{border-color:#b9cbbf}
+#cleanhub-calc .chc-opt[aria-pressed="true"]{border-color:var(--chc-green);background:var(--chc-tint);box-shadow:inset 0 0 0 1px var(--chc-green)}
+#cleanhub-calc .chc-opt__title{font-weight:500;font-size:15px;line-height:1.25;color:#000}
+#cleanhub-calc .chc-opt__sub{font-size:13px;color:var(--chc-muted)}
+#cleanhub-calc .chc-opt[aria-pressed="true"] .chc-opt__sub{color:var(--chc-green-h)}
+#cleanhub-calc .chc-opts--sm .chc-opt{min-height:52px;padding:10px 14px}
+
+/* площадь */
+#cleanhub-calc .chc-area{display:flex;align-items:center;gap:20px}
+#cleanhub-calc .chc-range{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:28px;background:transparent;cursor:pointer;--chc-fill:30%}
+#cleanhub-calc .chc-range::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(to right,var(--chc-green) var(--chc-fill),#e3eae6 var(--chc-fill))}
+#cleanhub-calc .chc-range::-moz-range-track{height:6px;border-radius:6px;background:#e3eae6}
+#cleanhub-calc .chc-range::-moz-range-progress{height:6px;border-radius:6px;background:var(--chc-green)}
+#cleanhub-calc .chc-range::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;margin-top:-10px;border-radius:50%;background:#fff;border:6px solid var(--chc-green);box-shadow:0 2px 8px rgba(11,37,23,.2)}
+#cleanhub-calc .chc-range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:6px solid var(--chc-green);box-shadow:0 2px 8px rgba(11,37,23,.2)}
+#cleanhub-calc .chc-area__field{display:flex;align-items:center;gap:6px;height:52px;padding:0 18px;border:1.5px solid var(--chc-line);border-radius:30px;background:#fff;flex:none;cursor:text}
+#cleanhub-calc .chc-area__field:focus-within{border-color:var(--chc-green)}
+#cleanhub-calc .chc-area__field input{width:56px;border:0;outline:0;background:transparent;padding:0;font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:700;font-size:22px;text-align:right;color:#000}
+#cleanhub-calc .chc-area__field span{font-size:16px;color:var(--chc-muted)}
+#cleanhub-calc .chc-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+#cleanhub-calc .chc-chip{padding:8px 14px;border-radius:30px;background:var(--chc-soft);font-size:13px;color:#2b3a32;transition:background-color .15s,color .15s}
+#cleanhub-calc .chc-chip:hover{background:#e7eee9}
+#cleanhub-calc .chc-chip[aria-pressed="true"]{background:var(--chc-ink);color:#fff}
+
+/* тарифы */
+#cleanhub-calc .chc-tariff{display:flex;flex-direction:column;gap:4px;padding:18px;border:1.5px solid var(--chc-line);border-radius:20px;background:#fff;transition:border-color .15s,background-color .15s,box-shadow .15s}
+#cleanhub-calc .chc-tariff:hover{border-color:#b9cbbf}
+#cleanhub-calc .chc-tariff[aria-pressed="true"]{border-color:var(--chc-green);background:var(--chc-tint);box-shadow:inset 0 0 0 1px var(--chc-green)}
+#cleanhub-calc .chc-tariff__head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#cleanhub-calc .chc-tariff__name{font-weight:500;font-size:16px;color:#000}
+#cleanhub-calc .chc-radio{width:20px;height:20px;border-radius:50%;border:1.5px solid #b9c7bf;flex:none;position:relative;background:#fff}
+#cleanhub-calc [aria-pressed="true"] .chc-radio{border-color:var(--chc-green);background:var(--chc-green)}
+#cleanhub-calc [aria-pressed="true"] .chc-radio::after{content:"";position:absolute;inset:5px;border-radius:50%;background:#fff}
+#cleanhub-calc .chc-tariff__price{font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:700;font-size:26px;line-height:1.15;color:#000;white-space:nowrap}
+#cleanhub-calc .chc-tariff__perks{margin-top:6px;font-size:13px;line-height:1.4;color:var(--chc-muted)}
+#cleanhub-calc .chc-tariff__perks b{font-weight:500;color:var(--chc-green-h)}
+#cleanhub-calc .chc-note{padding:16px 18px;border-radius:18px;background:var(--chc-tint);font-size:14px;color:#1f3a2b}
+#cleanhub-calc .chc-note b{font-weight:500}
+#cleanhub-calc .chc-badge{font-family:var(--chc-font);font-weight:500;font-size:12px;color:#fff;background:var(--chc-green);padding:4px 10px;border-radius:30px}
+#cleanhub-calc .chc-months{margin-top:10px}
+
+/* доп. услуги */
+#cleanhub-calc .chc-xgroup+.chc-xgroup{margin-top:22px}
+#cleanhub-calc .chc-xgroup__title{font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--chc-muted);margin-bottom:10px}
+#cleanhub-calc .chc-xlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#cleanhub-calc .chc-x{display:flex;align-items:center;gap:12px;padding:14px 14px 14px 16px;border:1.5px solid var(--chc-line);border-radius:18px;background:#fff;transition:border-color .15s,background-color .15s}
+#cleanhub-calc .chc-x.is-on{border-color:var(--chc-green);background:var(--chc-tint)}
+#cleanhub-calc .chc-x__body{flex:1;min-width:0}
+#cleanhub-calc .chc-x__title{font-weight:500;font-size:14px;line-height:1.3;color:#000}
+#cleanhub-calc .chc-x__desc{font-size:12px;line-height:1.35;color:var(--chc-muted);margin-top:2px}
+#cleanhub-calc .chc-x__meta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:6px}
+#cleanhub-calc .chc-x__price{font-size:13px;font-weight:500;color:#000;white-space:nowrap}
+#cleanhub-calc .chc-x__inc{font-size:11px;font-weight:500;color:var(--chc-green-h);background:#fff;border:1px solid #bfe6cf;padding:2px 8px;border-radius:20px;white-space:nowrap}
+#cleanhub-calc .chc-stepper{display:flex;align-items:center;flex:none;border:1.5px solid var(--chc-line);border-radius:30px;background:#fff;height:38px}
+#cleanhub-calc .chc-stepper__btn{width:34px;height:100%;display:flex;align-items:center;justify-content:center;color:var(--chc-ink);border-radius:30px}
+#cleanhub-calc .chc-stepper__btn:hover:not(:disabled){color:var(--chc-green)}
+#cleanhub-calc .chc-stepper__btn:disabled{opacity:.3;cursor:default}
+#cleanhub-calc .chc-stepper__btn svg{width:14px;height:14px}
+#cleanhub-calc .chc-stepper__val{width:30px;border:0;outline:0;background:transparent;padding:0;text-align:center;font-weight:500;font-size:15px;color:#000}
+#cleanhub-calc .chc-toggle{width:38px;height:38px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1.5px solid var(--chc-line);background:#fff;color:var(--chc-ink);transition:background-color .15s,border-color .15s,color .15s}
+#cleanhub-calc .chc-toggle svg{width:16px;height:16px}
+#cleanhub-calc .chc-toggle[aria-pressed="true"]{background:var(--chc-green);border-color:var(--chc-green);color:#fff}
+#cleanhub-calc .chc-toggle .chc-ico-check,#cleanhub-calc .chc-toggle[aria-pressed="true"] .chc-ico-plus{display:none}
+#cleanhub-calc .chc-toggle[aria-pressed="true"] .chc-ico-check{display:block}
+
+/* итог */
+#cleanhub-calc .chc-sum{padding:28px;border-radius:var(--chc-r);background:var(--chc-ink);color:#fff}
+#cleanhub-calc .chc-sum__title{font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:700;font-size:22px;margin-bottom:18px}
+#cleanhub-calc .chc-sum__row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:9px 0;border-top:1px solid rgba(255,255,255,.12);font-size:14px}
+#cleanhub-calc .chc-sum__row:first-child{border-top:0;padding-top:0}
+#cleanhub-calc .chc-sum__row span:first-child{color:rgba(255,255,255,.75);min-width:0}
+#cleanhub-calc .chc-sum__row span:last-child{white-space:nowrap;font-weight:500;text-align:right}
+#cleanhub-calc .chc-sum__row--main span:first-child{color:#fff;font-weight:500}
+#cleanhub-calc .chc-sum__row small{display:block;font-size:12px;color:rgba(255,255,255,.55);margin-top:2px;font-weight:400}
+#cleanhub-calc .chc-sum__row--accent span:last-child{color:#5fe39a}
+#cleanhub-calc .chc-sum__muted{color:rgba(255,255,255,.55)!important;font-weight:400!important}
+#cleanhub-calc .chc-upsell{margin-top:14px;padding:14px 16px;border-radius:16px;background:rgba(0,177,79,.16);border:1px solid rgba(95,227,154,.35);font-size:13px;line-height:1.4}
+#cleanhub-calc .chc-upsell b{font-weight:500;color:#5fe39a}
+#cleanhub-calc .chc-upsell button{display:inline-block;margin-top:10px;padding:8px 14px;border-radius:30px;background:#fff;color:var(--chc-ink);font-size:13px;font-weight:500}
+#cleanhub-calc .chc-first{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.07);font-size:13px;line-height:1.4;cursor:pointer;user-select:none}
+#cleanhub-calc .chc-first input{position:absolute;opacity:0;width:1px;height:1px}
+#cleanhub-calc .chc-first__box{width:20px;height:20px;flex:none;border-radius:6px;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;margin-top:-1px}
+#cleanhub-calc .chc-first__box svg{width:12px;height:12px;opacity:0}
+#cleanhub-calc .chc-first input:checked+.chc-first__box{background:var(--chc-green);border-color:var(--chc-green)}
+#cleanhub-calc .chc-first input:checked+.chc-first__box svg{opacity:1}
+#cleanhub-calc .chc-first input:focus-visible+.chc-first__box{outline:2px solid #5fe39a;outline-offset:2px}
+#cleanhub-calc .chc-first small{display:block;color:rgba(255,255,255,.55);font-size:12px;margin-top:2px}
+#cleanhub-calc .chc-sum__total{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.18)}
+#cleanhub-calc .chc-sum__label{font-size:14px;color:rgba(255,255,255,.75)}
+#cleanhub-calc .chc-sum__value{font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:700;font-size:40px;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
+#cleanhub-calc .chc-sum__sub{margin-top:6px;font-size:13px;color:rgba(255,255,255,.7)}
+#cleanhub-calc .chc-sum__sub:empty{display:none}
+#cleanhub-calc .chc-sum__sub b{color:#5fe39a;font-weight:500}
+#cleanhub-calc a.chc-btn{display:flex;align-items:center;justify-content:center;gap:10px;height:54px;padding:0 24px;border-radius:30px;font-size:15px;font-weight:500;text-decoration:none;transition:background-color .15s,color .15s,border-color .15s}
+#cleanhub-calc a.chc-btn--primary{margin-top:20px;background:var(--chc-green);color:#fff}
+#cleanhub-calc a.chc-btn--primary:hover{background:var(--chc-green-h);color:#fff}
+#cleanhub-calc a.chc-btn--ghost{margin-top:10px;border:1.5px solid rgba(255,255,255,.3);color:#fff}
+#cleanhub-calc a.chc-btn--ghost:hover{border-color:#fff;color:#fff}
+#cleanhub-calc a.chc-btn svg{width:18px;height:18px;flex:none}
+#cleanhub-calc .chc-sum__note{margin-top:14px;font-size:12px;line-height:1.45;color:rgba(255,255,255,.55)}
+
+/* мобильная панель итога */
+#cleanhub-calc .chc-bar{display:none}
+
+@media (max-width:1100px){
+  #cleanhub-calc .chc__grid{grid-template-columns:minmax(0,1fr) 340px;gap:24px}
+  #cleanhub-calc .chc-xlist{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:960px){
+  #cleanhub-calc{padding:44px 0}
+  #cleanhub-calc .chc__grid{grid-template-columns:minmax(0,1fr)}
+  #cleanhub-calc .chc__side{position:static}
+  #cleanhub-calc .chc-xlist{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #cleanhub-calc .chc-bar{display:flex;align-items:center;gap:12px;position:fixed;left:10px;right:10px;bottom:10px;z-index:9990;padding:10px 10px 10px 18px;border-radius:22px;background:var(--chc-ink);color:#fff;box-shadow:0 10px 30px rgba(11,37,23,.3);transform:translateY(140%);visibility:hidden;transition:transform .25s ease,visibility 0s linear .25s}
+  #cleanhub-calc .chc-bar.is-visible{transform:none;visibility:visible;transition:transform .25s ease}
+  #cleanhub-calc .chc-bar__info{flex:1;min-width:0;display:flex;flex-direction:column}
+  #cleanhub-calc .chc-bar__label{font-size:12px;color:rgba(255,255,255,.7)}
+  #cleanhub-calc .chc-bar__value{font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:700;font-size:20px;line-height:1.15;white-space:nowrap}
+  #cleanhub-calc a.chc-bar__btn{margin:0;height:46px;padding:0 20px;font-size:14px;flex:none}
+  .t-body_popupshowed #cleanhub-calc .chc-bar{display:none}
+}
+@media (max-width:640px){
+  #cleanhub-calc{padding:32px 0}
+  #cleanhub-calc .chc__wrap{padding:0 16px}
+  #cleanhub-calc .chc__head{margin-bottom:24px}
+  #cleanhub-calc .chc__title{font-size:28px}
+  #cleanhub-calc .chc__lead{font-size:15px}
+  #cleanhub-calc .chc-step{padding:20px 16px;border-radius:20px}
+  #cleanhub-calc .chc-step+.chc-step{margin-top:12px}
+  #cleanhub-calc .chc-step__title{font-size:18px;margin-bottom:14px}
+  #cleanhub-calc .chc-step__aside{margin-left:0}
+  #cleanhub-calc .chc-opts--services{grid-template-columns:minmax(0,1fr)}
+  #cleanhub-calc .chc-opts--services .chc-opt{flex-direction:row;align-items:center;justify-content:space-between;min-height:54px}
+  #cleanhub-calc .chc-opt{padding:10px 12px}
+  #cleanhub-calc .chc-opt__title{font-size:14px}
+  #cleanhub-calc .chc-opts--sm .chc-opt{padding:8px 10px}
+  #cleanhub-calc .chc-opts--sm .chc-opt__title{font-size:13px}
+  #cleanhub-calc .chc-opts--sm .chc-opt__sub{font-size:12px}
+  #cleanhub-calc .chc-area{gap:14px}
+  #cleanhub-calc .chc-area__field{height:48px;padding:0 14px}
+  #cleanhub-calc .chc-area__field input{width:48px;font-size:20px}
+  #cleanhub-calc .chc-tariffs.chc-opts{grid-template-columns:minmax(0,1fr)}
+  #cleanhub-calc .chc-tariff{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:4px 12px;padding:14px 16px}
+  #cleanhub-calc .chc-tariff__head{display:contents}
+  #cleanhub-calc .chc-tariff .chc-radio{grid-column:1;grid-row:1}
+  #cleanhub-calc .chc-tariff__name{grid-column:2;grid-row:1}
+  #cleanhub-calc .chc-tariff__price{grid-column:3;grid-row:1;font-size:20px}
+  #cleanhub-calc .chc-tariff__perks{grid-column:2/4;grid-row:2;margin-top:0;font-size:12px}
+  #cleanhub-calc .chc-xlist{grid-template-columns:minmax(0,1fr)}
+  #cleanhub-calc .chc-x{padding:12px 12px 12px 14px}
+  #cleanhub-calc .chc-sum{padding:22px 18px;border-radius:20px}
+  #cleanhub-calc .chc-sum__value{font-size:34px}
+}
+@media (prefers-reduced-motion:reduce){
+  #cleanhub-calc *{transition:none!important}
+}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ================================================================
+     НАСТРОЙКИ
+     ================================================================ */
+  var CONFIG = {
+    rootId: 'cleanhub-calc',
+    title: 'Рассчитайте стоимость уборки',
+    subtitle: 'Выберите вид уборки, площадь и дополнительные услуги — цена пересчитается сразу. Менеджер подтвердит её перед выездом, и она не изменится во время уборки.',
+
+    // Попап-форма Тильды, которая открывается по кнопке «Оставить заявку».
+    // В форме создайте скрытое поле с именем из fields.summary — туда попадёт расчёт.
+    popupHook: '#popup:calc',
+    fields: {
+      summary: 'calc',          // весь расчёт текстом (обязательно)
+      total: 'calc_total',      // итоговая сумма, например «от 16 490 ₽»
+      service: 'calc_service',  // вид уборки
+      tariff: 'calc_tariff',    // тариф
+      area: 'calc_area',        // площадь, м²
+      extras: 'calc_extras'     // доп. услуги
+    },
+
+    whatsapp: '79152606655',    // номер для кнопки WhatsApp (без «+»); '' — скрыть кнопку
+    metrikaId: 108429981,       // Яндекс Метрика; 0 — не отправлять цели
+    goals: { start: 'calc_start', lead: 'calc_lead', whatsapp: 'calc_whatsapp' },
+
+    // Скидка на первый заказ (галочка в блоке итога). null — убрать галочку.
+    firstOrder: { percent: 10, max: 6000, services: ['general', 'renovation'] },
+
+    defaults: { service: 'general', area: 60, tariff: 'standard', freq: 0, months: 6 },
+    areaSlider: { min: 10, max: 200 },  // диапазон ползунка; в поле можно ввести больше
+    areaMax: 5000,
+    stickyTop: 100                      // отступ «липкого» блока итога от верха экрана, px
+  };
+
+  /* ================================================================
+     ЦЕНЫ ТАРИФОВ (из таблицы «Цены»)
+     tiers — верхние границы площади, prices — цена для каждой границы.
+     perM2 — цена за м² для площади больше последней границы.
+     includes — какие доп. услуги уже входят в тариф (сколько штук).
+     ================================================================ */
+  var TARIFFS = [
+    { id: 'lite', title: 'Лайт' },
+    { id: 'standard', title: 'Стандарт' },
+    { id: 'premium', title: 'Премиум' }
+  ];
+
+  var SERVICES = {
+    general: {
+      title: 'Генеральная',
+      full: 'Генеральная уборка',
+      hint: 'Глубокая уборка всех помещений и труднодоступных мест: от потолка до пола. В среднем 4–6 часов.',
+      tiers: [40, 60, 80, 100, 120],
+      prices: {
+        lite:     [8490, 12990, 17490, 21990, 26490],
+        standard: [10490, 14990, 19490, 23990, 28490],
+        premium:  [12490, 16990, 21490, 25990, 30490]
+      },
+      perM2: 250,
+      perks: {
+        lite: [],
+        standard: ['СВЧ', 'духовка', 'посудомойка'],
+        premium: ['СВЧ', 'духовка', 'посудомойка', 'вытяжка', 'холодильник', 'стиральная машина']
+      },
+      includes: {
+        standard: { microwave: 1, oven: 1, dishwasher: 1 },
+        premium: { microwave: 1, oven: 1, dishwasher: 1, fridge: 1, washer: 1 }
+      }
+    },
+    support: {
+      title: 'Поддерживающая',
+      full: 'Поддерживающая уборка',
+      hint: 'Регулярная уборка, чтобы дома всегда было чисто. От 2 часов. Можно оформить абонемент со скидкой.',
+      tiers: [25, 40, 60, 80, 100, 120],
+      prices: {
+        lite:     [4390, 4990, 6490, 8490, 10490, 12090],
+        standard: [5390, 5990, 7490, 9490, 11490, 13090],
+        premium:  [7140, 7740, 9240, 11240, 13240, 14840]
+      },
+      perM2: 110,
+      perks: {
+        lite: [],
+        standard: ['1 час глажки'],
+        premium: ['1 час глажки', 'СВЧ', 'духовка', 'смена постельного белья']
+      },
+      includes: {
+        standard: { hourly: 1 },
+        premium: { hourly: 1, microwave: 1, oven: 1 }
+      }
+    },
+    renovation: {
+      title: 'После ремонта',
+      full: 'Уборка после ремонта',
+      hint: 'Удалим строительную пыль и следы ремонта со всех поверхностей, отмоем сантехнику, полы и плинтусы.',
+      tiers: [40, 60, 80, 100, 120],
+      prices: {
+        lite:     [11990, 16490, 20990, 25490, 29990],
+        standard: [14490, 18990, 23490, 27990, 32490],
+        premium:  [16990, 21490, 25990, 30490, 34990]
+      },
+      perM2: 300,
+      perks: {
+        lite: [],
+        standard: ['мойка всех шкафов внутри (пустых)'],
+        premium: ['мойка всех шкафов внутри (пустых)', 'окна до {windows} створок']
+      },
+      includes: {
+        standard: { wardrobe: Infinity },
+        premium: { wardrobe: Infinity, windows: [4, 6, 8, 10, 12] }
+      }
+    }
+  };
+
+  /* Абонемент на поддерживающую уборку: скидка с каждой уборки по сроку, ₽ */
+  var SUBSCRIPTION = {
+    service: 'support',
+    frequencies: [2, 4],
+    discounts: { 3: 500, 6: 700, 12: 1000 }
+  };
+
+  /* ================================================================
+     ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ (из презентации «Дополнительные услуги»)
+     price: null — стоимость по фото; from: true — цена «от»;
+     toggle: true — услуга без количества.
+     ================================================================ */
+  var EXTRA_GROUPS = [
+    { id: 'kitchen', title: 'Кухня и техника' },
+    { id: 'windows', title: 'Окна и текстиль' },
+    { id: 'home', title: 'Дом и особые задачи' }
+  ];
+
+  var UNITS = {
+    pcs: { short: 'шт.', forms: ['шт.', 'шт.', 'шт.'] },
+    sash: { short: 'створка', forms: ['створка', 'створки', 'створок'] },
+    hour: { short: 'час', forms: ['час', 'часа', 'часов'] },
+    m2: { short: 'м²', forms: ['м²', 'м²', 'м²'] }
+  };
+
+  var EXTRAS = [
+    { id: 'oven', group: 'kitchen', title: 'Чистка духовки', short: 'духовка', desc: 'Внутри и снаружи', price: 1000, from: true, unit: 'pcs', max: 5 },
+    { id: 'microwave', group: 'kitchen', title: 'Мойка СВЧ', short: 'СВЧ', desc: 'Внутри и снаружи', price: 500, from: true, unit: 'pcs', max: 5 },
+    { id: 'dishwasher', group: 'kitchen', title: 'Посудомоечная машина', short: 'посудомойка', desc: 'Чистка внутри и снаружи', price: 1000, from: true, unit: 'pcs', max: 5 },
+    { id: 'washer', group: 'kitchen', title: 'Стиральная машина', short: 'стиральная машина', desc: 'Уплотнитель, лоток, барабан', price: 1000, from: true, unit: 'pcs', max: 5 },
+    { id: 'fridge', group: 'kitchen', title: 'Мойка холодильника', short: 'холодильник', desc: 'Полки, ящики, дверцы. Морозилку нужно разморозить заранее', price: 1500, from: true, unit: 'pcs', max: 5 },
+    { id: 'wardrobe', group: 'kitchen', title: 'Шкафы внутри и снаружи', short: 'шкафы', desc: 'Кухонные, купе, гардеробная', price: 2000, from: true, unit: 'pcs', max: 20 },
+
+    { id: 'windows', group: 'windows', title: 'Мытьё окон', short: 'окна', desc: 'Створки с двух сторон, рамы, подоконники', price: 500, from: false, unit: 'sash', max: 60 },
+    { id: 'blinds', group: 'windows', title: 'Жалюзи и москитные сетки', short: 'жалюзи', desc: 'Вертикальные и горизонтальные жалюзи, сетки', price: 300, from: true, unit: 'pcs', max: 30 },
+    { id: 'curtains', group: 'windows', title: 'Шторы и тюль', short: 'шторы', desc: 'Снятие, стирка, навеска', price: 700, from: true, unit: 'pcs', max: 30 },
+
+    { id: 'hourly', group: 'home', title: 'Почасовая задача', short: 'час глажки', desc: 'Глажка, мойка посуды, разбор вещей', price: 1250, from: true, unit: 'hour', max: 10 },
+    { id: 'chandelier', group: 'home', title: 'Сложные люстры', short: 'люстры', desc: 'Плафоны, подвески, хрусталь', price: 1000, from: true, unit: 'pcs', max: 10 },
+    { id: 'balcony', group: 'home', title: 'Уборка балкона', short: 'балкон', desc: 'Пыль с поверхностей, мытьё пола', price: 1000, from: true, unit: 'pcs', max: 5 },
+    { id: 'grout', group: 'home', title: 'Чистка межплиточных швов', short: 'швы', desc: 'Стандартные швы плитки', price: 500, from: true, unit: 'm2', max: 100 },
+    { id: 'steam', group: 'home', title: 'Пароочиститель', short: 'пароочиститель', desc: 'Убивает до 99% бактерий и грибка', price: 1500, from: false, toggle: true },
+    { id: 'upholstery', group: 'home', title: 'Химчистка мебели', short: 'химчистка', desc: 'Диваны, кресла, матрасы, ковры. Стоимость — по фото', price: null, toggle: true }
+  ];
+
+  /* ================================================================
+     РАСЧЁТ
+     ================================================================ */
+  var TARIFF_IDS = TARIFFS.map(function (t) { return t.id; });
+  var EXTRA_BY_ID = {};
+  EXTRAS.forEach(function (x) { EXTRA_BY_ID[x.id] = x; });
+
+  function plural(n, forms) {
+    var a = Math.abs(n) % 100, b = a % 10;
+    if (a > 10 && a < 20) return forms[2];
+    if (b > 1 && b < 5) return forms[1];
+    if (b === 1) return forms[0];
+    return forms[2];
+  }
+
+  function money(n) {
+    return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+  }
+
+  function tariffTitle(id) {
+    for (var i = 0; i < TARIFFS.length; i++) if (TARIFFS[i].id === id) return TARIFFS[i].title;
+    return id;
+  }
+
+  function tierIndexFor(svc, area) {
+    for (var i = 0; i < svc.tiers.length; i++) if (area <= svc.tiers[i]) return i;
+    return -1;
+  }
+
+  function tierLabelFor(svc, i) {
+    if (i < 0) return 'больше ' + svc.tiers[svc.tiers.length - 1] + ' м²';
+    if (i === 0) return 'до ' + svc.tiers[0] + ' м²';
+    return (svc.tiers[i - 1] + 1) + '–' + svc.tiers[i] + ' м²';
+  }
+
+  function includedFor(svc, tariff, i) {
+    var map = (svc.includes && svc.includes[tariff]) || {}, out = {};
+    Object.keys(map).forEach(function (id) {
+      out[id] = Array.isArray(map[id]) ? map[id][i] : map[id];
+    });
+    return out;
+  }
+
+  function perksFor(svc, tariff, included) {
+    return (svc.perks[tariff] || []).map(function (p) {
+      return p.replace('{windows}', included.windows);
+    });
+  }
+
+  function clampQty(x, v) {
+    var max = x.toggle ? 1 : (x.max || 99);
+    var n = Math.floor(Number(v));
+    if (!isFinite(n) || n < 0) return 0;
+    return Math.min(n, max);
+  }
+
+  function normalize(state) {
+    state = state || {};
+    var d = CONFIG.defaults, s = {};
+    s.service = SERVICES[state.service] ? state.service : d.service;
+    var area = Math.round(Number(state.area));
+    s.area = isFinite(area) && area >= 1 ? Math.min(area, CONFIG.areaMax) : d.area;
+    s.tariff = TARIFF_IDS.indexOf(state.tariff) >= 0 ? state.tariff : d.tariff;
+    var freq = Number(state.freq);
+    s.freq = s.service === SUBSCRIPTION.service && SUBSCRIPTION.frequencies.indexOf(freq) >= 0 ? freq : 0;
+    s.months = SUBSCRIPTION.discounts[state.months] != null ? Number(state.months) : d.months;
+    s.extras = {};
+    var src = state.extras || {};
+    EXTRAS.forEach(function (x) {
+      var q = clampQty(x, src[x.id]);
+      if (q) s.extras[x.id] = q;
+    });
+    s.firstOrder = !!state.firstOrder;
+    return s;
+  }
+
+  function firstOrderApplies(s) {
+    var fo = CONFIG.firstOrder;
+    return !!(fo && fo.percent && fo.services.indexOf(s.service) >= 0 && !s.freq);
+  }
+
+  /* Разовая стоимость при выбранном тарифе */
+  function quote(s, tariff) {
+    var svc = SERVICES[s.service];
+    var i = tierIndexFor(svc, s.area);
+    var individual = i < 0;
+    var base = individual ? s.area * svc.perM2 : svc.prices[tariff][i];
+    var included = individual ? {} : includedFor(svc, tariff, i);
+    var lines = [], extrasTotal = 0, approx = individual, hasQuote = false;
+
+    EXTRAS.forEach(function (x) {
+      var qty = s.extras[x.id] || 0;
+      if (!qty) return;
+      var inc = Math.min(qty, included[x.id] || 0);
+      var paid = qty - inc;
+      var cost = x.price == null ? 0 : paid * x.price;
+      if (x.price == null) hasQuote = true;
+      if (x.from && paid > 0) approx = true;
+      extrasTotal += cost;
+      lines.push({ id: x.id, title: x.title, qty: qty, included: inc, paid: paid, cost: cost, from: !!x.from && paid > 0, quote: x.price == null, toggle: !!x.toggle, unit: x.unit });
+    });
+
+    var discount = 0;
+    if (s.firstOrder && firstOrderApplies(s)) {
+      discount = Math.round(base * CONFIG.firstOrder.percent / 100);
+      if (CONFIG.firstOrder.max) discount = Math.min(discount, CONFIG.firstOrder.max);
+    }
+
+    return {
+      svc: svc, tierIndex: i, individual: individual, base: base, included: included,
+      lines: lines, extrasTotal: extrasTotal, approx: approx, hasQuote: hasQuote,
+      discount: discount, oneTime: base - discount + extrasTotal
+    };
+  }
+
+  function compute(state) {
+    var s = normalize(state);
+    var q = quote(s, s.tariff);
+    var svc = q.svc;
+    var r = {
+      state: s,
+      service: s.service,
+      serviceTitle: svc.full,
+      area: s.area,
+      tierIndex: q.tierIndex,
+      tierLabel: tierLabelFor(svc, q.tierIndex),
+      individual: q.individual,
+      tariff: q.individual ? null : s.tariff,
+      tariffTitle: q.individual ? 'Индивидуальный расчёт' : tariffTitle(s.tariff),
+      perM2: svc.perM2,
+      base: q.base,
+      included: q.included,
+      perks: q.individual ? [] : perksFor(svc, s.tariff, q.included),
+      lines: q.lines,
+      extrasTotal: q.extrasTotal,
+      hasQuote: q.hasQuote,
+      approx: q.approx,
+      discount: q.discount ? { percent: CONFIG.firstOrder.percent, amount: q.discount } : null,
+      firstOrderAvailable: firstOrderApplies(s),
+      subscription: null,
+      upsell: null,
+      tariffPrices: {}
+    };
+
+    TARIFFS.forEach(function (t) {
+      r.tariffPrices[t.id] = q.individual ? null : svc.prices[t.id][q.tierIndex];
+    });
+
+    if (s.freq) {
+      var sub = { freq: s.freq, months: s.months, individual: q.individual };
+      if (!q.individual) {
+        var d = SUBSCRIPTION.discounts[s.months];
+        sub.discountPerCleaning = d;
+        sub.perCleaning = q.base - d;
+        sub.perMonth = sub.perCleaning * s.freq;
+        sub.savingMonth = d * s.freq;
+        sub.periodTotal = sub.perMonth * s.months;
+        sub.periodSaving = sub.savingMonth * s.months;
+      }
+      r.subscription = sub;
+    }
+
+    // Итог: за разовую уборку или за месяц абонемента (доп. услуги — отдельно, к уборке)
+    r.total = r.subscription && !r.subscription.individual ? r.subscription.perMonth : q.oneTime;
+    // «от» у итога: цена за м² или «от»-цены доп. услуг (в абонементе доп. услуги показаны отдельно)
+    r.totalApprox = r.subscription && !r.subscription.individual ? false : q.approx;
+
+    // Подсказка: более высокий тариф выходит не дороже, потому что включает выбранные услуги
+    if (!q.individual) {
+      var cur = TARIFF_IDS.indexOf(s.tariff), best = null;
+      for (var k = cur + 1; k < TARIFF_IDS.length; k++) {
+        var alt = quote(s, TARIFF_IDS[k]);
+        if (alt.oneTime <= q.oneTime && (!best || alt.oneTime <= best.q.oneTime)) best = { id: TARIFF_IDS[k], q: alt };
+      }
+      if (best) {
+        var covered = [];
+        q.lines.forEach(function (l) {
+          if ((best.q.included[l.id] || 0) > (q.included[l.id] || 0)) covered.push(EXTRA_BY_ID[l.id].short);
+        });
+        r.upsell = { tariff: best.id, title: tariffTitle(best.id), saving: q.oneTime - best.q.oneTime, covered: covered };
+      }
+    }
+    return r;
+  }
+
+  function unitLabel(unit, n) {
+    var u = UNITS[unit] || UNITS.pcs;
+    return n + ' ' + plural(n, u.forms);
+  }
+
+  function lineValue(l) {
+    if (l.quote) return 'по фото';
+    if (!l.paid) return 'в тарифе';
+    return (l.from ? 'от ' : '') + money(l.cost);
+  }
+
+  function lineText(l) {
+    var t = l.title;
+    if (!l.toggle) {
+      t += ' — ' + unitLabel(l.unit, l.qty);
+      if (l.included && l.paid) t += ' (' + l.included + ' в тарифе)';
+    }
+    return t + ': ' + lineValue(l);
+  }
+
+  function totalText(r) {
+    var t = (r.totalApprox ? 'от ' : '') + money(r.total);
+    if (r.subscription && !r.subscription.individual) t += ' в месяц';
+    else if (r.subscription) t += ' за уборку';
+    return t;
+  }
+
+  function freqLabel(f) {
+    return f === 4 ? '4 раза в месяц' : f === 2 ? '2 раза в месяц' : 'разовая';
+  }
+
+  function summaryLines(r) {
+    var L = [];
+    L.push('Уборка: ' + r.serviceTitle);
+    L.push('Площадь: ' + r.area + ' м²');
+    if (r.individual) L.push('Тариф: индивидуальный расчёт, от ' + r.perM2 + ' ₽/м² — от ' + money(r.base));
+    else L.push('Тариф: ' + r.tariffTitle + ' (' + r.tierLabel + ') — ' + money(r.base) + (r.perks.length ? ', включает: ' + r.perks.join(', ') : ''));
+    var sub = r.subscription;
+    if (sub && sub.individual) L.push('Абонемент: ' + freqLabel(sub.freq) + ', ' + sub.months + ' мес. — расчёт у менеджера');
+    else if (sub) L.push('Абонемент: ' + freqLabel(sub.freq) + ', ' + sub.months + ' мес. — ' + money(sub.perCleaning) + ' за уборку, ' + money(sub.perMonth) + ' в месяц, ' + money(sub.periodTotal) + ' за период, экономия ' + money(sub.periodSaving));
+    if (r.lines.length) L.push('Доп. услуги: ' + r.lines.map(lineText).join('; '));
+    if (r.discount) L.push('Скидка на первый заказ ' + r.discount.percent + '%: −' + money(r.discount.amount));
+    L.push('Итого: ' + totalText(r) + (sub && !sub.individual && r.extrasTotal ? ' + доп. услуги ' + (r.approx ? 'от ' : '') + money(r.extrasTotal) : ''));
+    return L;
+  }
+
+  var api = {
+    compute: compute,
+    summaryLines: summaryLines,
+    totalText: totalText,
+    money: money,
+    config: CONFIG,
+    services: SERVICES,
+    tariffs: TARIFFS,
+    subscription: SUBSCRIPTION,
+    extras: EXTRAS
+  };
+  if (typeof window !== 'undefined') window.CleanHubCalc = api;
+  if (typeof document === 'undefined') return;
+
+  /* ================================================================
+     ИНТЕРФЕЙС
+     ================================================================ */
+  var ICONS = {
+    plus: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>',
+    minus: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>',
+    check: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>',
+    whatsapp: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2z"/></svg>'
+  };
+
+  var CHIPS = [
+    { label: 'Студия', area: 25 },
+    { label: '1-комн.', area: 40 },
+    { label: '2-комн.', area: 60 },
+    { label: '3-комн.', area: 80 },
+    { label: '4-комн.', area: 100 }
+  ];
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function minPrice(svc) {
+    return Math.min.apply(null, TARIFF_IDS.map(function (t) { return svc.prices[t][0]; }));
+  }
+
+  function extraPriceLabel(x) {
+    if (x.price == null) return 'по фото';
+    var p = (x.from ? 'от ' : '') + money(x.price);
+    return x.toggle ? p : p + ' / ' + (UNITS[x.unit] || UNITS.pcs).short;
+  }
+
+  function maxSubscriptionSaving() {
+    var maxD = 0, maxM = 0;
+    Object.keys(SUBSCRIPTION.discounts).forEach(function (m) {
+      var total = SUBSCRIPTION.discounts[m] * Number(m);
+      if (total > maxD * maxM) { maxD = SUBSCRIPTION.discounts[m]; maxM = Number(m); }
+    });
+    return maxD * maxM * Math.max.apply(null, SUBSCRIPTION.frequencies);
+  }
+
+  function markup() {
+    var services = Object.keys(SERVICES).map(function (id) {
+      var svc = SERVICES[id];
+      return '<button type="button" class="chc-opt" data-action="service" data-value="' + id + '" aria-pressed="false">' +
+        '<span class="chc-opt__title">' + esc(svc.title) + '</span>' +
+        '<span class="chc-opt__sub">от ' + money(minPrice(svc)) + '</span></button>';
+    }).join('');
+
+    var chips = CHIPS.map(function (c) {
+      return '<button type="button" class="chc-chip" data-action="chip" data-area="' + c.area + '" aria-pressed="false">' + esc(c.label) + ' · ' + c.area + ' м²</button>';
+    }).join('');
+
+    var tariffs = TARIFFS.map(function (t) {
+      return '<button type="button" class="chc-tariff" data-action="tariff" data-value="' + t.id + '" aria-pressed="false">' +
+        '<span class="chc-tariff__head"><span class="chc-tariff__name">' + esc(t.title) + '</span><span class="chc-radio"></span></span>' +
+        '<span class="chc-tariff__price" data-tariff-price="' + t.id + '"></span>' +
+        '<span class="chc-tariff__perks" data-tariff-perks="' + t.id + '"></span></button>';
+    }).join('');
+
+    var freqs = [0].concat(SUBSCRIPTION.frequencies).map(function (f) {
+      var sub = f === 0 ? 'без абонемента' : f === 4 ? 'каждую неделю' : 'раз в две недели';
+      return '<button type="button" class="chc-opt" data-action="freq" data-value="' + f + '" aria-pressed="false">' +
+        '<span class="chc-opt__title">' + (f === 0 ? 'Разовая' : freqLabel(f)) + '</span><span class="chc-opt__sub">' + sub + '</span></button>';
+    }).join('');
+
+    var months = Object.keys(SUBSCRIPTION.discounts).map(function (m) {
+      return '<button type="button" class="chc-opt" data-action="months" data-value="' + m + '" aria-pressed="false">' +
+        '<span class="chc-opt__title">' + m + ' мес.</span><span class="chc-opt__sub">−' + money(SUBSCRIPTION.discounts[m]) + ' с уборки</span></button>';
+    }).join('');
+
+    var groups = EXTRA_GROUPS.map(function (g) {
+      var rows = EXTRAS.filter(function (x) { return x.group === g.id; }).map(function (x) {
+        var ctrl = x.toggle
+          ? '<button type="button" class="chc-toggle" data-action="toggle" data-id="' + x.id + '" aria-pressed="false" aria-label="Добавить: ' + esc(x.title) + '"><span class="chc-ico-plus">' + ICONS.plus + '</span><span class="chc-ico-check">' + ICONS.check + '</span></button>'
+          : '<div class="chc-stepper">' +
+              '<button type="button" class="chc-stepper__btn" data-action="dec" data-id="' + x.id + '" aria-label="Убавить: ' + esc(x.title) + '">' + ICONS.minus + '</button>' +
+              '<input type="text" class="chc-stepper__val" inputmode="numeric" autocomplete="off" value="0" data-qty="' + x.id + '" aria-label="Количество: ' + esc(x.title) + '">' +
+              '<button type="button" class="chc-stepper__btn" data-action="inc" data-id="' + x.id + '" aria-label="Добавить: ' + esc(x.title) + '">' + ICONS.plus + '</button>' +
+            '</div>';
+        return '<div class="chc-x" data-extra="' + x.id + '"><div class="chc-x__body">' +
+          '<div class="chc-x__title">' + esc(x.title) + '</div>' +
+          (x.desc ? '<div class="chc-x__desc">' + esc(x.desc) + '</div>' : '') +
+          '<div class="chc-x__meta"><span class="chc-x__price">' + esc(extraPriceLabel(x)) + '</span><span class="chc-x__inc" data-inc="' + x.id + '" hidden></span></div>' +
+          '</div>' + ctrl + '</div>';
+      }).join('');
+      return '<div class="chc-xgroup"><div class="chc-xgroup__title">' + esc(g.title) + '</div><div class="chc-xlist">' + rows + '</div></div>';
+    }).join('');
+
+    var fo = CONFIG.firstOrder;
+    var first = fo ? '<label class="chc-first" data-ref="first"><input type="checkbox" data-ref="firstInput"><span class="chc-first__box">' + ICONS.check + '</span>' +
+      '<span>Первый заказ в CleanHub — скидка ' + fo.percent + '%<small>На генеральную уборку и уборку после ремонта' + (fo.max ? ', до ' + money(fo.max) : '') + '</small></span></label>' : '';
+
+    var wa = CONFIG.whatsapp ? '<a class="chc-btn chc-btn--ghost" href="#" target="_blank" rel="noopener" data-action="whatsapp" data-ref="wa">' + ICONS.whatsapp + 'Обсудить в WhatsApp</a>' : '';
+
+    return '<div class="chc__wrap">' +
+      '<div class="chc__head"><div class="chc__eyebrow">Онлайн-калькулятор</div>' +
+        '<h2 class="chc__title">' + esc(CONFIG.title) + '</h2>' +
+        (CONFIG.subtitle ? '<p class="chc__lead">' + esc(CONFIG.subtitle) + '</p>' : '') + '</div>' +
+      '<div class="chc__grid"><div class="chc__main">' +
+        '<section class="chc-step"><h3 class="chc-step__title"><span class="chc-step__num" data-num></span>Вид уборки</h3>' +
+          '<div class="chc-opts chc-opts--services" role="group" aria-label="Вид уборки">' + services + '</div>' +
+          '<p class="chc-step__hint" data-ref="hint"></p></section>' +
+        '<section class="chc-step"><h3 class="chc-step__title"><span class="chc-step__num" data-num></span>Площадь<span class="chc-step__aside" data-ref="tier"></span></h3>' +
+          '<div class="chc-area"><input type="range" class="chc-range" min="' + CONFIG.areaSlider.min + '" max="' + CONFIG.areaSlider.max + '" step="1" data-ref="range" aria-label="Площадь, м²">' +
+          '<label class="chc-area__field"><input type="text" inputmode="numeric" autocomplete="off" maxlength="4" data-ref="areaInput" aria-label="Площадь в квадратных метрах"><span>м²</span></label></div>' +
+          '<div class="chc-chips">' + chips + '</div></section>' +
+        '<section class="chc-step"><h3 class="chc-step__title"><span class="chc-step__num" data-num></span>Тариф</h3>' +
+          '<div class="chc-opts chc-tariffs" role="group" aria-label="Тариф" data-ref="tariffs">' + tariffs + '</div>' +
+          '<div class="chc-note" data-ref="individual" hidden></div></section>' +
+        '<section class="chc-step" data-ref="freqStep" hidden><h3 class="chc-step__title"><span class="chc-step__num" data-num></span>Регулярность<span class="chc-badge">выгода до ' + money(maxSubscriptionSaving()) + '</span></h3>' +
+          '<div class="chc-opts chc-opts--sm" role="group" aria-label="Как часто убирать">' + freqs + '</div>' +
+          '<div class="chc-opts chc-opts--sm chc-months" role="group" aria-label="Срок абонемента" data-ref="months" hidden>' + months + '</div>' +
+          '<p class="chc-step__hint" data-ref="freqHint"></p></section>' +
+        '<section class="chc-step"><h3 class="chc-step__title"><span class="chc-step__num" data-num></span>Дополнительные услуги</h3>' + groups +
+          '<p class="chc-step__hint">Если нужно что-то ещё — напишите менеджеру, включим в расчёт.</p></section>' +
+      '</div>' +
+      '<aside class="chc__side"><div class="chc-sum" data-ref="sum"><div class="chc-sum__title">Ваш расчёт</div>' +
+        '<div data-ref="sumBody"></div>' +
+        '<div class="chc-upsell" data-ref="upsell" hidden></div>' + first +
+        '<div class="chc-sum__total"><div class="chc-sum__label" data-ref="totalLabel">Итого</div>' +
+          '<div class="chc-sum__value" data-ref="total" aria-live="polite" aria-atomic="true"></div><div class="chc-sum__sub" data-ref="totalSub"></div></div>' +
+        '<a class="chc-btn chc-btn--primary" href="' + esc(CONFIG.popupHook || '#') + '" data-action="lead">Оставить заявку</a>' + wa +
+        '<p class="chc-sum__note">Расчёт предварительный. Менеджер уточнит детали и назовёт точную цену — она фиксируется и не меняется во время уборки.</p>' +
+      '</div></aside></div></div>' +
+      '<div class="chc-bar" data-ref="bar"><div class="chc-bar__info"><span class="chc-bar__label" data-ref="barLabel">Итого</span><span class="chc-bar__value" data-ref="barTotal"></span></div>' +
+        '<a class="chc-btn chc-btn--primary chc-bar__btn" href="' + esc(CONFIG.popupHook || '#') + '" data-action="lead">Оставить заявку</a></div>';
+  }
+
+  function track(goal) {
+    if (!goal || !CONFIG.metrikaId || typeof window.ym !== 'function') return;
+    try { window.ym(CONFIG.metrikaId, 'reachGoal', goal); } catch (e) { /* ignore */ }
+  }
+
+  function init() {
+    var root = document.getElementById(CONFIG.rootId);
+    if (!root || root.getAttribute('data-ready')) return;
+    root.setAttribute('data-ready', '1');
+    root.style.setProperty('--chc-sticky-top', CONFIG.stickyTop + 'px');
+    root.innerHTML = markup();
+
+    var refs = {};
+    Array.prototype.forEach.call(root.querySelectorAll('[data-ref]'), function (n) { refs[n.getAttribute('data-ref')] = n; });
+    function all(sel) { return Array.prototype.slice.call(root.querySelectorAll(sel)); }
+
+    var state = {
+      service: CONFIG.defaults.service, area: CONFIG.defaults.area, tariff: CONFIG.defaults.tariff,
+      freq: CONFIG.defaults.freq, months: CONFIG.defaults.months, extras: {}, firstOrder: false
+    };
+    var result = null, started = false;
+
+    function set(patch) {
+      Object.keys(patch).forEach(function (k) { state[k] = patch[k]; });
+      if (!started) { started = true; track(CONFIG.goals.start); }
+      render();
+    }
+
+    function setExtra(id, qty) {
+      var extras = {};
+      Object.keys(state.extras).forEach(function (k) { extras[k] = state.extras[k]; });
+      extras[id] = clampQty(EXTRA_BY_ID[id], qty);
+      set({ extras: extras });
+    }
+
+    function pressed(nodes, fn) {
+      nodes.forEach(function (n) { n.setAttribute('aria-pressed', fn(n) ? 'true' : 'false'); });
+    }
+
+    function renderSummary(r) {
+      var rows = [];
+      var head = r.serviceTitle + ' · ' + (r.individual ? 'индивидуально' : r.tariffTitle);
+      var headSub = r.area + ' м²' + (r.individual ? ', от ' + r.perM2 + ' ₽/м²' : ' · тариф ' + r.tierLabel);
+      var sub = r.subscription;
+      rows.push(row(head, headSub, (r.individual ? 'от ' : '') + money(r.base), 'chc-sum__row--main'));
+      if (r.perks.length) rows.push(row('Входит в тариф', r.perks.join(', '), '✓', 'chc-sum__row--accent'));
+      if (sub && !sub.individual) {
+        rows.push(row('Абонемент: ' + freqLabel(sub.freq), sub.months + ' мес. · −' + money(sub.discountPerCleaning) + ' с каждой уборки', money(sub.perCleaning) + ' / уборка', 'chc-sum__row--accent'));
+      } else if (sub) {
+        rows.push(row('Абонемент: ' + freqLabel(sub.freq), sub.months + ' мес. · стоимость рассчитает менеджер', '', ''));
+      }
+      r.lines.forEach(function (l) {
+        var detail = l.toggle ? '' : unitLabel(l.unit, l.qty) + (l.included && l.paid ? ', ' + l.included + ' в тарифе' : '');
+        rows.push(row(l.title, detail, lineValue(l), l.paid || l.quote ? '' : 'chc-sum__row--accent'));
+      });
+      if (r.discount) rows.push(row('Скидка на первый заказ', r.discount.percent + '% от стоимости тарифа', '−' + money(r.discount.amount), 'chc-sum__row--accent'));
+      refs.sumBody.innerHTML = rows.join('');
+    }
+
+    function row(title, small, value, cls) {
+      return '<div class="chc-sum__row ' + (cls || '') + '"><span>' + esc(title) + (small ? '<small>' + esc(small) + '</small>' : '') + '</span><span>' + esc(value) + '</span></div>';
+    }
+
+    function render() {
+      var r = result = compute(state);
+      var s = r.state;
+      var svc = SERVICES[s.service];
+      state.freq = s.freq;
+
+      pressed(all('[data-action="service"]'), function (n) { return n.getAttribute('data-value') === s.service; });
+      refs.hint.textContent = svc.hint || '';
+
+      // площадь
+      var sl = CONFIG.areaSlider;
+      refs.range.value = Math.max(sl.min, Math.min(sl.max, s.area));
+      refs.range.style.setProperty('--chc-fill', ((refs.range.value - sl.min) / (sl.max - sl.min) * 100) + '%');
+      if (document.activeElement !== refs.areaInput) refs.areaInput.value = s.area;
+      refs.tier.textContent = r.individual ? 'индивидуальный расчёт' : 'тариф ' + r.tierLabel;
+      pressed(all('[data-action="chip"]'), function (n) { return Number(n.getAttribute('data-area')) === s.area; });
+
+      // тарифы
+      refs.tariffs.hidden = r.individual;
+      refs.individual.hidden = !r.individual;
+      if (r.individual) {
+        refs.individual.innerHTML = 'Для площади больше ' + svc.tiers[svc.tiers.length - 1] + ' м² стоимость считается индивидуально: <b>от ' + svc.perM2 + ' ₽ за м²</b>. Менеджер уточнит объём работ и зафиксирует цену.';
+      }
+      pressed(all('[data-action="tariff"]'), function (n) { return n.getAttribute('data-value') === s.tariff; });
+      TARIFFS.forEach(function (t) {
+        var price = root.querySelector('[data-tariff-price="' + t.id + '"]');
+        var perksNode = root.querySelector('[data-tariff-perks="' + t.id + '"]');
+        price.textContent = r.tariffPrices[t.id] != null ? money(r.tariffPrices[t.id]) : '';
+        var inc = r.individual ? {} : includedFor(svc, t.id, r.tierIndex);
+        var perks = perksFor(svc, t.id, inc);
+        perksNode.innerHTML = perks.length ? '<b>+</b> ' + esc(perks.join(', ')) : 'Базовый чек-лист уборки';
+      });
+
+      // регулярность
+      var isSub = s.service === SUBSCRIPTION.service;
+      refs.freqStep.hidden = !isSub;
+      pressed(all('[data-action="freq"]'), function (n) { return Number(n.getAttribute('data-value')) === s.freq; });
+      refs.months.hidden = !s.freq;
+      pressed(all('[data-action="months"]'), function (n) { return Number(n.getAttribute('data-value')) === s.months; });
+      refs.freqHint.textContent = s.freq
+        ? (r.subscription && !r.subscription.individual
+            ? s.freq + ' ' + plural(s.freq, ['уборка', 'уборки', 'уборок']) + ' в месяц по ' + money(r.subscription.perCleaning) + ' вместо ' + money(r.base) + '. За ' + s.months + ' мес. экономия ' + money(r.subscription.periodSaving) + '.'
+            : 'Для площади больше 120 м² стоимость абонемента рассчитает менеджер.')
+        : 'Абонемент на 3, 6 или 12 месяцев снижает цену каждой уборки.';
+
+      // номера шагов
+      var n = 0;
+      all('.chc-step').forEach(function (step) {
+        var num = step.querySelector('[data-num]');
+        if (num && !step.hidden) num.textContent = ++n;
+      });
+
+      // доп. услуги
+      EXTRAS.forEach(function (x) {
+        var qty = s.extras[x.id] || 0;
+        var rowNode = root.querySelector('[data-extra="' + x.id + '"]');
+        rowNode.classList.toggle('is-on', qty > 0);
+        var inc = r.included[x.id] || 0;
+        var incNode = root.querySelector('[data-inc="' + x.id + '"]');
+        incNode.hidden = !inc;
+        if (inc) incNode.textContent = inc === Infinity ? 'входит в тариф' : 'в тарифе: ' + unitLabel(x.unit, inc);
+        if (x.toggle) {
+          var tg = rowNode.querySelector('[data-action="toggle"]');
+          tg.setAttribute('aria-pressed', qty ? 'true' : 'false');
+          tg.setAttribute('aria-label', (qty ? 'Убрать: ' : 'Добавить: ') + x.title);
+        } else {
+          var input = rowNode.querySelector('[data-qty]');
+          if (document.activeElement !== input) input.value = qty;
+          rowNode.querySelector('[data-action="dec"]').disabled = qty <= 0;
+          rowNode.querySelector('[data-action="inc"]').disabled = qty >= x.max;
+        }
+      });
+
+      // итог
+      renderSummary(r);
+      var sub = r.subscription;
+      var label = sub && !sub.individual ? 'В месяц' : sub ? 'За одну уборку' : 'Итого';
+      refs.totalLabel.textContent = label;
+      refs.total.textContent = (r.totalApprox ? 'от ' : '') + money(r.total);
+      var subText = '';
+      if (sub && !sub.individual) {
+        subText = 'За ' + sub.months + ' мес. — ' + money(sub.periodTotal) + ', экономия <b>' + money(sub.periodSaving) + '</b>';
+        if (r.extrasTotal) subText += '<br>+ доп. услуги ' + (r.approx ? 'от ' : '') + money(r.extrasTotal) + ' к уборке';
+      } else if (r.hasQuote) {
+        subText = 'Химчистку мебели рассчитаем по фото';
+      }
+      refs.totalSub.innerHTML = subText;
+
+      if (refs.upsell) {
+        refs.upsell.hidden = !r.upsell;
+        if (r.upsell) {
+          var u = r.upsell;
+          refs.upsell.innerHTML = 'Выгоднее тариф <b>«' + esc(u.title) + '»</b>' +
+            (u.covered.length ? ': в него уже ' + (u.covered.length > 1 ? 'входят ' : 'входит ') + esc(u.covered.join(', ')) : '') +
+            (u.saving > 0 ? ' — итог на ' + esc(money(u.saving)) + ' меньше.' : ' — за ту же цену.') +
+            '<br><button type="button" data-action="upsell" data-value="' + u.tariff + '">Выбрать «' + esc(u.title) + '»</button>';
+        }
+      }
+      if (refs.first) {
+        refs.first.hidden = !r.firstOrderAvailable;
+        refs.firstInput.checked = !!state.firstOrder;
+      }
+
+      refs.barLabel.textContent = label;
+      refs.barTotal.textContent = refs.total.textContent;
+
+      if (refs.wa) {
+        var text = 'Здравствуйте! Хочу заказать уборку.\n' + summaryLines(r).join('\n');
+        refs.wa.href = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(text);
+      }
+    }
+
+    function fillForms() {
+      var r = result, f = CONFIG.fields || {};
+      var values = {
+        summary: summaryLines(r).join(';\n'),
+        total: totalText(r),
+        service: r.serviceTitle,
+        tariff: r.tariffTitle,
+        area: String(r.area),
+        extras: r.lines.length ? r.lines.map(lineText).join('; ') : 'нет'
+      };
+      Object.keys(values).forEach(function (k) {
+        if (!f[k]) return;
+        Array.prototype.forEach.call(document.querySelectorAll('form [name="' + f[k] + '"]'), function (input) {
+          input.value = values[k];
+        });
+      });
+    }
+
+    function onLead(e) {
+      fillForms();
+      track(CONFIG.goals.lead);
+      var hook = CONFIG.popupHook;
+      if (hook && document.querySelector('[data-tooltip-hook="' + hook + '"]')) return; // попап откроет Тильда
+      e.preventDefault();
+      var field = CONFIG.fields && CONFIG.fields.summary && document.querySelector('form [name="' + CONFIG.fields.summary + '"]');
+      if (field) {
+        field.form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (refs.wa) {
+        window.open(refs.wa.href, '_blank', 'noopener');
+      }
+    }
+
+    root.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-action]');
+      if (!t || !root.contains(t)) return;
+      var a = t.getAttribute('data-action'), v = t.getAttribute('data-value'), id = t.getAttribute('data-id');
+      if (a === 'service') set({ service: v });
+      else if (a === 'tariff' || a === 'upsell') set({ tariff: v });
+      else if (a === 'freq') set({ freq: Number(v) });
+      else if (a === 'months') set({ months: Number(v) });
+      else if (a === 'chip') set({ area: Number(t.getAttribute('data-area')) });
+      else if (a === 'inc') setExtra(id, (state.extras[id] || 0) + 1);
+      else if (a === 'dec') setExtra(id, (state.extras[id] || 0) - 1);
+      else if (a === 'toggle') setExtra(id, state.extras[id] ? 0 : 1);
+      else if (a === 'lead') onLead(e);
+      else if (a === 'whatsapp') track(CONFIG.goals.whatsapp);
+    });
+
+    refs.range.addEventListener('input', function () { set({ area: Number(refs.range.value) }); });
+
+    function digits(input) {
+      var clean = input.value.replace(/\D+/g, '');
+      if (clean !== input.value) input.value = clean;
+      return clean;
+    }
+    refs.areaInput.addEventListener('input', function () {
+      var v = digits(refs.areaInput);
+      if (v && Number(v) >= 1) set({ area: Number(v) });
+    });
+    refs.areaInput.addEventListener('blur', function () { refs.areaInput.value = result.area; });
+    refs.areaInput.addEventListener('focus', function () { refs.areaInput.select(); });
+
+    root.addEventListener('input', function (e) {
+      var id = e.target.getAttribute && e.target.getAttribute('data-qty');
+      if (!id) return;
+      var v = digits(e.target);
+      setExtra(id, v === '' ? 0 : Number(v));
+    });
+    root.addEventListener('focusout', function (e) {
+      var id = e.target.getAttribute && e.target.getAttribute('data-qty');
+      if (id) e.target.value = state.extras[id] || 0;
+    });
+    root.addEventListener('focusin', function (e) {
+      if (e.target.getAttribute && e.target.getAttribute('data-qty')) e.target.select();
+    });
+
+    if (refs.firstInput) {
+      refs.firstInput.addEventListener('change', function () { set({ firstOrder: refs.firstInput.checked }); });
+    }
+
+    // мобильная панель итога: видна, пока калькулятор на экране, а блок итога — нет
+    if ('IntersectionObserver' in window) {
+      var rootVisible = false, sumVisible = false;
+      var updateBar = function () { refs.bar.classList.toggle('is-visible', rootVisible && !sumVisible); };
+      new IntersectionObserver(function (en) { rootVisible = en[0].isIntersecting; updateBar(); }).observe(root.querySelector('.chc__main'));
+      new IntersectionObserver(function (en) { sumVisible = en[0].isIntersecting; updateBar(); }).observe(refs.sum);
+    }
+
+    render();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
