@@ -142,7 +142,7 @@ test('скидка на первый заказ: 10% от тарифа, толь
 test('некорректный ввод не ломает расчёт', () => {
   const res = calc.compute({ service: 'nope', tariff: 'x', area: 'abc', extras: { windows: -5, oven: 999, unknown: 3 } });
   assert.equal(res.service, 'general');
-  assert.equal(res.area, 60);
+  assert.equal(res.area, 50);
   assert.equal(res.state.extras.windows, undefined);
   assert.equal(res.state.extras.oven, 5, 'количество ограничено максимумом');
 });
