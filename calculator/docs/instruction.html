@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Калькулятор CleanHub — инструкция по установке на Тильду</title>
+<style>
+@font-face{font-family:'UA-brand';src:url('https://static.tildacdn.com/tild3032-6561-4961-a135-333136313139/ua-BRAND-bold.woff') format('woff');font-weight:700}
+@page{size:A4;margin:16mm 16mm 18mm}
+:root{--green:#00b14f;--green-d:#008a3d;--ink:#0b2517;--text:#1b211e;--muted:#5d6b63;--line:#dce5df;--soft:#f4f7f5;--tint:#eaf8f0;--warn:#fff4e5;--warn-line:#f3c27a}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:Inter,'DejaVu Sans',Arial,sans-serif;font-size:10.5pt;line-height:1.5;color:var(--text)}
+h1,h2,h3{font-family:'UA-brand',Inter,Arial,sans-serif;font-weight:700;color:#000;line-height:1.15;margin:0}
+h1{font-size:24pt}
+h2{font-size:16pt;margin:0 0 4mm;display:flex;align-items:center;gap:3mm;break-after:avoid;break-inside:avoid}
+h3{font-size:12pt;margin:6mm 0 2.5mm;break-after:avoid}
+p{margin:0 0 2.5mm}
+.num{display:inline-flex;align-items:center;justify-content:center;width:9mm;height:9mm;border-radius:50%;background:var(--green);color:#fff;font-size:12pt;flex:none}
+section{margin-top:9mm}
+.page{break-before:page;margin-top:0}
+.muted{color:var(--muted)}
+code,.code{font-family:'DejaVu Sans Mono',monospace;font-size:9pt}
+code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:0 4px;white-space:nowrap}
+pre{font-family:'DejaVu Sans Mono',monospace;font-size:8.5pt;line-height:1.5;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:3.5mm 4mm;margin:2mm 0 3mm;white-space:pre-wrap;break-inside:avoid}
+b,strong{font-weight:600}
+
+.cover{border-radius:18px;background:var(--ink);color:#fff;padding:10mm 11mm 9mm;margin-bottom:7mm}
+.cover h1{color:#fff;margin-top:3mm}
+.cover .eyebrow{display:inline-block;background:rgba(0,177,79,.22);color:#6ee6a4;border-radius:20px;padding:1.2mm 3.5mm;font-size:9pt;font-weight:500}
+.cover p{color:rgba(255,255,255,.75);margin:3mm 0 0;font-size:11pt}
+.cover .meta{display:flex;gap:8mm;margin-top:6mm;font-size:9pt;color:rgba(255,255,255,.6)}
+.cover .meta b{display:block;color:#fff;font-size:10pt;font-weight:500}
+
+.need{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin:0 0 2mm}
+.need div{border:1px solid var(--line);border-radius:12px;padding:3.5mm 4mm;font-size:9.5pt}
+.need b{display:block;font-size:10pt;margin-bottom:1mm}
+
+figure{margin:3mm 0 0;break-inside:avoid}
+figure img{display:block;width:100%;border:1px solid var(--line);border-radius:12px}
+figure.w74{width:74%;margin-left:auto;margin-right:auto}
+figure.w46{width:46%;margin-left:auto;margin-right:auto}
+figcaption{font-size:8.5pt;color:var(--muted);margin-top:1.8mm}
+
+.flow{display:grid;grid-template-columns:1fr 6mm 1fr 6mm 1fr 6mm 1fr;align-items:stretch;margin:3mm 0 1mm;break-inside:avoid}
+.flow .box{border:1px solid var(--line);border-radius:12px;padding:3mm 3.5mm;font-size:9pt;background:#fff}
+.flow .box b{display:block;font-size:9.5pt;margin-bottom:1mm;color:#000}
+.flow .box.hl{background:var(--tint);border-color:#bfe6cf}
+.flow .arr{display:flex;align-items:center;justify-content:center;color:var(--green);font-size:13pt}
+
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:2mm 0 3mm}
+ol.steps>li{counter-increment:s;position:relative;padding-left:9mm;margin-bottom:2.6mm;break-inside:avoid}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:6mm;height:6mm;border-radius:50%;background:var(--tint);color:var(--green-d);font-weight:600;font-size:9pt;display:flex;align-items:center;justify-content:center}
+ul{margin:1mm 0 2.5mm;padding-left:5mm}
+ul li{margin-bottom:1mm}
+
+.note{border-radius:12px;padding:3.2mm 4mm;margin:3mm 0;font-size:9.5pt;break-inside:avoid;background:var(--tint);border:1px solid #bfe6cf}
+.note.warn{background:var(--warn);border-color:var(--warn-line)}
+.note b:first-child{display:block;margin-bottom:.6mm}
+
+table{width:100%;border-collapse:collapse;margin:2mm 0 3mm;font-size:9pt;break-inside:auto}
+th,td{text-align:left;vertical-align:top;padding:2.2mm 2.6mm;border-bottom:1px solid var(--line)}
+th{font-weight:600;background:var(--soft);font-size:8.5pt;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+tr{break-inside:avoid}
+td:first-child{white-space:nowrap}
+
+.check{list-style:none;padding:0;margin:2mm 0 3mm}
+.check li{position:relative;padding-left:8mm;margin-bottom:2mm;break-inside:avoid}
+.check li::before{content:"";position:absolute;left:0;top:.6mm;width:4.2mm;height:4.2mm;border:1.5px solid #9fb3a7;border-radius:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6mm;align-items:start}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <span class="eyebrow">Для специалиста по Тильде</span>
+  <h1>Калькулятор стоимости уборки: установка на cleanhub24.ru</h1>
+  <p>Пошаговая инструкция: как добавить калькулятор на страницу, связать его с формой заявки, проверить работу и поменять цены.</p>
+  <div class="meta">
+    <div><b>Сайт</b>cleanhub24.ru (Тильда)</div>
+    <div><b>Файл с кодом</b>cleanhub-calculator.html</div>
+    <div><b>Время</b>20–30 минут</div>
+  </div>
+</div>
+
+<div class="need">
+  <div><b>Доступ к Тильде</b>Права на редактирование и публикацию страниц проекта CleanHub.</div>
+  <div><b>Файл с кодом</b><code>cleanhub-calculator.html</code> передаётся вместе с этой инструкцией.</div>
+  <div><b>Текстовый редактор</b>Блокнот, VS Code или аналог, чтобы скопировать код. Word не подходит.</div>
+</div>
+
+<section>
+  <h2>Что устанавливаем</h2>
+  <p>Калькулятор написан на HTML, CSS и JavaScript и вставляется целиком в один блок «HTML-код» (T123). Внешние библиотеки
+  не нужны. Шрифты и цвета берутся с сайта. Цены тарифов, абонементов и доп. услуг уже заложены в код.</p>
+  <h3>Как заявка попадает к менеджеру</h3>
+  <div class="flow">
+    <div class="box"><b>1. Клиент считает</b>Выбирает вид уборки, площадь, тариф и доп. услуги. Цена пересчитывается сразу.</div>
+    <div class="arr">→</div>
+    <div class="box"><b>2. «Оставить заявку»</b>Калькулятор записывает расчёт в скрытое поле <code>calc</code> формы.</div>
+    <div class="arr">→</div>
+    <div class="box"><b>3. Попап Тильды</b>Открывается обычная форма Тильды. Клиент вводит имя и телефон.</div>
+    <div class="arr">→</div>
+    <div class="box hl"><b>4. Заявка с расчётом</b>Приходит в почту, Telegram или CRM, как и другие формы сайта.</div>
+  </div>
+  <p class="muted" style="font-size:9pt">Кнопка «Обсудить в WhatsApp» открывает чат, где текст расчёта уже набран. Если форму на странице не найти, кнопка «Оставить заявку» тоже открывает WhatsApp, чтобы заявка не потерялась.</p>
+</section>
+
+<section class="page">
+  <h3 style="margin-top:0">Как выглядит</h3>
+  <figure class="w74"><img src="img/desktop.png" alt="Калькулятор на компьютере"><figcaption>Калькулятор на компьютере: слева параметры уборки, справа итог с кнопкой заявки. Блок итога остаётся на экране при прокрутке.</figcaption></figure>
+  <figure class="w74" style="margin-top:7mm"><img src="img/mobile.png" alt="Калькулятор на телефоне"><figcaption>На телефоне блоки идут друг под другом. Пока клиент выбирает услуги, внизу экрана видна панель с итогом и кнопкой заявки.</figcaption></figure>
+</section>
+
+
+<section class="page">
+  <h2><span class="num">1</span>Попап-форма для заявок</h2>
+  <p>Проще всего <b>дублировать</b> существующую форму «Оставьте заявку». Тогда сохранятся оформление и подключённые сервисы
+  приёма заявок (почта, Telegram, CRM).</p>
+  <ol class="steps">
+    <li>Откройте в редакторе страницу, на которую ставите калькулятор. Например, «Цены» (<code>/price</code>).</li>
+    <li>Найдите блок попап-формы «Оставьте заявку». В редакторе попапы видны как отдельные блоки. На <code>/price</code> это, например, форма
+      кнопки «Выбрать тариф» со ссылкой <code>#popup:myform6</code>.</li>
+    <li>Наведите курсор на блок и нажмите <b>«Дублировать»</b>.</li>
+    <li>В копии откройте <b>«Контент»</b> и найдите поле со ссылкой для вызова попапа (сейчас там <code>#popup:myform6</code>).
+      Впишите <code>#popup:calc</code>.</li>
+    <li>Там же, в списке полей формы, добавьте поле типа <b>«Скрытое поле»</b>. Имя переменной: <code>calc</code>
+      (строчными латинскими буквами).</li>
+    <li>По желанию поменяйте заголовок формы, например на «Отправьте расчёт менеджеру». Сохраните блок.</li>
+    <li>Проверьте в настройках приёма данных формы, что подключены те же сервисы, что у оригинала.</li>
+  </ol>
+  <div class="note warn"><b>Обязательно смените ссылку у копии.</b>Если у копии останется <code>#popup:myform6</code>, по кнопкам
+    «Выбрать тариф» откроются сразу две формы.</div>
+  <div class="note"><b>Дополнительные скрытые поля (по желанию)</b>Калькулятор сам заполнит скрытые поля с этими именами,
+    если они есть в форме. Это удобно для CRM: <code>calc_total</code> (итог), <code>calc_service</code> (вид уборки),
+    <code>calc_tariff</code> (тариф), <code>calc_area</code> (площадь, м²), <code>calc_extras</code> (доп. услуги).</div>
+  <p class="muted" style="font-size:9pt"><b>Без копии.</b> Можно добавить скрытое поле <code>calc</code> в уже существующую форму
+    и указать её ссылку в настройке <code>popupHook</code> (раздел «Настройки» ниже).</p>
+  <figure class="w46"><img src="img/tilda-popup.png" alt="Форма заявки открылась из калькулятора"><figcaption>Проверено на копии /price: кнопка калькулятора открыла попап Тильды, расчёт уже в скрытом поле.</figcaption></figure>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Блок с калькулятором</h2>
+  <ol class="steps">
+    <li>Откройте файл <code>cleanhub-calculator.html</code> в текстовом редакторе.
+      <ul>
+        <li>Windows: правой кнопкой мыши → «Открыть с помощью» → «Блокнот».</li>
+        <li>Mac: VS Code или TextEdit. В TextEdit включите в настройках «Показывать HTML-файлы как HTML-код», иначе он покажет страницу вместо кода.</li>
+      </ul>
+    </li>
+    <li>Выделите весь текст (<code>Ctrl+A</code> / <code>⌘A</code>) и скопируйте его. Код начинается с <code>&lt;!--</code>
+      и заканчивается на <code>&lt;/script&gt;</code>.</li>
+    <li>В редакторе Тильды на нужном месте страницы нажмите <b>«+»</b> (добавить блок) → <b>«Другое»</b> →
+      <b>«T123 HTML-код»</b>.</li>
+    <li>Нажмите <b>«Контент»</b>, вставьте код <b>целиком</b> и сохраните.</li>
+    <li>Опубликуйте страницу.</li>
+  </ol>
+  <div class="note"><b>В редакторе калькулятор не виден</b>Вместо него Тильда показывает заглушку HTML-блока, это нормально.
+    Смотрите результат на опубликованной странице.</div>
+  <div class="note warn"><b>Форма и калькулятор должны быть на одной странице</b>Если калькулятор нужен на нескольких
+    страницах, повторите шаги 1 и 2 на каждой из них.</div>
+
+  <h3>Где разместить</h3>
+  <ul>
+    <li><b>«Цены» (/price)</b> — основное место, сразу после первого экрана.</li>
+    <li>Страницы услуг: <b>/general</b> (генеральная), <b>/support</b> (поддерживающая), <b>/afterepair</b> (после ремонта).</li>
+    <li>Главная страница: после блока «Комплексные решения».</li>
+  </ul>
+
+  <h2 style="margin-top:9mm"><span class="num">3</span>Проверка</h2>
+  <p>Откройте опубликованную страницу на компьютере и на телефоне:</p>
+  <ul class="check">
+    <li>Калькулятор виден, цена меняется при выборе услуг. Шрифты такие же, как на остальном сайте.</li>
+    <li>Кнопка «Оставить заявку» открывает форму, а не WhatsApp.</li>
+    <li>Тестовая заявка пришла, и в ней есть поле <code>calc</code> с расчётом (пример ниже).</li>
+    <li>Старые кнопки «Выбрать тариф» по-прежнему открывают только свою форму.</li>
+    <li>На телефоне внизу экрана появляется панель с итогом. Когда открыта форма, панель скрывается.</li>
+    <li>Кнопка «Обсудить в WhatsApp» открывает чат с текстом расчёта.</li>
+  </ul>
+  <div style="break-inside:avoid">
+  <p>Пример поля <code>calc</code> в заявке:</p>
+<pre>Уборка: Генеральная уборка;
+Площадь: 60 м²;
+Тариф: Стандарт (41–60 м²) — 14 990 ₽, включает: СВЧ, духовка, посудомойка;
+Доп. услуги: Мытьё окон — 6 створок: 3 000 ₽; Химчистка мебели: по фото;
+Итого: 17 990 ₽</pre>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Цели в Яндекс Метрике <span class="muted" style="font-family:Inter,Arial,sans-serif;font-size:10pt;font-weight:400">по желанию</span></h2>
+  <p>Калькулятор отправляет события в счётчик <b>108429981</b>. Чтобы они появились в отчётах, создайте цели: Метрика →
+    «Цели» → «Добавить цель» → тип <b>«JavaScript-событие»</b>.</p>
+  <table>
+    <tr><th>Идентификатор цели</th><th>Когда срабатывает</th></tr>
+    <tr><td><code>calc_start</code></td><td>Первое действие посетителя в калькуляторе</td></tr>
+    <tr><td><code>calc_lead</code></td><td>Нажатие «Оставить заявку»</td></tr>
+    <tr><td><code>calc_whatsapp</code></td><td>Нажатие «Обсудить в WhatsApp»</td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <h2>Настройки</h2>
+  <p>Все настройки собраны в начале скрипта, в блоке <code>CONFIG</code>. После любой правки заново вставьте код
+    в блок T123 и опубликуйте страницу.</p>
+  <table>
+    <tr><th>Параметр</th><th>Что делает</th><th>Сейчас</th></tr>
+    <tr><td><code>popupHook</code></td><td>Ссылка попап-формы, которую открывает кнопка «Оставить заявку»</td><td><code>#popup:calc</code></td></tr>
+    <tr><td><code>fields</code></td><td>Имена скрытых полей формы</td><td><code>calc</code>, <code>calc_total</code> и др.</td></tr>
+    <tr><td><code>whatsapp</code></td><td>Номер для кнопки WhatsApp, без «+». Пустые кавычки <code>''</code> скрывают кнопку</td><td><code>79152606655</code>*</td></tr>
+    <tr><td><code>metrikaId</code></td><td>Счётчик Метрики. <code>0</code> — не отправлять цели</td><td><code>108429981</code></td></tr>
+    <tr><td><code>firstOrder</code></td><td>Галочка «Первый заказ — скидка»: процент, максимум, виды уборки. <code>null</code> убирает галочку</td><td>10%, до 6 000 ₽, генеральная и после ремонта</td></tr>
+    <tr><td><code>stickyTop</code></td><td>Отступ блока итога от верха экрана при прокрутке, px (чтобы не заезжал под шапку)</td><td><code>100</code></td></tr>
+    <tr><td><code>defaults</code></td><td>Что выбрано при открытии страницы</td><td>генеральная, 60 м², «Стандарт»</td></tr>
+    <tr><td><code>title</code>, <code>subtitle</code></td><td>Заголовок и подзаголовок калькулятора</td><td>«Рассчитайте стоимость уборки»</td></tr>
+  </table>
+  <p class="muted" style="font-size:8.5pt">* Номер взят со ссылки WhatsApp на сайте (wa.me/89152606655) и переведён в международный формат. Уточните его у заказчика.</p>
+
+  <h3>Файлы</h3>
+  <table>
+    <tr><th>Файл</th><th>Зачем</th></tr>
+    <tr><td><code>cleanhub-calculator.html</code></td><td>Код калькулятора для блока T123. Это единственный файл, который нужен для установки.</td></tr>
+    <tr><td><code>demo.html</code></td><td>Предпросмотр без Тильды (по желанию): откройте в браузере, чтобы посмотреть калькулятор и проверить, что попадает в заявку.</td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <h2>Как поменять цены</h2>
+  <p>Цены записаны в коде сразу после блока <code>CONFIG</code>:</p>
+  <table>
+    <tr><th>Блок</th><th>Что внутри</th></tr>
+    <tr><td><code>SERVICES</code></td><td>Тарифы трёх видов уборки: границы площади, цены, цена за м² свыше 120 м², что входит в тариф</td></tr>
+    <tr><td><code>SUBSCRIPTION</code></td><td>Абонемент на поддерживающую уборку: скидка с каждой уборки за 3, 6 и 12 месяцев</td></tr>
+    <tr><td><code>EXTRAS</code></td><td>Доп. услуги: название, описание, цена, пометка «от» (<code>from: true</code>), максимальное количество</td></tr>
+  </table>
+  <p>Пример: генеральная уборка. Каждое число в строке тарифа — цена для своей границы площади из <code>tiers</code>,
+    по порядку:</p>
+<pre>tiers: [40, 60, 80, 100, 120],          // до 40 м², 41–60, 61–80, 81–100, 101–120
+prices: {
+  lite:     [8490, 12990, 17490, 21990, 26490],
+  standard: [10490, 14990, 19490, 23990, 28490],   // ← «Стандарт»
+  premium:  [12490, 16990, 21490, 25990, 30490]
+},
+perM2: 250,                             // свыше 120 м²: 250 ₽ за м²</pre>
+  <ul>
+    <li>Числа пишите без пробелов: <code>14990</code>, а не <code>14 990</code>.</li>
+    <li>Не удаляйте запятые, скобки и кавычки. Если после правки калькулятор пропал со страницы, скорее всего, где-то потерялся знак.</li>
+    <li>Цена доп. услуги: строка в <code>EXTRAS</code>, например <code>{ id: 'windows', … price: 500, … }</code>.</li>
+  </ul>
+
+</section>
+
+<section>
+  <h2>Если что-то не работает</h2>
+  <table>
+    <tr><th>Что видно</th><th>Причина и решение</th></tr>
+    <tr><td>Калькулятора нет на странице</td><td>Страница не опубликована, или код вставлен не целиком. Вставьте весь файл заново, от первой до последней строки.</td></tr>
+    <tr><td>«Оставить заявку» открывает WhatsApp</td><td>На этой странице нет попапа со ссылкой <code>#popup:calc</code>. Проверьте шаг 1: ссылку и то, что форма на той же странице.</td></tr>
+    <tr><td>Форма открывается, но расчёта в заявке нет</td><td>В форме нет скрытого поля <code>calc</code>, или имя набрано иначе (регистр важен, нужны латинские буквы).</td></tr>
+    <tr><td>Открываются сразу две формы</td><td>У копии формы осталась старая ссылка. Задайте ей <code>#popup:calc</code>.</td></tr>
+    <tr><td>Блок итога заезжает под шапку при прокрутке</td><td>Увеличьте <code>stickyTop</code> в настройках, например до <code>130</code>.</td></tr>
+  </table>
+
+</section>
+
+</body>
+</html>
