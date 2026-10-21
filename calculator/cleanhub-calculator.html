@@ -194,24 +194,26 @@
     subtitle: 'Выберите вид уборки, площадь и дополнительные услуги — цена пересчитается сразу. Менеджер подтвердит её перед выездом, и она не изменится во время уборки.',
 
     // Попап-форма Тильды, которая открывается по кнопке «Оставить заявку».
-    // В форме создайте скрытое поле с именем из fields.summary — туда попадёт расчёт.
+    // В форме создайте скрытое поле «Расчёт» — туда попадёт расчёт. Калькулятор заполнит
+    // скрытое поле с любым именем из списка; остальные поля — по желанию (например, для CRM).
     popupHook: '#popup:calc',
     fields: {
-      summary: 'calc',          // весь расчёт текстом (обязательно)
-      total: 'calc_total',      // итоговая сумма, например «от 16 490 ₽»
-      service: 'calc_service',  // вид уборки
-      tariff: 'calc_tariff',    // тариф
-      area: 'calc_area',        // площадь, м²
-      extras: 'calc_extras'     // доп. услуги
+      summary: ['Расчёт', 'Расчет', 'calc'],           // весь расчёт (обязательно)
+      total: ['Сумма', 'calc_total'],                   // итог, например «от 16 490 ₽»
+      service: ['Вид_уборки', 'calc_service'],          // вид уборки
+      tariff: ['Тариф', 'calc_tariff'],                 // тариф
+      area: ['Площадь', 'calc_area'],                   // площадь, м²
+      extras: ['Доп_услуги', 'calc_extras']             // доп. услуги
     },
 
     metrikaId: 108429981,       // Яндекс Метрика; 0 — не отправлять цели
     goals: { start: 'calc_start', lead: 'calc_lead' },
 
-    // Скидка на первый заказ (галочка в блоке итога). null — убрать галочку.
-    firstOrder: { percent: 10, max: 6000, services: ['general', 'renovation'] },
+    // Скидка на первый заказ (галочка в блоке итога). Сейчас выключена.
+    // Чтобы включить: firstOrder: { percent: 10, max: 6000, services: ['general', 'renovation'] },
+    firstOrder: null,
 
-    defaults: { service: 'general', area: 50, tariff: 'standard', freq: 0, months: 6 },
+    defaults: { service: 'general', area: 50, tariff: 'premium', freq: 0, months: 6 },
     areaMax: 5000,
     stickyTop: 100                      // отступ «липкого» блока итога от верха экрана, px
   };
@@ -535,13 +537,16 @@
     return (l.from ? 'от ' : '') + money(l.cost);
   }
 
-  function lineText(l) {
+  // Строка доп. услуги для заявки: «Мытьё окон, 8 створок (6 в тарифе) — 1 000 ₽»
+  function extraLine(l) {
     var t = l.title;
     if (!l.toggle) {
-      t += ' — ' + unitLabel(l.unit, l.qty);
+      t += ', ' + unitLabel(l.unit, l.qty);
       if (l.included && l.paid) t += ' (' + l.included + ' в тарифе)';
     }
-    return t + ': ' + lineValue(l);
+    if (l.quote) return t + ' — оценить по фото';
+    if (!l.paid) return t + ' — входит в тариф';
+    return t + ' — ' + (l.from ? 'от ' : '') + money(l.cost);
   }
 
   function totalText(r) {
@@ -555,18 +560,48 @@
     return f === 4 ? '4 раза в месяц' : f === 2 ? '2 раза в месяц' : 'разовая';
   }
 
+  /* Текст расчёта для заявки: сначала главное (что, сколько метров, итог), затем детали —
+     по одной строке на пункт, блоки разделены пустой строкой. */
   function summaryLines(r) {
     var L = [];
-    L.push('Уборка: ' + r.serviceTitle);
-    L.push('Площадь: ' + r.area + ' м²');
-    if (r.individual) L.push('Тариф: индивидуальный расчёт, от ' + r.perM2 + ' ₽/м² — от ' + money(r.base));
-    else L.push('Тариф: ' + r.tariffTitle + ' (' + r.tierLabel + ') — ' + money(r.base) + (r.perks.length ? ', включает: ' + r.perks.join(', ') : ''));
     var sub = r.subscription;
-    if (sub && sub.individual) L.push('Абонемент: ' + freqLabel(sub.freq) + ', ' + sub.months + ' мес. — расчёт у менеджера');
-    else if (sub) L.push('Абонемент: ' + freqLabel(sub.freq) + ', ' + sub.months + ' мес. — ' + money(sub.perCleaning) + ' за уборку, ' + money(sub.perMonth) + ' в месяц, ' + money(sub.periodTotal) + ' за период, экономия ' + money(sub.periodSaving));
-    if (r.lines.length) L.push('Доп. услуги: ' + r.lines.map(lineText).join('; '));
-    if (r.discount) L.push('Скидка на первый заказ ' + r.discount.percent + '%: −' + money(r.discount.amount));
-    L.push('Итого: ' + totalText(r) + (sub && !sub.individual && r.extrasTotal ? ' + доп. услуги ' + (r.approx ? 'от ' : '') + money(r.extrasTotal) : ''));
+    var extrasFrom = r.lines.some(function (l) { return l.from; });
+    var extrasSum = r.extrasTotal ? (extrasFrom ? 'от ' : '') + money(r.extrasTotal) : '';
+
+    L.push(r.serviceTitle + (r.individual ? '' : ', тариф «' + r.tariffTitle + '»') + ', ' + r.area + ' м²');
+    L.push('Итого: ' + totalText(r) + (sub && !sub.individual && extrasSum ? ' + доп. услуги ' + extrasSum : ''));
+
+    L.push('');
+    if (r.individual) {
+      L.push('Тариф: индивидуальный расчёт, от ' + r.perM2 + ' ₽ за м²');
+      L.push('Ориентировочно: от ' + money(r.base));
+    } else {
+      L.push('Тариф «' + r.tariffTitle + '» (' + r.tierLabel + '): ' + money(r.base));
+      if (r.perks.length) L.push('Входит: ' + r.perks.join(', '));
+    }
+
+    if (sub) {
+      L.push('');
+      L.push('Абонемент: ' + freqLabel(sub.freq) + ' на ' + sub.months + ' мес.');
+      if (sub.individual) {
+        L.push('Стоимость абонемента — рассчитать индивидуально');
+      } else {
+        L.push('За уборку: ' + money(sub.perCleaning) + ' вместо ' + money(r.base));
+        L.push('В месяц: ' + money(sub.perMonth));
+        L.push('За ' + sub.months + ' мес.: ' + money(sub.periodTotal) + ', экономия ' + money(sub.periodSaving));
+      }
+    }
+
+    if (r.lines.length) {
+      L.push('');
+      L.push('Доп. услуги' + (extrasSum ? ' (' + extrasSum + ')' : '') + ':');
+      r.lines.forEach(function (l) { L.push('• ' + extraLine(l)); });
+    }
+
+    if (r.discount) {
+      L.push('');
+      L.push('Скидка на первый заказ ' + r.discount.percent + '%: −' + money(r.discount.amount));
+    }
     return L;
   }
 
@@ -868,17 +903,18 @@
     function fillForms() {
       var r = result, f = CONFIG.fields || {};
       var values = {
-        summary: summaryLines(r).join(';\n'),
+        summary: summaryLines(r).join('\n'),
         total: totalText(r),
         service: r.serviceTitle,
         tariff: r.tariffTitle,
         area: String(r.area),
-        extras: r.lines.length ? r.lines.map(lineText).join('; ') : 'нет'
+        extras: r.lines.length ? r.lines.map(extraLine).join('\n') : 'нет'
       };
       Object.keys(values).forEach(function (k) {
-        if (!f[k]) return;
-        Array.prototype.forEach.call(document.querySelectorAll('form [name="' + f[k] + '"]'), function (input) {
-          input.value = values[k];
+        [].concat(f[k] || []).forEach(function (name) {
+          Array.prototype.forEach.call(document.querySelectorAll('form [name="' + name + '"]'), function (input) {
+            input.value = values[k];
+          });
         });
       });
     }
@@ -889,7 +925,11 @@
       var hook = CONFIG.popupHook;
       if (hook && document.querySelector('[data-tooltip-hook="' + hook + '"]')) return; // попап откроет Тильда
       e.preventDefault();
-      var field = CONFIG.fields && CONFIG.fields.summary && document.querySelector('form [name="' + CONFIG.fields.summary + '"]');
+      var field = null;
+      [].concat((CONFIG.fields || {}).summary || []).some(function (name) {
+        field = document.querySelector('form [name="' + name + '"]');
+        return field;
+      });
       if (field) field.form.scrollIntoView({ behavior: 'smooth', block: 'center' });
       else if (window.console) console.warn('Калькулятор CleanHub: на странице нет попап-формы ' + hook + ' — см. инструкцию, шаг 1');
     }

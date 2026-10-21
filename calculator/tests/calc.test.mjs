@@ -130,13 +130,33 @@ test('подсказка о более выгодном тарифе', () => {
   assert.equal(calc.compute({ service: 'general', tariff: 'lite', area: 40 }).upsell, null);
 });
 
-test('скидка на первый заказ: 10% от тарифа, только генеральная и после ремонта', () => {
+// Скидка на первый заказ сейчас выключена (CONFIG.firstOrder = null). Механизм оставлен —
+// проверяем его, временно включив настройку.
+function withFirstOrder(fn) {
+  const saved = calc.config.firstOrder;
+  calc.config.firstOrder = { percent: 10, max: 6000, services: ['general', 'renovation'] };
+  try { fn(); } finally { calc.config.firstOrder = saved; }
+}
+
+test('скидка на первый заказ выключена', () => {
+  assert.equal(calc.config.firstOrder, null);
+  const res = calc.compute({ service: 'general', tariff: 'standard', area: 60, firstOrder: true });
+  assert.equal(res.discount, null);
+  assert.equal(res.firstOrderAvailable, false);
+  assert.equal(res.total, 14990);
+});
+
+test('если включить скидку: 10% от тарифа, только генеральная и после ремонта', () => withFirstOrder(() => {
   const g = calc.compute({ service: 'general', tariff: 'standard', area: 60, firstOrder: true, extras: { windows: 4 } });
   assert.equal(g.discount.amount, 1499);
   assert.equal(g.total, 14990 - 1499 + 2000);
   assert.equal(calc.compute({ service: 'support', tariff: 'standard', area: 60, firstOrder: true }).discount, null);
   const big = calc.compute({ service: 'renovation', area: 300, firstOrder: true });
   assert.equal(big.discount.amount, 6000, 'не больше 6 000 ₽');
+}));
+
+test('по умолчанию выбран тариф «Премиум»', () => {
+  assert.equal(calc.compute({}).tariff, 'premium');
 });
 
 test('некорректный ввод не ломает расчёт', () => {
@@ -147,23 +167,46 @@ test('некорректный ввод не ломает расчёт', () => {
   assert.equal(res.state.extras.oven, 5, 'количество ограничено максимумом');
 });
 
-test('текст заявки содержит ключевые параметры', () => {
+test('текст заявки: сначала главное, затем по строке на пункт, всё по-русски', () => {
   const res = calc.compute({ service: 'general', tariff: 'standard', area: 55, extras: { windows: 6, oven: 1, upholstery: 1 } });
-  const text = calc.summaryLines(res).join('\n');
-  assert.match(text, /Генеральная уборка/);
-  assert.match(text, /Стандарт \(41–60 м²\)/);
-  assert.match(text, /Мытьё окон — 6 створок: 3 000 ₽/);
-  assert.match(text, /Чистка духовки — 1 шт\.: в тарифе/);
-  assert.match(text, /Химчистка мебели: по фото/);
-  assert.match(text, /Итого: 17 990 ₽/);
+  const lines = [...calc.summaryLines(res)];
+  assert.equal(lines[0], 'Генеральная уборка, тариф «Стандарт», 55 м²');
+  assert.equal(lines[1], 'Итого: 17\u00a0990\u00a0₽');
+  assert.ok(lines.includes('Тариф «Стандарт» (41–60 м²): 14\u00a0990\u00a0₽'));
+  assert.ok(lines.includes('Входит: СВЧ, духовка, посудомойка'));
+  assert.ok(lines.includes('• Мытьё окон, 6\u00a0створок — 3\u00a0000\u00a0₽'));
+  assert.ok(lines.includes('• Чистка духовки, 1\u00a0шт. — входит в тариф'));
+  assert.ok(lines.includes('• Химчистка мебели — оценить по фото'));
+  const text = lines.join('\n');
+  assert.doesNotMatch(text, /[A-Za-z]/, 'в тексте заявки нет латиницы');
+  assert.doesNotMatch(text, /;$/m, 'строки без точек с запятой в конце');
+});
+
+test('заявка из примера менеджеров: итог совпадает, каждая услуга — отдельной строкой', () => {
+  const res = calc.compute({
+    service: 'general', tariff: 'premium', area: 35, firstOrder: true,
+    extras: { wardrobe: 1, windows: 4, curtains: 2, balcony: 1, grout: 1, steam: 1, upholstery: 1 }
+  });
+  assert.equal(res.total, 12490 + 2000 + 2000 + 1400 + 1000 + 500 + 1500, 'без скидки на первый заказ');
+  const lines = [...calc.summaryLines(res)];
+  assert.equal(lines[1], 'Итого: от 20\u00a0890\u00a0₽');
+  assert.equal(lines.filter((l) => l.startsWith('• ')).length, 7);
+  assert.ok(!lines.some((l) => /Скидка/.test(l)));
+  withFirstOrder(() => {
+    const withDiscount = [...calc.summaryLines(calc.compute({ service: 'general', tariff: 'premium', area: 35, firstOrder: true }))];
+    assert.equal(withDiscount.at(-1), 'Скидка на первый заказ 10%: −1\u00a0249\u00a0₽');
+  });
 });
 
 test('абонемент: цена в месяц точная, «от» относится только к доп. услугам', () => {
   const res = calc.compute({ service: 'support', tariff: 'lite', area: 45, freq: 4, months: 12, extras: { curtains: 2 } });
   assert.equal(res.total, 21960);
   assert.equal(res.totalApprox, false);
-  assert.equal(calc.totalText(res), '21 960 ₽ в месяц');
-  assert.match(calc.summaryLines(res).at(-1), /\+ доп\. услуги от 1 400 ₽$/);
+  assert.equal(calc.totalText(res), '21\u00a0960\u00a0₽ в месяц');
+  const lines = [...calc.summaryLines(res)];
+  assert.equal(lines[1], 'Итого: 21\u00a0960\u00a0₽ в месяц + доп. услуги от 1\u00a0400\u00a0₽');
+  assert.ok(lines.includes('Абонемент: 4 раза в месяц на 12 мес.'));
+  assert.ok(lines.includes('За 12 мес.: 263\u00a0520\u00a0₽, экономия 48\u00a0000\u00a0₽'));
 });
 
 test('demo.html собран из актуальной версии калькулятора', () => {

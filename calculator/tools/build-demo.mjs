@@ -1,6 +1,6 @@
 // Собирает calculator/demo.html — страницу предпросмотра калькулятора без Тильды.
 // Запуск: node calculator/tools/build-demo.mjs
-// В демо подключены шрифты сайта и макет попап-формы Тильды (#popup:calc со скрытым полем calc),
+// В демо подключены шрифты сайта и макет попап-формы Тильды (#popup:calc со скрытым полем «Расчёт»),
 // чтобы проверить, что расчёт попадает в заявку.
 import { readFileSync, writeFileSync } from 'node:fs';
 
@@ -43,12 +43,11 @@ ${snippet}
   <div class="demo-popup__box">
     <button type="button" class="demo-close" aria-label="Закрыть">×</button>
     <h3>Оставьте заявку</h3>
-    <p>Так выглядит попап-форма. Ниже — содержимое скрытого поля <b>calc</b>, которое придёт вместе с заявкой.</p>
+    <p>Так выглядит попап-форма. Ниже — скрытое поле <b>«Расчёт»</b> в том виде, в каком оно придёт менеджеру вместе с заявкой.</p>
     <form onsubmit="event.preventDefault();alert('Демо: заявка не отправляется')">
       <input type="text" name="Name" placeholder="Как к вам обращаться?">
       <input type="text" name="Phone" placeholder="+7 (000) 000-00-00">
-      <input type="hidden" name="calc">
-      <input type="hidden" name="calc_total">
+      <input type="hidden" name="Расчёт">
       <pre data-demo-out></pre>
       <button type="submit">Отправить</button>
     </form>
@@ -62,7 +61,7 @@ ${snippet}
     if (e.target.closest('a[href$="#popup:calc"]')) {
       e.preventDefault();
       var f = popup.querySelector('form');
-      popup.querySelector('[data-demo-out]').textContent = f.calc.value + '\\n\\ncalc_total: ' + f.calc_total.value;
+      popup.querySelector('[data-demo-out]').textContent = 'Расчёт: ' + f.elements['Расчёт'].value;
       popup.classList.add('is-open');
       document.body.classList.add('t-body_popupshowed');
     }
