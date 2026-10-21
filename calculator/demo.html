@@ -226,12 +226,14 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
     // скрытое поле с любым именем из списка; остальные поля — по желанию (например, для CRM).
     popupHook: '#popup:calc',
     fields: {
-      summary: ['Расчёт', 'Расчет', 'calc'],           // весь расчёт (обязательно)
-      total: ['Сумма', 'calc_total'],                   // итог, например «от 16 490 ₽»
-      service: ['Вид_уборки', 'calc_service'],          // вид уборки
-      tariff: ['Тариф', 'calc_tariff'],                 // тариф
-      area: ['Площадь', 'calc_area'],                   // площадь, м²
-      extras: ['Доп_услуги', 'calc_extras']             // доп. услуги
+      summary: ['Расчёт', 'Расчет', 'calc']             // весь расчёт (обязательно)
+      // Отдельные поля — только если CRM должна разложить данные по своим полям.
+      // Чтобы включить, добавьте в форму скрытое поле с таким именем и уберите «//» в начале строки:
+      // , total: ['Сумма']          // итог, например «от 16 490 ₽»
+      // , service: ['Вид_уборки']   // вид уборки
+      // , tariff: ['Тариф']         // тариф
+      // , area: ['Площадь']         // площадь, м²
+      // , extras: ['Доп_услуги']    // доп. услуги
     },
 
     metrikaId: 108429981,       // Яндекс Метрика; 0 — не отправлять цели
@@ -355,7 +357,8 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
     { id: 'dishwasher', group: 'kitchen', title: 'Посудомоечная машина', short: 'посудомойка', desc: 'Чистка внутри и снаружи', price: 1000, from: true, unit: 'pcs', max: 5 },
     { id: 'washer', group: 'kitchen', title: 'Стиральная машина', short: 'стиральная машина', desc: 'Уплотнитель, лоток, барабан', price: 1000, from: true, unit: 'pcs', max: 5 },
     { id: 'fridge', group: 'kitchen', title: 'Мойка холодильника', short: 'холодильник', desc: 'Полки, ящики, дверцы. Морозилку нужно разморозить заранее', price: 1500, from: true, unit: 'pcs', max: 5 },
-    { id: 'wardrobe', group: 'kitchen', title: 'Шкафы внутри и снаружи', short: 'шкафы', desc: 'Кухонные, купе, гардеробная', price: 2000, from: true, unit: 'pcs', max: 20 },
+    { id: 'wardrobe', group: 'kitchen', title: 'Шкафы пустые', short: 'пустые шкафы', desc: 'Мытьё внутри и снаружи: кухонные, купе, гардеробная', price: 2000, from: true, unit: 'pcs', max: 20 },
+    { id: 'wardrobeFull', group: 'kitchen', title: 'Шкафы заполненные', short: 'заполненные шкафы', desc: 'Шкафы с вещами: мытьё внутри и снаружи', price: 4000, from: true, unit: 'pcs', max: 20 },
 
     { id: 'windows', group: 'windows', title: 'Мытьё окон', short: 'окна', desc: 'Створки с двух сторон, рамы, подоконники', price: 500, from: false, unit: 'sash', max: 60 },
     { id: 'blinds', group: 'windows', title: 'Жалюзи и москитные сетки', short: 'жалюзи', desc: 'Вертикальные и горизонтальные жалюзи, сетки', price: 300, from: true, unit: 'pcs', max: 30 },

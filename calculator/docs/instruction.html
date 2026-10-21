@@ -141,11 +141,12 @@ td:first-child{white-space:nowrap}
     <tr><td>2</td><td>Телефон</td><td><code>Телефон</code> (было <code>Phone</code>)</td></tr>
     <tr><td>3</td><td>Скрытое поле с расчётом</td><td><code>Расчёт</code> (было <code>calc</code>)</td></tr>
     <tr><td>4</td><td>Email</td><td><code>Почта</code> (было <code>Email</code>)</td></tr>
-    <tr><td>5</td><td>Согласие на обработку данных</td><td><code>Согласие_на_обработку_данных</code> (было <code>Checkbox</code>)</td></tr>
-    <tr><td>6</td><td>Согласие с офертой</td><td><code>Согласие_с_офертой</code> (было <code>Checkbox_2</code>)</td></tr>
+    <tr><td>5</td><td>Комментарий</td><td><code>Комментарий</code> (было <code>Input</code>)</td></tr>
+    <tr><td>6</td><td>Согласие на обработку данных</td><td><code>Согласие_на_обработку_данных</code> (было <code>Checkbox</code>)</td></tr>
+    <tr><td>7</td><td>Согласие с офертой</td><td><code>Согласие_с_офертой</code> (было <code>Checkbox_2</code>)</td></tr>
   </table>
   <div class="note warn"><b>Лишние скрытые поля удалите</b>Поля <code>calc_total</code>, <code>calc_service</code>, <code>calc_tariff</code>,
-    <code>calc_area</code>, <code>calc_extras</code> дублируют «Расчёт» и загромождают заявку.</div>
+    <code>calc_area</code>, <code>calc_extras</code> не нужны: калькулятор их не заполняет, всё есть в «Расчёте».</div>
   <div class="note"><b>Что ещё важно</b>
     Если Тильда не сохраняет русское имя у скрытого поля, оставьте <code>calc</code> — калькулятор заполнит и его.<br>
     Если заявки из Тильды создают лиды в Битрикс24 через интеграцию, после переименования проверьте в настройках интеграции,

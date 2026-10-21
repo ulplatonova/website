@@ -213,3 +213,20 @@ test('demo.html собран из актуальной версии кальку
   const demo = readFileSync(new URL('../demo.html', here), 'utf8');
   assert.ok(demo.includes(html), 'запустите: node calculator/tools/build-demo.mjs');
 });
+
+test('шкафы: пустые от 2 000 ₽, заполненные от 4 000 ₽', () => {
+  const res = calc.compute({ service: 'general', tariff: 'lite', area: 40, extras: { wardrobe: 1, wardrobeFull: 2 } });
+  assert.equal(res.extrasTotal, 2000 + 2 * 4000);
+  assert.equal(res.approx, true, 'обе цены «от»');
+  const lines = [...calc.summaryLines(res)];
+  assert.ok(lines.includes('• Шкафы пустые, 1 шт. — от 2 000 ₽'));
+  assert.ok(lines.includes('• Шкафы заполненные, 2 шт. — от 8 000 ₽'));
+  // после ремонта в «Стандарт» и «Премиум» входят только пустые шкафы
+  const reno = calc.compute({ service: 'renovation', tariff: 'standard', area: 50, extras: { wardrobe: 3, wardrobeFull: 1 } });
+  assert.equal(reno.extrasTotal, 4000);
+});
+
+test('по умолчанию заполняется только поле «Расчёт»', () => {
+  assert.deepEqual(Object.keys(calc.config.fields), ['summary']);
+  assert.deepEqual([...calc.config.fields.summary], ['Расчёт', 'Расчет', 'calc']);
+});

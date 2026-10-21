@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Калькулятор CleanHub — обновление</title>
+<style>
+@font-face{font-family:'UA-brand';src:url('https://static.tildacdn.com/tild3032-6561-4961-a135-333136313139/ua-BRAND-bold.woff') format('woff');font-weight:700}
+@page{size:A4;margin:16mm 16mm 18mm}
+:root{--green:#00b14f;--green-d:#008a3d;--ink:#0b2517;--text:#1b211e;--muted:#5d6b63;--line:#dce5df;--soft:#f4f7f5;--tint:#eaf8f0;--warn:#fff4e5;--warn-line:#f3c27a}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:Inter,'DejaVu Sans',Arial,sans-serif;font-size:10.5pt;line-height:1.5;color:var(--text)}
+h1,h2,h3{font-family:'UA-brand',Inter,Arial,sans-serif;font-weight:700;color:#000;line-height:1.15;margin:0}
+h1{font-size:24pt}
+h2{font-size:16pt;margin:0 0 4mm;display:flex;align-items:center;gap:3mm;break-after:avoid;break-inside:avoid}
+h3{font-size:12pt;margin:6mm 0 2.5mm;break-after:avoid}
+p{margin:0 0 2.5mm}
+.num{display:inline-flex;align-items:center;justify-content:center;width:9mm;height:9mm;border-radius:50%;background:var(--green);color:#fff;font-size:12pt;flex:none}
+section{margin-top:9mm}
+.page{break-before:page;margin-top:0}
+.muted{color:var(--muted)}
+code,.code{font-family:'DejaVu Sans Mono',monospace;font-size:9pt}
+code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:0 4px;white-space:nowrap}
+pre{font-family:'DejaVu Sans Mono',monospace;font-size:8.5pt;line-height:1.5;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:3.5mm 4mm;margin:2mm 0 3mm;white-space:pre-wrap;break-inside:avoid}
+b,strong{font-weight:600}
+
+.cover{border-radius:18px;background:var(--ink);color:#fff;padding:10mm 11mm 9mm;margin-bottom:7mm}
+.cover h1{color:#fff;margin-top:3mm}
+.cover .eyebrow{display:inline-block;background:rgba(0,177,79,.22);color:#6ee6a4;border-radius:20px;padding:1.2mm 3.5mm;font-size:9pt;font-weight:500}
+.cover p{color:rgba(255,255,255,.75);margin:3mm 0 0;font-size:11pt}
+.cover .meta{display:flex;gap:8mm;margin-top:6mm;font-size:9pt;color:rgba(255,255,255,.6)}
+.cover .meta b{display:block;color:#fff;font-size:10pt;font-weight:500}
+
+.need{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin:0 0 2mm}
+.need div{border:1px solid var(--line);border-radius:12px;padding:3.5mm 4mm;font-size:9.5pt}
+.need b{display:block;font-size:10pt;margin-bottom:1mm}
+
+figure{margin:3mm 0 0;break-inside:avoid}
+figure img{display:block;width:100%;border:1px solid var(--line);border-radius:12px}
+figure.w74{width:74%;margin-left:auto;margin-right:auto}
+figure.w46{width:46%;margin-left:auto;margin-right:auto}
+figcaption{font-size:8.5pt;color:var(--muted);margin-top:1.8mm}
+
+.flow{display:grid;grid-template-columns:1fr 6mm 1fr 6mm 1fr 6mm 1fr;align-items:stretch;margin:3mm 0 1mm;break-inside:avoid}
+.flow .box{border:1px solid var(--line);border-radius:12px;padding:3mm 3.5mm;font-size:9pt;background:#fff}
+.flow .box b{display:block;font-size:9.5pt;margin-bottom:1mm;color:#000}
+.flow .box.hl{background:var(--tint);border-color:#bfe6cf}
+.flow .arr{display:flex;align-items:center;justify-content:center;color:var(--green);font-size:13pt}
+
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:2mm 0 3mm}
+ol.steps>li{counter-increment:s;position:relative;padding-left:9mm;margin-bottom:2.6mm;break-inside:avoid}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:6mm;height:6mm;border-radius:50%;background:var(--tint);color:var(--green-d);font-weight:600;font-size:9pt;display:flex;align-items:center;justify-content:center}
+ul{margin:1mm 0 2.5mm;padding-left:5mm}
+ul li{margin-bottom:1mm}
+
+.note{border-radius:12px;padding:3.2mm 4mm;margin:3mm 0;font-size:9.5pt;break-inside:avoid;background:var(--tint);border:1px solid #bfe6cf}
+.note.warn{background:var(--warn);border-color:var(--warn-line)}
+.note b:first-child{display:block;margin-bottom:.6mm}
+
+table{width:100%;border-collapse:collapse;margin:2mm 0 3mm;font-size:9pt;break-inside:auto}
+th,td{text-align:left;vertical-align:top;padding:2.2mm 2.6mm;border-bottom:1px solid var(--line)}
+th{font-weight:600;background:var(--soft);font-size:8.5pt;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+tr{break-inside:avoid}
+td:first-child{white-space:nowrap}
+
+.check{list-style:none;padding:0;margin:2mm 0 3mm}
+.check li{position:relative;padding-left:8mm;margin-bottom:2mm;break-inside:avoid}
+.check li::before{content:"";position:absolute;left:0;top:.6mm;width:4.2mm;height:4.2mm;border:1.5px solid #9fb3a7;border-radius:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6mm;align-items:start}
+</style>
+<style>
+.pages{display:flex;flex-wrap:wrap;gap:2mm;margin:2mm 0 1mm}
+.pages span{border:1px solid #bfe6cf;background:var(--tint);color:var(--green-d);border-radius:20px;padding:1mm 3mm;font-size:9pt;font-weight:500}
+.changes{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5mm;margin:3mm 0 0}
+.changes div{border:1px solid var(--line);border-radius:12px;padding:3mm;font-size:8.8pt;line-height:1.4}
+.changes b{display:block;font-size:9.5pt;margin-bottom:.8mm;color:#000}
+td.arrow{color:var(--muted);white-space:nowrap}
+table.wrap td:first-child{white-space:normal;width:38%}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <span class="eyebrow">Для специалиста по Тильде</span>
+  <h1>Обновление калькулятора на cleanhub24.ru</h1>
+  <p>Калькулятор уже стоит на сайте. Нужно заменить код и поправить форму заявки, чтобы менеджерам приходили понятные заявки. Займёт около 20 минут.</p>
+  <div class="meta">
+    <div><b>Файл с кодом</b>cleanhub-calculator.html</div>
+    <div><b>Где менять</b>5 страниц сайта</div>
+  </div>
+</div>
+
+<p><b>Калькулятор сейчас стоит на этих страницах.</b> Шаги 1 и 2 нужно сделать на каждой из них:</p>
+<div class="pages"><span>Главная /</span><span>/price</span><span>/general</span><span>/support</span><span>/afterepair</span></div>
+<p class="muted" style="font-size:9pt">Если калькулятор стоит ещё где-то, обновите и там.</p>
+
+<div class="changes">
+  <div><b>Шкафы</b>Теперь две услуги: пустые — от 2 000 ₽, заполненные — от 4 000 ₽.</div>
+  <div><b>Без скидки 10%</b>Галочки «Первый заказ — скидка» больше нет.</div>
+  <div><b>«Премиум»</b>Тариф «Премиум» выбран по умолчанию.</div>
+  <div><b>Заявка</b>Приходит по-русски: главное сверху, каждая услуга с новой строки.</div>
+</div>
+
+<section>
+  <h2><span class="num">1</span>Заменить код калькулятора</h2>
+  <ol class="steps">
+    <li>Откройте файл <code>cleanhub-calculator.html</code> в текстовом редакторе: Windows — «Блокнот»
+      (правой кнопкой → «Открыть с помощью»), Mac — VS Code. Выделите весь текст (<code>Ctrl+A</code> / <code>⌘A</code>) и скопируйте.</li>
+    <li>В Тильде откройте страницу и найдите блок <b>«HTML-код» (T123)</b> с калькулятором. Нажмите <b>«Контент»</b>.</li>
+    <li>Удалите <b>весь</b> старый код в поле и вставьте новый. Сохраните.</li>
+  </ol>
+  <div class="note warn"><b>Старый код нужно удалить полностью</b>Если вставить новый код рядом со старым, на странице окажутся два калькулятора.</div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Настроить форму заявки</h2>
+  <p>На каждой из этих страниц есть попап-форма калькулятора со ссылкой <code>#popup:calc</code>. Откройте её <b>«Контент»</b>
+    и сделайте четыре вещи.</p>
+
+  <h3>2.1. Переименуйте поля</h3>
+  <p>В заявке поле подписано так, как указано в его «Имени переменной». Поменяйте имена:</p>
+  <table>
+    <tr><th>Поле в форме</th><th>Сейчас</th><th></th><th>Новое имя переменной</th></tr>
+    <tr><td>Имя</td><td><code>Name</code></td><td class="arrow">→</td><td><code>Имя</code></td></tr>
+    <tr><td>Телефон</td><td><code>Phone</code></td><td class="arrow">→</td><td><code>Телефон</code></td></tr>
+    <tr><td>Скрытое поле с расчётом</td><td><code>calc</code></td><td class="arrow">→</td><td><code>Расчёт</code></td></tr>
+    <tr><td>Email</td><td><code>Email</code></td><td class="arrow">→</td><td><code>Почта</code></td></tr>
+    <tr><td>Комментарий</td><td><code>Input</code></td><td class="arrow">→</td><td><code>Комментарий</code></td></tr>
+    <tr><td>Согласие на обработку данных</td><td><code>Checkbox</code></td><td class="arrow">→</td><td><code>Согласие_на_обработку_данных</code></td></tr>
+    <tr><td>Согласие с офертой</td><td><code>Checkbox_2</code></td><td class="arrow">→</td><td><code>Согласие_с_офертой</code></td></tr>
+  </table>
+
+  <h3>2.2. Поставьте «Расчёт» сразу под «Телефон»</h3>
+  <p>В заявке поля идут в том же порядке, что и в форме. Перетащите скрытое поле «Расчёт» на третье место, сразу после телефона.</p>
+
+  <h3>2.3. Удалите пять лишних скрытых полей</h3>
+  <p><code>calc_total</code>, <code>calc_service</code>, <code>calc_tariff</code>, <code>calc_area</code>, <code>calc_extras</code>.
+    Новый калькулятор их не заполняет: всё есть в поле «Расчёт».</p>
+
+  <h3>2.4. Переименуйте форму</h3>
+  <p>Название формы «Общая форма» замените на <b>«Калькулятор»</b>. Тогда менеджер в строке «Form Name» сразу видит, что заявка пришла из калькулятора.</p>
+  <p>Сохраните блок.</p>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Опубликовать и проверить</h2>
+  <ol class="steps">
+    <li>Опубликуйте страницы.</li>
+    <li>Откройте одну из них на телефоне, выберите несколько услуг, нажмите «Оставить заявку» и отправьте тестовую заявку.</li>
+    <li>Проверьте по списку:</li>
+  </ol>
+  <ul class="check">
+    <li>В калькуляторе две строки со шкафами: «Шкафы пустые» от 2 000 ₽ и «Шкафы заполненные» от 4 000 ₽.</li>
+    <li>Галочки «Первый заказ — скидка 10%» нет.</li>
+    <li>При открытии страницы выбран тариф «Премиум».</li>
+    <li>В заявке поля подписаны по-русски, «Расчёт» идёт сразу после телефона, полей <code>calc_…</code> нет.</li>
+  </ul>
+  <div style="break-inside:avoid">
+  <p>Заявка должна выглядеть примерно так (имя и телефон условные):</p>
+<pre>Имя: Анна
+Телефон: +7 900 000-00-00
+Расчёт: Генеральная уборка, тариф «Премиум», 50 м²
+Итого: от 22 990 ₽
+
+Тариф «Премиум» (41–60 м²): 16 990 ₽
+Входит: СВЧ, духовка, посудомойка, вытяжка, холодильник, стиральная машина
+
+Доп. услуги (от 6 000 ₽):
+• Шкафы заполненные, 1 шт. — от 4 000 ₽
+• Мытьё окон, 4 створки — 2 000 ₽
+• Химчистка мебели — оценить по фото
+Почта: anna@example.ru
+Согласие_на_обработку_данных: yes
+Согласие_с_офертой: yes</pre>
+  <p class="muted" style="font-size:9pt">Строки «Request details», «Additional information» и значение «yes» у согласий добавляет сама Тильда — так и должно быть.</p>
+  </div>
+
+  <h2 style="margin-top:8mm">Если что-то не так</h2>
+  <table class="wrap">
+    <tr><th>Что видно</th><th>Что сделать</th></tr>
+    <tr><td>В заявке нет расчёта</td><td>Проверьте имя скрытого поля: ровно <code>Расчёт</code> (можно <code>Расчет</code> или <code>calc</code>). Проверьте, что поле не удалено вместе с лишними.</td></tr>
+    <tr><td>Тильда не сохраняет русское имя поля</td><td>Оставьте прежнее имя (<code>Name</code>, <code>Phone</code>, <code>calc</code>). Заявка придёт, только подпись будет латиницей.</td></tr>
+    <tr><td>Имя или телефон перестали попадать в карточку лида в Битрикс24</td><td>В настройках интеграции Тильды с Битрикс24 заново сопоставьте поля «Имя» и «Телефон».</td></tr>
+    <tr><td>На сайте старые цены или скидка 10%</td><td>Страница не переопубликована, или браузер показывает старую версию. Опубликуйте страницу и обновите её в браузере.</td></tr>
+    <tr><td>На странице два калькулятора</td><td>Старый код остался в блоке или в соседнем блоке T123. Удалите его.</td></tr>
+  </table>
+</section>
+
+</body>
+</html>
