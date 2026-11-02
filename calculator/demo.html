@@ -73,9 +73,9 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
 
 /* площадь */
 #cleanhub-calc .chc-area{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px}
-#cleanhub-calc .chc-area__field{display:flex;align-items:center;gap:8px;height:56px;padding:0 22px;border:1.5px solid var(--chc-line);border-radius:30px;background:#fff;flex:none;cursor:text;transition:border-color .15s}
+#cleanhub-calc .chc-area__field{display:flex;align-items:center;gap:8px;height:56px;padding:0 24px;border:1.5px solid var(--chc-line);border-radius:30px;background:#fff;flex:none;cursor:text;transition:border-color .15s}
 #cleanhub-calc .chc-area__field:focus-within{border-color:var(--chc-green)}
-#cleanhub-calc .chc-area__field input{width:84px;border:0;outline:0;background:transparent;padding:0;font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:700;font-size:26px;text-align:right;color:#000}
+#cleanhub-calc .chc-area__field input{width:2.4ch;border:0;outline:0;background:transparent;padding:0;font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:700;font-size:26px;text-align:right;color:#000}
 #cleanhub-calc .chc-area__field span{font-size:17px;color:var(--chc-muted)}
 #cleanhub-calc .chc-area__hint{flex:1;min-width:200px;font-size:14px;color:var(--chc-muted)}
 
@@ -189,8 +189,8 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
   #cleanhub-calc .chc-opts--sm .chc-opt{padding:8px 10px}
   #cleanhub-calc .chc-opts--sm .chc-opt__title{font-size:13px}
   #cleanhub-calc .chc-opts--sm .chc-opt__sub{font-size:12px}
-  #cleanhub-calc .chc-area__field{height:52px;padding:0 18px}
-  #cleanhub-calc .chc-area__field input{width:72px;font-size:22px}
+  #cleanhub-calc .chc-area__field{height:52px;padding:0 20px}
+  #cleanhub-calc .chc-area__field input{font-size:22px}
   #cleanhub-calc .chc-area__hint{min-width:0;flex-basis:100%;font-size:13px}
   #cleanhub-calc .chc-tariffs.chc-opts{grid-template-columns:minmax(0,1fr)}
   #cleanhub-calc .chc-tariff{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:4px 12px;padding:14px 16px}
@@ -850,6 +850,11 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
       return '<div class="chc-sum__row ' + (cls || '') + '"><span>' + esc(title) + (small ? '<small>' + esc(small) + '</small>' : '') + '</span><span>' + esc(value) + '</span></div>';
     }
 
+    // поле площади по ширине числа, чтобы рядом с «м²» не было пустого места
+    function fitArea() {
+      refs.areaInput.style.width = (Math.max(String(refs.areaInput.value).length, 2) + 0.4) + 'ch';
+    }
+
     function render() {
       var r = result = compute(state);
       var s = r.state;
@@ -861,6 +866,7 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
 
       // площадь (границы тарифов по площади клиенту не показываем)
       if (document.activeElement !== refs.areaInput) refs.areaInput.value = s.area;
+      fitArea();
 
       // тарифы
       refs.tariffs.hidden = r.individual;
@@ -1011,6 +1017,7 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
     }
     refs.areaInput.addEventListener('input', function () {
       var v = digits(refs.areaInput);
+      fitArea();
       if (v && Number(v) >= 1) set({ area: Number(v) });
     });
     refs.areaInput.addEventListener('blur', function () { refs.areaInput.value = result.area; });
