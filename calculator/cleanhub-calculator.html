@@ -686,7 +686,8 @@
         '<span class="chc-opt__sub">от ' + money(minPrice(svc)) + '</span></button>';
     }).join('');
 
-    var tariffs = TARIFFS.map(function (t) {
+    // показываем от старшего к младшему: Премиум, Стандарт, Лайт (порядок в TARIFFS нужен для подсказки «Выгоднее тариф»)
+    var tariffs = TARIFFS.slice().reverse().map(function (t) {
       return '<button type="button" class="chc-tariff" data-action="tariff" data-value="' + t.id + '" aria-pressed="false">' +
         '<span class="chc-tariff__head"><span class="chc-tariff__name">' + esc(t.title) + '</span><span class="chc-radio"></span></span>' +
         '<span class="chc-tariff__price" data-tariff-price="' + t.id + '"></span>' +
