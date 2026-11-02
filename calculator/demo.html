@@ -267,11 +267,11 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
       hint: 'Глубокая уборка всех помещений и труднодоступных мест: от потолка до пола. В среднем 4–6 часов.',
       tiers: [40, 60, 80, 100, 120],
       prices: {
-        lite:     [8490, 12990, 17490, 21990, 26490],
-        standard: [10490, 14990, 19490, 23990, 28490],
-        premium:  [12490, 16990, 21490, 25990, 30490]
+        lite:     [8990, 13990, 18490, 23490, 27990],
+        standard: [10990, 15990, 20490, 25490, 29990],
+        premium:  [12990, 17990, 22490, 27490, 31990]
       },
-      perM2: 250,
+      perM2: 265,
       perks: {
         lite: [],
         standard: ['СВЧ', 'духовка', 'посудомойка'],
@@ -285,14 +285,14 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
     support: {
       title: 'Поддерживающая',
       full: 'Поддерживающая уборка',
-      hint: 'Регулярная уборка, чтобы дома всегда было чисто. От 2 часов. Можно оформить абонемент со скидкой.',
+      hint: 'Регулярная уборка, чтобы дома всегда было чисто. От 2 часов.',
       tiers: [25, 40, 60, 80, 100, 120],
       prices: {
-        lite:     [4390, 4990, 6490, 8490, 10490, 12090],
-        standard: [5390, 5990, 7490, 9490, 11490, 13090],
-        premium:  [7140, 7740, 9240, 11240, 13240, 14840]
+        lite:     [4990, 5490, 6990, 9490, 11490, 13490],
+        standard: [5990, 6490, 7990, 10490, 12490, 14490],
+        premium:  [7990, 8490, 9990, 12490, 14490, 16490]
       },
-      perM2: 110,
+      perM2: 120,
       perks: {
         lite: [],
         standard: ['1 час глажки'],
@@ -326,8 +326,11 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
     }
   };
 
-  /* Абонемент на поддерживающую уборку: скидка с каждой уборки по сроку, ₽ */
+  /* Абонемент на поддерживающую уборку: скидка с каждой уборки по сроку, ₽.
+     Сейчас абонементы не продаём (enabled: false) — в калькуляторе их нет.
+     Чтобы вернуть: enabled: true и проверить скидки ниже. */
   var SUBSCRIPTION = {
+    enabled: false,
     service: 'support',
     frequencies: [2, 4],
     discounts: { 3: 500, 6: 700, 12: 1000 }
@@ -356,20 +359,30 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
     { id: 'microwave', group: 'kitchen', title: 'Мойка СВЧ', short: 'СВЧ', desc: 'Внутри и снаружи', price: 500, from: true, unit: 'pcs', max: 5 },
     { id: 'dishwasher', group: 'kitchen', title: 'Посудомоечная машина', short: 'посудомойка', desc: 'Чистка внутри и снаружи', price: 1000, from: true, unit: 'pcs', max: 5 },
     { id: 'washer', group: 'kitchen', title: 'Стиральная машина', short: 'стиральная машина', desc: 'Уплотнитель, лоток, барабан', price: 1000, from: true, unit: 'pcs', max: 5 },
-    { id: 'fridge', group: 'kitchen', title: 'Мойка холодильника', short: 'холодильник', desc: 'Полки, ящики, дверцы. Морозилку нужно разморозить заранее', price: 1500, from: true, unit: 'pcs', max: 5 },
+    { id: 'fridge', group: 'kitchen', title: 'Мойка холодильника', short: 'холодильник', desc: 'Полки, ящики, дверцы. Разморозка — до нашего приезда', price: 1500, from: true, unit: 'pcs', max: 5 },
     { id: 'wardrobe', group: 'kitchen', title: 'Шкафы пустые', short: 'пустые шкафы', desc: 'Мытьё внутри и снаружи: кухонные, купе, гардеробная', price: 2000, from: true, unit: 'pcs', max: 20 },
     { id: 'wardrobeFull', group: 'kitchen', title: 'Шкафы заполненные', short: 'заполненные шкафы', desc: 'Шкафы с вещами: мытьё внутри и снаружи', price: 4000, from: true, unit: 'pcs', max: 20 },
 
-    { id: 'windows', group: 'windows', title: 'Мытьё окон', short: 'окна', desc: 'Створки с двух сторон, рамы, подоконники', price: 500, from: false, unit: 'sash', max: 60 },
-    { id: 'blinds', group: 'windows', title: 'Жалюзи и москитные сетки', short: 'жалюзи', desc: 'Вертикальные и горизонтальные жалюзи, сетки', price: 300, from: true, unit: 'pcs', max: 30 },
-    { id: 'curtains', group: 'windows', title: 'Шторы и тюль', short: 'шторы', desc: 'Снятие, стирка, навеска', price: 700, from: true, unit: 'pcs', max: 30 },
+    // priceBy / titleBy / descBy — другое значение для вида уборки (ключ — id из SERVICES)
+    { id: 'windows', group: 'windows', title: 'Мытьё окон', short: 'окна', desc: 'Створки изнутри и снаружи, рамы, подоконники', price: 550, from: false, unit: 'sash', max: 60,
+      priceBy: { renovation: 750 },
+      titleBy: { renovation: 'Мытьё окон после ремонта' },
+      descBy: { renovation: 'Строительная пыль, краска, клей, плёнка' } },
+    { id: 'blinds', group: 'windows', title: 'Мытьё жалюзи', short: 'жалюзи', desc: 'Вертикальные и горизонтальные', price: 300, from: true, unit: 'pcs', max: 30 },
+    { id: 'screens', group: 'windows', title: 'Мытьё москитных сеток', short: 'москитные сетки', desc: 'Снимем, вымоем, установим обратно', price: 300, from: true, unit: 'pcs', max: 30 },
+    { id: 'curtains', group: 'windows', title: 'Шторы и тюль', short: 'шторы', desc: 'Снятие, стирка, навеска, химчистка', price: 700, from: true, unit: 'pcs', max: 30 },
 
-    { id: 'hourly', group: 'home', title: 'Почасовая задача', short: 'час глажки', desc: 'Глажка, мойка посуды, разбор вещей', price: 1250, from: true, unit: 'hour', max: 10 },
+    { id: 'bathroom', group: 'home', title: 'Дополнительный санузел', short: 'доп. санузел', desc: 'Если санузлов больше одного: ванная, туалет, раковина или отдельный туалет', price: 1500, from: false, unit: 'pcs', max: 5,
+      priceBy: { support: 1000, renovation: 2000 } },
+    { id: 'hourly', group: 'home', title: 'Почасовая задача', short: 'час глажки', desc: 'Глажка, посуда, разбор вещей', price: 1250, from: true, unit: 'hour', max: 10 },
     { id: 'chandelier', group: 'home', title: 'Сложные люстры', short: 'люстры', desc: 'Плафоны, подвески, хрусталь', price: 1000, from: true, unit: 'pcs', max: 10 },
-    { id: 'balcony', group: 'home', title: 'Уборка балкона', short: 'балкон', desc: 'Пыль с поверхностей, мытьё пола', price: 1000, from: true, unit: 'pcs', max: 5 },
+    { id: 'balcony', group: 'home', title: 'Уборка балкона', short: 'балкон', desc: 'Пыль с поверхностей, мытьё пола', price: 1000, from: true, unit: 'pcs', max: 5,
+      priceBy: { renovation: 2000 },
+      titleBy: { renovation: 'Уборка балкона после ремонта' },
+      descBy: { renovation: 'Строительная пыль с поверхностей, мытьё пола' } },
     { id: 'grout', group: 'home', title: 'Чистка межплиточных швов', short: 'швы', desc: 'Стандартные швы плитки', price: 500, from: true, unit: 'm2', max: 100 },
-    { id: 'steam', group: 'home', title: 'Пароочиститель', short: 'пароочиститель', desc: 'Убивает до 99% бактерий и грибка', price: 1500, from: false, toggle: true },
-    { id: 'upholstery', group: 'home', title: 'Химчистка мебели', short: 'химчистка', desc: 'Диваны, кресла, матрасы, ковры. Стоимость — по фото', price: null, toggle: true }
+    { id: 'steam', group: 'home', title: 'Пароочиститель', short: 'пароочиститель', desc: 'До 99% бактерий и грибков. Цена — за доставку и использование', price: 1500, from: false, toggle: true },
+    { id: 'upholstery', group: 'home', title: 'Химчистка мебели', short: 'химчистка', desc: 'Диваны, кресла, матрасы, ковры; запахи, кровь, моча, сложные пятна. Расчёт по фото', price: null, toggle: true }
   ];
 
   /* ================================================================
@@ -421,6 +434,13 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
     });
   }
 
+  function pick(map, svcId, fallback) {
+    return map && map[svcId] != null ? map[svcId] : fallback;
+  }
+  function priceOf(x, svcId) { return pick(x.priceBy, svcId, x.price); }
+  function titleOf(x, svcId) { return pick(x.titleBy, svcId, x.title); }
+  function descOf(x, svcId) { return pick(x.descBy, svcId, x.desc); }
+
   function clampQty(x, v) {
     var max = x.toggle ? 1 : (x.max || 99);
     var n = Math.floor(Number(v));
@@ -436,7 +456,7 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
     s.area = isFinite(area) && area >= 1 ? Math.min(area, CONFIG.areaMax) : d.area;
     s.tariff = TARIFF_IDS.indexOf(state.tariff) >= 0 ? state.tariff : d.tariff;
     var freq = Number(state.freq);
-    s.freq = s.service === SUBSCRIPTION.service && SUBSCRIPTION.frequencies.indexOf(freq) >= 0 ? freq : 0;
+    s.freq = SUBSCRIPTION.enabled && s.service === SUBSCRIPTION.service && SUBSCRIPTION.frequencies.indexOf(freq) >= 0 ? freq : 0;
     s.months = SUBSCRIPTION.discounts[state.months] != null ? Number(state.months) : d.months;
     s.extras = {};
     var src = state.extras || {};
@@ -467,11 +487,12 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
       if (!qty) return;
       var inc = Math.min(qty, included[x.id] || 0);
       var paid = qty - inc;
-      var cost = x.price == null ? 0 : paid * x.price;
-      if (x.price == null) hasQuote = true;
+      var price = priceOf(x, s.service);
+      var cost = price == null ? 0 : paid * price;
+      if (price == null) hasQuote = true;
       if (x.from && paid > 0) approx = true;
       extrasTotal += cost;
-      lines.push({ id: x.id, title: x.title, qty: qty, included: inc, paid: paid, cost: cost, from: !!x.from && paid > 0, quote: x.price == null, toggle: !!x.toggle, unit: x.unit });
+      lines.push({ id: x.id, title: titleOf(x, s.service), qty: qty, included: inc, paid: paid, cost: cost, from: !!x.from && paid > 0, quote: price == null, toggle: !!x.toggle, unit: x.unit });
     });
 
     var discount = 0;
@@ -669,9 +690,10 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
     return Math.min.apply(null, TARIFF_IDS.map(function (t) { return svc.prices[t][0]; }));
   }
 
-  function extraPriceLabel(x) {
-    if (x.price == null) return 'по фото';
-    var p = (x.from ? 'от ' : '') + money(x.price);
+  function extraPriceLabel(x, svcId) {
+    var price = priceOf(x, svcId);
+    if (price == null) return 'по фото';
+    var p = (x.from ? 'от ' : '') + money(price);
     return x.toggle ? p : p + ' / ' + (UNITS[x.unit] || UNITS.pcs).short;
   }
 
@@ -720,9 +742,9 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
               '<button type="button" class="chc-stepper__btn" data-action="inc" data-id="' + x.id + '" aria-label="Добавить: ' + esc(x.title) + '">' + ICONS.plus + '</button>' +
             '</div>';
         return '<div class="chc-x" data-extra="' + x.id + '"><div class="chc-x__body">' +
-          '<div class="chc-x__title">' + esc(x.title) + '</div>' +
-          (x.desc ? '<div class="chc-x__desc">' + esc(x.desc) + '</div>' : '') +
-          '<div class="chc-x__meta"><span class="chc-x__price">' + esc(extraPriceLabel(x)) + '</span><span class="chc-x__inc" data-inc="' + x.id + '" hidden></span></div>' +
+          '<div class="chc-x__title" data-x-title="' + x.id + '">' + esc(x.title) + '</div>' +
+          '<div class="chc-x__desc" data-x-desc="' + x.id + '">' + esc(x.desc || '') + '</div>' +
+          '<div class="chc-x__meta"><span class="chc-x__price" data-x-price="' + x.id + '">' + esc(extraPriceLabel(x, CONFIG.defaults.service)) + '</span><span class="chc-x__inc" data-inc="' + x.id + '" hidden></span></div>' +
           '</div>' + ctrl + '</div>';
       }).join('');
       return '<div class="chc-xgroup"><div class="chc-xgroup__title">' + esc(g.title) + '</div><div class="chc-xlist">' + rows + '</div></div>';
@@ -857,7 +879,7 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
       });
 
       // регулярность
-      var isSub = s.service === SUBSCRIPTION.service;
+      var isSub = SUBSCRIPTION.enabled && s.service === SUBSCRIPTION.service;
       refs.freqStep.hidden = !isSub;
       pressed(all('[data-action="freq"]'), function (n) { return Number(n.getAttribute('data-value')) === s.freq; });
       refs.months.hidden = !s.freq;
@@ -880,6 +902,9 @@ body{margin:0;background:#fff;--t-headline-font:'UA-brand',Arial,sans-serif;--t-
         var qty = s.extras[x.id] || 0;
         var rowNode = root.querySelector('[data-extra="' + x.id + '"]');
         rowNode.classList.toggle('is-on', qty > 0);
+        rowNode.querySelector('[data-x-title]').textContent = titleOf(x, s.service);
+        rowNode.querySelector('[data-x-desc]').textContent = descOf(x, s.service) || '';
+        rowNode.querySelector('[data-x-price]').textContent = extraPriceLabel(x, s.service);
         var inc = r.included[x.id] || 0;
         var incNode = root.querySelector('[data-inc="' + x.id + '"]');
         incNode.hidden = !inc;

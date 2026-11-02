@@ -7,7 +7,7 @@ import vm from 'node:vm';
 
 const here = new URL('.', import.meta.url);
 const html = readFileSync(new URL('../cleanhub-calculator.html', here), 'utf8');
-const sheet = JSON.parse(readFileSync(new URL('fixtures/sheet.json', here), 'utf8'));
+const prices = JSON.parse(readFileSync(new URL('fixtures/prices.json', here), 'utf8'));
 
 function loadCalc() {
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
@@ -18,79 +18,52 @@ function loadCalc() {
 }
 
 const calc = loadCalc();
-const TARIFF = { 'лайт': 'lite', 'стандарт': 'standard', 'премиум': 'premium' };
-const SHEETS = { 'ГЕНЕРАЛЬНАЯ': 'general', 'ПОСЛЕ РЕМОНТА': 'renovation', 'ПОДДЕРЖИВАЮЩАЯ': 'support' };
+const TARIFFS = ['lite', 'standard', 'premium'];
 
-// «до 40м2» → 40, «41-60м2» / «41–60 м²» → 60
-const upper = (label) => Number(label.match(/(\d+)\s*(?:м2|м²)/)[1]);
-
-for (const [sheetName, service] of Object.entries(SHEETS)) {
-  test(`${sheetName}: цены тарифов совпадают с таблицей на границах площади`, () => {
-    const rows = sheet[sheetName].filter((r) => TARIFF[r['категория уборки']]);
-    assert.ok(rows.length >= 15);
-    rows.forEach((r, i) => {
-      const tariff = TARIFF[r['категория уборки']];
-      // нижняя граница — следующий метр после предыдущей строки того же тарифа («до 40» после «до 25» = 26–40)
-      const prev = rows[i - 1];
-      const from = prev && prev['категория уборки'] === r['категория уборки'] ? upper(prev['площадь']) + 1 : 1;
-      for (const area of [from, upper(r['площадь'])]) {
-        const res = calc.compute({ service, tariff, area });
-        assert.equal(res.individual, false, `${sheetName} ${area} м²`);
-        assert.equal(res.base, r['цена'], `${sheetName} · ${tariff} · ${area} м²`);
-        assert.equal(res.total, r['цена']);
-      }
-    });
+for (const service of ['general', 'support', 'renovation']) {
+  const p = prices[service];
+  test(`${service}: цены тарифов совпадают с баннерами на границах площади`, () => {
+    for (const tariff of TARIFFS) {
+      p.tiers.forEach((upper, i) => {
+        const from = i ? p.tiers[i - 1] + 1 : 1;
+        for (const area of [from, upper]) {
+          const res = calc.compute({ service, tariff, area });
+          assert.equal(res.individual, false, `${service} ${area} м²`);
+          assert.equal(res.base, p[tariff][i], `${service} · ${tariff} · ${area} м²`);
+          assert.equal(res.total, p[tariff][i]);
+        }
+      });
+    }
   });
 
-  test(`${sheetName}: свыше 120 м² — индивидуальный расчёт по цене за м²`, () => {
-    const row = sheet[sheetName].find((r) => r['категория уборки'] === 'индивидуальный расчет');
-    const perM2 = Number(String(row['цена']).match(/\d+/)[0]);
-    for (const area of [121, 150, 300]) {
+  test(`${service}: свыше ${p.tiers.at(-1)} м² — индивидуальный расчёт по цене за м²`, () => {
+    for (const area of [p.tiers.at(-1) + 1, 150, 300]) {
       const res = calc.compute({ service, tariff: 'premium', area });
       assert.equal(res.individual, true);
-      assert.equal(res.base, area * perM2);
+      assert.equal(res.base, area * p.perM2);
       assert.equal(res.approx, true, 'итог показывается как «от»');
     }
-    assert.equal(calc.compute({ service, area: 120 }).individual, false);
+    assert.equal(calc.compute({ service, area: p.tiers.at(-1) }).individual, false);
   });
 }
 
-for (const [sheetName, freq] of [['Абонемент 4 раза в месяц', 4], ['Абонемент 2 раза в месяц', 2]]) {
-  test(`${sheetName}: все строки таблицы`, () => {
-    const rows = sheet[sheetName];
-    assert.equal(rows.length, 54);
-    for (const r of rows) {
-      const tariff = TARIFF[r['Тариф'].toLowerCase()];
-      const months = Number(r['Срок'].match(/\d+/)[0]);
-      const area = upper(r['Площадь']);
-      const res = calc.compute({ service: 'support', tariff, area, freq, months });
-      const sub = res.subscription;
-      const ctx = `${r['Площадь']} · ${r['Тариф']} · ${r['Срок']}`;
-      assert.equal(res.base, r['Разовая цена'], ctx);
-      assert.equal(sub.freq, r['Уборок в месяц'], ctx);
-      assert.equal(sub.perCleaning, r['Цена за уборку'], ctx);
-      assert.equal(sub.perMonth, r['Стоимость в месяц'], ctx);
-      assert.equal(sub.savingMonth, r['Экономия в месяц'], ctx);
-      assert.equal(sub.periodTotal, r['Итого за период'], ctx);
-      assert.equal(sub.periodSaving, r['Экономия за период'], ctx);
-      assert.equal(res.total, r['Стоимость в месяц'], ctx);
-    }
-  });
-}
-
-test('абонемент доступен только для поддерживающей уборки', () => {
-  assert.equal(calc.compute({ service: 'general', freq: 4, months: 6 }).subscription, null);
-  assert.ok(calc.compute({ service: 'support', freq: 4, months: 6 }).subscription);
+test('абонементы выключены: калькулятор их не считает', () => {
+  assert.equal(calc.subscription.enabled, false);
+  const res = calc.compute({ service: 'support', tariff: 'lite', area: 30, freq: 4, months: 12 });
+  assert.equal(res.subscription, null);
+  assert.equal(res.state.freq, 0);
+  assert.equal(res.total, 5490);
+  assert.ok(!/абонемент/i.test(calc.summaryLines(res).join('\n')));
 });
 
 test('доп. услуги считаются по прайсу, «от»-цены помечают итог', () => {
   const res = calc.compute({ service: 'general', tariff: 'lite', area: 40, extras: { windows: 6 } });
-  assert.equal(res.extrasTotal, 3000);
-  assert.equal(res.total, 8490 + 3000);
+  assert.equal(res.extrasTotal, 3300);
+  assert.equal(res.total, 8990 + 3300);
   assert.equal(res.approx, false, 'мытьё окон — фиксированная цена');
 
   const res2 = calc.compute({ service: 'general', tariff: 'lite', area: 40, extras: { windows: 2, curtains: 3, steam: 1 } });
-  assert.equal(res2.extrasTotal, 2 * 500 + 3 * 700 + 1500);
+  assert.equal(res2.extrasTotal, 2 * 550 + 3 * 700 + 1500);
   assert.equal(res2.approx, true);
 });
 
@@ -108,10 +81,10 @@ test('после ремонта «Премиум»: окна включены п
   for (const [area, sashes] of Object.entries(expected)) {
     const res = calc.compute({ service: 'renovation', tariff: 'premium', area: Number(area), extras: { windows: sashes + 3 } });
     assert.equal(res.included.windows, sashes);
-    assert.equal(res.extrasTotal, 3 * 500, `${area} м²`);
+    assert.equal(res.extrasTotal, 3 * 750, `${area} м², окна после ремонта 750 ₽`);
   }
   const std = calc.compute({ service: 'renovation', tariff: 'standard', area: 50, extras: { wardrobe: 4, windows: 2 } });
-  assert.equal(std.extrasTotal, 1000, 'шкафы входят в «Стандарт», окна — нет');
+  assert.equal(std.extrasTotal, 1500, 'шкафы входят в «Стандарт», окна — нет');
 });
 
 test('поддерживающая: 1 час глажки входит в «Стандарт» и «Премиум»', () => {
@@ -121,7 +94,7 @@ test('поддерживающая: 1 час глажки входит в «Ст
 });
 
 test('подсказка о более выгодном тарифе', () => {
-  // Лайт 8 490 + духовка 1 000 + СВЧ 500 + посудомойка 1 000 = 10 990 > Стандарт 10 490
+  // Лайт 8 990 + духовка 1 000 + СВЧ 500 + посудомойка 1 000 = 11 490 > Стандарт 10 990
   const res = calc.compute({ service: 'general', tariff: 'lite', area: 40, extras: { oven: 1, microwave: 1, dishwasher: 1 } });
   assert.equal(res.upsell.tariff, 'standard');
   assert.equal(res.upsell.saving, 500);
@@ -143,13 +116,13 @@ test('скидка на первый заказ выключена', () => {
   const res = calc.compute({ service: 'general', tariff: 'standard', area: 60, firstOrder: true });
   assert.equal(res.discount, null);
   assert.equal(res.firstOrderAvailable, false);
-  assert.equal(res.total, 14990);
+  assert.equal(res.total, 15990);
 });
 
 test('если включить скидку: 10% от тарифа, только генеральная и после ремонта', () => withFirstOrder(() => {
   const g = calc.compute({ service: 'general', tariff: 'standard', area: 60, firstOrder: true, extras: { windows: 4 } });
-  assert.equal(g.discount.amount, 1499);
-  assert.equal(g.total, 14990 - 1499 + 2000);
+  assert.equal(g.discount.amount, 1599);
+  assert.equal(g.total, 15990 - 1599 + 2200);
   assert.equal(calc.compute({ service: 'support', tariff: 'standard', area: 60, firstOrder: true }).discount, null);
   const big = calc.compute({ service: 'renovation', area: 300, firstOrder: true });
   assert.equal(big.discount.amount, 6000, 'не больше 6 000 ₽');
@@ -171,10 +144,10 @@ test('текст заявки: сначала главное, затем по с
   const res = calc.compute({ service: 'general', tariff: 'standard', area: 55, extras: { windows: 6, oven: 1, upholstery: 1 } });
   const lines = [...calc.summaryLines(res)];
   assert.equal(lines[0], 'Генеральная уборка, тариф «Стандарт», 55 м²');
-  assert.equal(lines[1], 'Итого: 17\u00a0990\u00a0₽');
-  assert.ok(lines.includes('Тариф «Стандарт» (41–60 м²): 14\u00a0990\u00a0₽'));
+  assert.equal(lines[1], 'Итого: 19\u00a0290\u00a0₽');
+  assert.ok(lines.includes('Тариф «Стандарт» (41–60 м²): 15\u00a0990\u00a0₽'));
   assert.ok(lines.includes('Входит: СВЧ, духовка, посудомойка'));
-  assert.ok(lines.includes('• Мытьё окон, 6\u00a0створок — 3\u00a0000\u00a0₽'));
+  assert.ok(lines.includes('• Мытьё окон, 6\u00a0створок — 3\u00a0300\u00a0₽'));
   assert.ok(lines.includes('• Чистка духовки, 1\u00a0шт. — входит в тариф'));
   assert.ok(lines.includes('• Химчистка мебели — оценить по фото'));
   const text = lines.join('\n');
@@ -187,26 +160,15 @@ test('заявка из примера менеджеров: итог совпа
     service: 'general', tariff: 'premium', area: 35, firstOrder: true,
     extras: { wardrobe: 1, windows: 4, curtains: 2, balcony: 1, grout: 1, steam: 1, upholstery: 1 }
   });
-  assert.equal(res.total, 12490 + 2000 + 2000 + 1400 + 1000 + 500 + 1500, 'без скидки на первый заказ');
+  assert.equal(res.total, 12990 + 2000 + 2200 + 1400 + 1000 + 500 + 1500, 'без скидки на первый заказ');
   const lines = [...calc.summaryLines(res)];
-  assert.equal(lines[1], 'Итого: от 20\u00a0890\u00a0₽');
+  assert.equal(lines[1], 'Итого: от 21\u00a0590\u00a0₽');
   assert.equal(lines.filter((l) => l.startsWith('• ')).length, 7);
   assert.ok(!lines.some((l) => /Скидка/.test(l)));
   withFirstOrder(() => {
     const withDiscount = [...calc.summaryLines(calc.compute({ service: 'general', tariff: 'premium', area: 35, firstOrder: true }))];
-    assert.equal(withDiscount.at(-1), 'Скидка на первый заказ 10%: −1\u00a0249\u00a0₽');
+    assert.equal(withDiscount.at(-1), 'Скидка на первый заказ 10%: −1\u00a0299\u00a0₽');
   });
-});
-
-test('абонемент: цена в месяц точная, «от» относится только к доп. услугам', () => {
-  const res = calc.compute({ service: 'support', tariff: 'lite', area: 45, freq: 4, months: 12, extras: { curtains: 2 } });
-  assert.equal(res.total, 21960);
-  assert.equal(res.totalApprox, false);
-  assert.equal(calc.totalText(res), '21\u00a0960\u00a0₽ в месяц');
-  const lines = [...calc.summaryLines(res)];
-  assert.equal(lines[1], 'Итого: 21\u00a0960\u00a0₽ в месяц + доп. услуги от 1\u00a0400\u00a0₽');
-  assert.ok(lines.includes('Абонемент: 4 раза в месяц на 12 мес.'));
-  assert.ok(lines.includes('За 12 мес.: 263\u00a0520\u00a0₽, экономия 48\u00a0000\u00a0₽'));
 });
 
 test('demo.html собран из актуальной версии калькулятора', () => {
@@ -229,4 +191,30 @@ test('шкафы: пустые от 2 000 ₽, заполненные от 4 000
 test('по умолчанию заполняется только поле «Расчёт»', () => {
   assert.deepEqual(Object.keys(calc.config.fields), ['summary']);
   assert.deepEqual([...calc.config.fields.summary], ['Расчёт', 'Расчет', 'calc']);
+});
+
+test('окна и балкон после ремонта дороже: 750 ₽ за створку, от 2 000 ₽ за балкон', () => {
+  const reno = calc.compute({ service: 'renovation', tariff: 'lite', area: 40, extras: { windows: 2, balcony: 1 } });
+  assert.equal(reno.extrasTotal, 2 * 750 + 2000);
+  const lines = [...calc.summaryLines(reno)];
+  assert.ok(lines.includes('• Мытьё окон после ремонта, 2\u00a0створки — 1\u00a0500\u00a0₽'));
+  assert.ok(lines.includes('• Уборка балкона после ремонта, 1\u00a0шт. — от 2\u00a0000\u00a0₽'));
+  const gen = calc.compute({ service: 'general', tariff: 'lite', area: 40, extras: { windows: 2, balcony: 1 } });
+  assert.equal(gen.extrasTotal, 2 * 550 + 1000);
+});
+
+test('дополнительный санузел: 1 000 ₽ в поддержке, 1 500 ₽ в генеральной, 2 000 ₽ после ремонта', () => {
+  for (const [service, price] of [['support', 1000], ['general', 1500], ['renovation', 2000]]) {
+    const res = calc.compute({ service, tariff: 'lite', area: 40, extras: { bathroom: 2 } });
+    assert.equal(res.extrasTotal, 2 * price, service);
+    assert.equal(res.approx, false, 'цена фиксированная');
+  }
+});
+
+test('жалюзи и москитные сетки — две отдельные услуги по 300 ₽', () => {
+  const res = calc.compute({ service: 'general', tariff: 'lite', area: 40, extras: { blinds: 2, screens: 3 } });
+  assert.equal(res.extrasTotal, 5 * 300);
+  const lines = [...calc.summaryLines(res)];
+  assert.ok(lines.includes('• Мытьё жалюзи, 2\u00a0шт. — от 600\u00a0₽'));
+  assert.ok(lines.includes('• Мытьё москитных сеток, 3\u00a0шт. — от 900\u00a0₽'));
 });
