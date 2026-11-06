@@ -1,0 +1,669 @@
+<!--
+  Личный кабинет CleanHub24 — блок для Тильды.
+  Вставка: Tilda → Блок «T123 — HTML-код» → вставить весь этот файл целиком.
+  Настройка: поменять значения в CHLK_CONFIG ниже (или задать window.CHLK_CONFIG до этого блока).
+  Пока mode = 'demo', кабинет работает на тестовых данных без сервера.
+  Для боевого режима см. lk/INTEGRATION.md (нужен свой бэкенд-прокси: Тейка и Telegram-бот).
+-->
+<div id="chlk" class="chlk"></div>
+
+<style>
+.chlk{
+  --k-bg:#F3F7F9;--k-card:#fff;--k-ink:#10243A;--k-muted:#5D7083;--k-line:#E2E9EE;
+  --k-acc:#0A7F72;--k-acc-h:#08695E;--k-acc-on:#fff;--k-acc-t:#0A7F72;--k-tint:#E2F4F0;
+  --k-blue:#1F5FA8;--k-blue-bg:#E6F0FB;--k-warn:#8A5A00;--k-warn-bg:#FFF4DB;
+  --k-bad:#B3372F;--k-bad-bg:#FDE9E7;--k-hero-a:#10243A;--k-hero-b:#0A7F72;
+  font-family:var(--chlk-font,inherit);color:var(--k-ink);line-height:1.45;font-size:15px;
+  box-sizing:border-box;max-width:1040px;margin:0 auto;-webkit-font-smoothing:antialiased;
+}
+.chlk *,.chlk *::before,.chlk *::after{box-sizing:border-box;font-family:inherit}
+.chlk h1,.chlk h2,.chlk h3,.chlk p{margin:0}
+.chlk a:not(.k-btn){color:var(--k-acc-t)}
+.chlk :where(button){font:inherit;color:inherit;cursor:pointer}
+.chlk :focus-visible{outline:3px solid var(--k-acc);outline-offset:2px}
+.k-shell{background:var(--k-bg);border-radius:24px;padding:20px}
+.k-ic{flex:none;display:block}
+.k-demo{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:13px;background:var(--k-warn-bg);color:var(--k-warn);padding:10px 14px;border-radius:12px;margin-bottom:16px}
+.k-demo b{font-weight:700}
+.k-demo .k-link{color:inherit}
+.k-demo-btns{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.k-demo-btns button{background:rgba(255,255,255,.55);border:1px solid currentColor;border-radius:999px;padding:3px 11px;font-size:12.5px;color:inherit}
+.k-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;background:var(--k-acc);color:var(--k-acc-on);padding:13px 20px;font-weight:600;font-size:15px;text-decoration:none;transition:background .15s}
+.k-btn:hover{background:var(--k-acc-h);color:var(--k-acc-on)}
+.k-btn[disabled]{opacity:.55;cursor:default}
+.k-btn.k-ghost{background:transparent;color:var(--k-ink);box-shadow:inset 0 0 0 1.5px var(--k-line)}
+.k-btn.k-ghost:hover{background:var(--k-tint);color:var(--k-ink)}
+.k-btn.k-tg{background:#229ED9;color:#fff}
+.k-btn.k-tg:hover{background:#1B86B9;color:#fff}
+.k-btn.k-sm{padding:9px 14px;font-size:14px;border-radius:10px}
+.k-btn.k-block{width:100%}
+.k-link{background:none;border:0;padding:0;color:var(--k-acc-t);text-decoration:underline;text-underline-offset:3px;font-size:inherit}
+.k-card{background:var(--k-card);border:1px solid var(--k-line);border-radius:18px;padding:20px;min-width:0}
+.k-card h3{font-size:16px;font-weight:700;margin-bottom:12px}
+.k-muted{color:var(--k-muted)}
+.k-small{font-size:13px}
+.k-num{font-variant-numeric:tabular-nums}
+.k-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr))}
+.k-stack{display:flex;flex-direction:column;gap:16px}
+.k-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.k-between{justify-content:space-between}
+
+/* auth */
+.k-auth{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);background:var(--k-card);border:1px solid var(--k-line);border-radius:22px;overflow:hidden}
+.k-aside{background:linear-gradient(155deg,var(--k-hero-a),var(--k-hero-b));color:#fff;padding:36px 32px;display:flex;flex-direction:column;gap:22px}
+.k-aside h2{font-size:26px;line-height:1.2;font-weight:800;text-wrap:balance}
+.k-aside ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.k-aside li{display:flex;gap:12px;align-items:flex-start;font-size:15px}
+.k-aside li span.k-dot{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:none}
+.k-form{padding:32px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.k-seg{display:flex;background:var(--k-bg);border-radius:12px;padding:4px;gap:4px}
+.k-seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:9px 10px;font-weight:600;color:var(--k-muted)}
+.k-seg button[aria-selected="true"]{background:var(--k-card);color:var(--k-ink);box-shadow:0 1px 3px rgba(16,36,58,.14)}
+.k-field{display:flex;flex-direction:column;gap:6px}
+.k-field label{font-size:13px;font-weight:600;color:var(--k-muted)}
+.k-in{width:100%;border:1.5px solid var(--k-line);background:var(--k-card);color:var(--k-ink);border-radius:12px;padding:12px 14px;font-size:16px;min-width:0}
+.k-in:focus{outline:none;border-color:var(--k-acc);box-shadow:0 0 0 3px var(--k-tint)}
+.k-code{font-size:28px;letter-spacing:.5em;text-align:center;font-variant-numeric:tabular-nums;padding-left:calc(14px + .5em)}
+.k-check{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--k-muted)}
+.k-check input{margin-top:2px;width:18px;height:18px;accent-color:var(--k-acc);flex:none}
+.k-err{background:var(--k-bad-bg);color:var(--k-bad);border-radius:10px;padding:10px 12px;font-size:14px}
+.k-or{display:flex;align-items:center;gap:12px;color:var(--k-muted);font-size:13px}
+.k-or::before,.k-or::after{content:"";height:1px;background:var(--k-line);flex:1}
+.k-wait{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.k-pulse{width:10px;height:10px;border-radius:50%;background:var(--k-acc);animation:k-p 1.2s ease-in-out infinite}
+@keyframes k-p{50%{opacity:.25;transform:scale(.7)}}
+
+/* app */
+.k-top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin-bottom:16px}
+.k-hello h2{font-size:24px;font-weight:800}
+.k-tabs{min-width:0;display:flex;gap:4px;background:var(--k-card);border:1px solid var(--k-line);border-radius:14px;padding:4px;overflow-x:auto;max-width:100%}
+.k-tabs button{display:flex;align-items:center;gap:8px;border:0;background:transparent;border-radius:10px;padding:9px 14px;font-weight:600;color:var(--k-muted);white-space:nowrap}
+.k-tabs button[aria-selected="true"]{background:var(--k-tint);color:var(--k-acc-t)}
+.k-loy{background:linear-gradient(135deg,var(--k-hero-a) 10%,var(--k-hero-b));color:#fff;border-radius:22px;padding:24px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+.k-loy .k-lvl{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600}
+.k-bal{font-size:44px;font-weight:800;line-height:1.05;margin:10px 0 4px;font-variant-numeric:tabular-nums}
+.k-loy .k-sub{opacity:.82;font-size:14px}
+.k-prog{height:10px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden;margin:10px 0 8px}
+.k-prog i{display:block;height:100%;background:#fff;border-radius:99px}
+.k-card-no{display:flex;align-items:center;gap:10px;margin-top:16px;background:rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;font-variant-numeric:tabular-nums;letter-spacing:.06em;font-weight:600}
+.k-card-no button{margin-left:auto;background:rgba(255,255,255,.18);border:0;border-radius:8px;color:#fff;padding:6px 8px;display:flex}
+.k-burn{margin-top:10px;font-size:13px;background:rgba(255,200,80,.2);border-radius:10px;padding:8px 12px}
+.k-chip{display:inline-flex;align-items:center;border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.k-chip.blue{background:var(--k-blue-bg);color:var(--k-blue)}
+.k-chip.warn{background:var(--k-warn-bg);color:var(--k-warn)}
+.k-chip.ok{background:var(--k-tint);color:var(--k-acc-t)}
+.k-chip.off{background:var(--k-bg);color:var(--k-muted)}
+.k-filters{display:flex;gap:8px;flex-wrap:wrap}
+.k-filters button{border:1.5px solid var(--k-line);background:var(--k-card);border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px;color:var(--k-muted)}
+.k-filters button[aria-pressed="true"]{border-color:var(--k-acc);background:var(--k-tint);color:var(--k-acc-t)}
+.k-orders{display:flex;flex-direction:column;gap:10px}
+.k-order{background:var(--k-card);border:1px solid var(--k-line);border-radius:16px;overflow:hidden}
+.k-ohead{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto 20px;gap:12px;align-items:center;text-align:left;background:none;border:0;padding:16px 18px}
+.k-ohead b{display:block;font-size:15.5px}
+.k-ohead .k-chev{transition:transform .2s;color:var(--k-muted)}
+.k-order.open .k-chev{transform:rotate(90deg)}
+.k-obody{padding:2px 18px 18px;border-top:1px dashed var(--k-line);display:none}
+.k-order.open .k-obody{display:block}
+.k-items{width:100%;border-collapse:collapse;margin:12px 0 4px;font-size:14px}
+.k-items td{padding:6px 0;border-bottom:1px solid var(--k-line);vertical-align:top}
+.k-items td:last-child{text-align:right;white-space:nowrap}
+.k-items tr.k-sum td{border:0;font-weight:700;padding-top:10px}
+.k-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px 20px;margin:12px 0;font-size:14px}
+.k-meta dt{color:var(--k-muted);font-size:12.5px}
+.k-meta dd{margin:0;font-weight:600}
+.k-steps{display:flex;gap:6px;margin:14px 0 4px}
+.k-steps div{flex:1;font-size:12.5px;color:var(--k-muted);border-top:4px solid var(--k-line);padding-top:6px}
+.k-steps div.on{border-color:var(--k-acc);color:var(--k-ink);font-weight:600}
+.k-hist{list-style:none;margin:0;padding:0}
+.k-hist li{display:flex;gap:12px;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--k-line)}
+.k-hist li:last-child{border:0}
+.k-plus{color:var(--k-acc-t);font-weight:700}
+.k-minus{color:var(--k-bad);font-weight:700}
+.k-lvls{display:grid;gap:8px}
+.k-lv{display:flex;justify-content:space-between;gap:10px;border:1.5px solid var(--k-line);border-radius:12px;padding:10px 14px}
+.k-lv.cur{border-color:var(--k-acc);background:var(--k-tint)}
+.k-empty{text-align:center;padding:32px 16px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.k-banner{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--k-card);border:1px solid var(--k-line);border-radius:18px;padding:16px 20px}
+.k-banner .k-tgico{width:44px;height:44px;border-radius:12px;background:#229ED9;color:#fff;display:grid;place-items:center;flex:none}
+.k-banner div.k-grow{flex:1;min-width:200px}
+.k-sw{position:relative;display:inline-block;width:46px;height:26px;flex:none}
+.k-sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.k-sw span{position:absolute;inset:0;border-radius:99px;background:var(--k-line);transition:background .15s}
+.k-sw span::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .15s}
+.k-sw input:checked+span{background:var(--k-acc)}
+.k-sw input:checked+span::after{transform:translateX(20px)}
+.k-sw input:focus-visible+span{outline:3px solid var(--k-acc);outline-offset:2px}
+.k-sw input:disabled{cursor:default}
+.k-sw input:disabled+span{opacity:.45}
+.k-pref{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:12px 0;border-bottom:1px solid var(--k-line)}
+.k-pref:last-child{border:0}
+.k-addr{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 12px;border:1.5px solid var(--k-line);border-radius:12px}
+.k-x{border:0;background:none;color:var(--k-muted);display:flex;padding:4px}
+.k-toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--k-ink);color:var(--k-card);padding:11px 18px;border-radius:12px;font-size:14px;z-index:99999;max-width:calc(100vw - 32px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.k-toast.bad{background:var(--k-bad);color:#fff}
+@media (max-width:760px){
+  .k-shell{padding:12px;border-radius:18px}
+  .k-auth{grid-template-columns:minmax(0,1fr)}
+  .k-aside{padding:24px 20px;gap:16px}
+  .k-aside h2{font-size:21px}
+  .k-form{padding:22px 18px}
+  .k-loy{grid-template-columns:minmax(0,1fr);padding:20px}
+  .k-bal{font-size:38px}
+  .k-ohead{grid-template-columns:minmax(0,1fr) 20px;row-gap:6px}
+  .k-ohead .k-ototal{grid-column:1;grid-row:2;font-weight:700}
+  .k-ohead .k-chip{grid-column:1;grid-row:3;justify-self:start}
+  .k-ohead .k-chev{grid-column:2;grid-row:1}
+  .k-demo-btns{margin-left:0}
+  .k-top>.k-row{width:100%;flex-wrap:nowrap}
+  .k-top>.k-row .k-tabs{flex:1 1 auto}
+  .k-top>.k-row>.k-btn{padding:9px 11px;font-size:0;gap:0}
+}
+@media (prefers-reduced-motion:reduce){.chlk *{animation:none!important;transition:none!important}}
+</style>
+
+<script>
+(function(){
+'use strict';
+var root=document.getElementById('chlk');
+if(!root||root.getAttribute('data-ready'))return;
+root.setAttribute('data-ready','1');
+
+/* ================= НАСТРОЙКИ ================= */
+var CHLK_CONFIG=window.CHLK_CONFIG||{};
+var C={
+  mode:'demo',                          // 'demo' — тестовые данные; 'live' — работа с вашим сервером
+  apiBase:'https://api.cleanhub24.ru/lk', // адрес вашего бэкенда (прокси к Тейке, CRM и Telegram-боту)
+  telegramBot:'cleanhub24_bot',         // имя Telegram-бота без @
+  orderUrl:'/#order',                   // страница/форма заказа на сайте
+  supportUrl:'https://t.me/cleanhub24_support',
+  privacyUrl:'/privacy',
+  welcomeBonus:300,
+  referralBonus:500,
+  telegramBonus:100,
+  maxPayPercent:30,
+  showDemoBar:true
+};
+for(var k in CHLK_CONFIG)C[k]=CHLK_CONFIG[k];
+
+/* ================= УТИЛИТЫ ================= */
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function digits(s){return String(s||'').replace(/\D/g,'')}
+function fmtPhone(s){
+  var d=digits(s);if(!d)return'';
+  if(d[0]==='7'||d[0]==='8')d=d.slice(1);
+  d=d.slice(0,10);
+  var o='+7 ('+d.slice(0,3);
+  if(d.length>=3)o+=')';
+  if(d.length>3)o+=' '+d.slice(3,6);
+  if(d.length>6)o+='-'+d.slice(6,8);
+  if(d.length>8)o+='-'+d.slice(8,10);
+  return o;
+}
+function phoneOk(s){var d=digits(s);if(d[0]==='7'||d[0]==='8')d=d.slice(1);return d.length===10}
+function money(n){return Math.round(n).toLocaleString('ru-RU')+' ₽'}
+function plural(n,f){n=Math.abs(n)%100;var m=n%10;return n>10&&n<20?f[2]:m>1&&m<5?f[1]:m===1?f[0]:f[2]}
+function bonus(n){return Math.round(n).toLocaleString('ru-RU')+' '+plural(n,['бонус','бонуса','бонусов'])}
+function dFmt(iso,long){var d=new Date(iso);return d.toLocaleDateString('ru-RU',long?{day:'numeric',month:'long',year:'numeric'}:{day:'numeric',month:'long'})}
+var mem={};
+var store={
+  get:function(k){try{return localStorage.getItem(k)}catch(e){return mem[k]||null}},
+  set:function(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}},
+  del:function(k){try{localStorage.removeItem(k)}catch(e){delete mem[k]}}
+};
+function wait(v,ms){return new Promise(function(r){setTimeout(function(){r(v)},ms==null?350:ms)})}
+function failP(m){return new Promise(function(_,rej){setTimeout(function(){rej(new Error(m))},350)})}
+
+/* ================= API: ДЕМО ================= */
+function demoApi(){
+  var RATE=.05;
+  function day(n){var d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+n);return d.toISOString()}
+  function mk(id,off,status,title,items,spent,addr,slot){
+    var sum=0;items.forEach(function(i){sum+=i[1]*i[2]});
+    var total=sum-spent;
+    return{id:id,date:day(off),status:status,title:title,
+      items:items.map(function(i){return{name:i[0],qty:i[1],price:i[2]}}),
+      bonusSpent:spent,total:total,bonusEarned:status==='cancel'?0:Math.round(total*RATE),
+      address:addr,slot:slot};
+  }
+  var LEVELS=[{name:'Старт',from:0,pct:3},{name:'Серебро',from:15000,pct:5},{name:'Золото',from:40000,pct:7}];
+  var ADDR='Москва, ул. Профсоюзная, 56, кв. 112';
+  function build(persona,phone,name,email){
+    var user={id:'u1',name:name||(persona==='regular'?'Анна':''),phone:phone||'+7 (916) 123-45-67',email:email||(persona==='regular'?'anna@example.com':''),birthday:'',
+      tg:{connected:false,username:''},notify:{tgOrders:true,tgPromo:false},
+      addresses:persona==='regular'?[{id:'a1',label:'Дом',text:ADDR},{id:'a2',label:'Дача',text:'Московская обл., Подольск, ул. Лесная, 12'}]:[]};
+    var orders=[],history=[];
+    if(persona==='regular'){
+      orders=[
+        mk('CH-10566',1,'new','Поддерживающая уборка',[['Уборка квартиры до 60 м²',1,4800],['Мытьё окон',3,500]],0,ADDR,'10:00–12:00'),
+        mk('CH-10558',0,'work','Химчистка дивана',[['Химчистка 3-местного дивана',1,3900],['Защитная пропитка',1,900]],0,ADDR,'14:00–16:00'),
+        mk('CH-10431',-21,'done','Генеральная уборка',[['Генеральная уборка до 60 м²',1,8800],['Мытьё окон',2,500]],300,ADDR,'09:00–11:00'),
+        mk('CH-10317',-58,'done','Химчистка матраса',[['Химчистка матраса 160×200',1,4200]],0,ADDR,'16:00–18:00'),
+        mk('CH-10204',-97,'done','Уборка после ремонта',[['Уборка после ремонта до 60 м²',1,13000],['Вывоз строительного мусора',1,1500]],0,ADDR,'10:00–14:00'),
+        mk('CH-10188',-110,'cancel','Мытьё окон',[['Мытьё окон',4,500]],0,ADDR,'12:00–14:00')
+      ];
+      history.push({date:day(-130),title:'Бонусы за регистрацию',delta:C.welcomeBonus});
+      orders.slice().reverse().forEach(function(o){
+        if(o.status!=='done')return;
+        history.push({date:o.date,title:'Начисление за заказ '+o.id,delta:o.bonusEarned});
+        if(o.bonusSpent)history.push({date:o.date,title:'Списание в заказе '+o.id,delta:-o.bonusSpent});
+      });
+    }else{
+      history.push({date:day(0),title:'Бонусы за регистрацию',delta:C.welcomeBonus});
+    }
+    history.sort(function(a,b){return new Date(b.date)-new Date(a.date)});
+    return{persona:persona,user:user,orders:orders,history:history,promos:{}};
+  }
+  var D=null;
+  try{D=JSON.parse(store.get('chlk_demo')||'null')}catch(e){}
+  function save(){store.set('chlk_demo',JSON.stringify(D))}
+  function loyalty(){
+    var spent=0,bal=0;
+    D.orders.forEach(function(o){if(o.status==='done')spent+=o.total});
+    D.history.forEach(function(h){bal+=h.delta});
+    var tail=D.persona==='regular'?{amount:150,date:day(24)}:null;
+    return{card:'CH 0042 '+(D.persona==='regular'?'7781':'9104'),balance:bal,spent:spent,levels:LEVELS,expiring:tail,
+      history:D.history,maxPay:C.maxPayPercent,referral:{code:'CH-'+(D.user.name||'FRIEND').toUpperCase().slice(0,5)+'7',bonus:C.referralBonus}};
+  }
+  function login(persona,phone,name,email){D=build(persona,phone,name,email);save();store.set('chlk_token','demo')}
+  var tgFlag={};
+  return{
+    quick:function(p){login(p);return wait(null,0)},
+    reset:function(){D=null;store.del('chlk_demo');store.del('chlk_token')},
+    sendCode:function(){return wait({ok:true})},
+    verify:function(phone,code,reg){
+      if(code!=='1234')return failP('Неверный код. В демо-режиме подходит код 1234.');
+      if(reg)login('new',phone,reg.name,reg.email);else login('regular',phone);
+      return wait({token:'demo'});
+    },
+    me:function(){return D?wait({user:D.user,loyalty:loyalty()}):failP('Сессия истекла')},
+    orders:function(){return wait(D?D.orders:[])},
+    updateProfile:function(patch){
+      for(var k in patch)D.user[k]=patch[k];
+      save();return wait({user:D.user},250);
+    },
+    promo:function(code){
+      code=String(code||'').trim().toUpperCase();
+      if(code!=='WELCOME200')return failP('Промокод не найден. В демо подходит WELCOME200.');
+      if(D.promos[code])return failP('Этот промокод уже использован.');
+      D.promos[code]=1;D.history.unshift({date:day(0),title:'Промокод '+code,delta:200});save();
+      return wait({ok:true});
+    },
+    tgLink:function(){tgFlag.link=false;return wait({url:'https://t.me/'+C.telegramBot+'?start=demo-link',token:'demo-link'})},
+    tgStatus:function(){
+      if(tgFlag.link){
+        D.user.tg={connected:true,username:'anna_k'};
+        D.history.unshift({date:day(0),title:'Бонусы за подключение Telegram',delta:C.telegramBonus});save();
+        return wait({connected:true,username:'anna_k'},150);
+      }
+      return wait({connected:false},150);
+    },
+    tgUnlink:function(){D.user.tg={connected:false,username:''};save();return wait({ok:true},250)},
+    tgAuthStart:function(){tgFlag.auth=false;return wait({url:'https://t.me/'+C.telegramBot+'?start=demo-login',token:'demo-auth'})},
+    tgAuthStatus:function(){
+      if(tgFlag.auth){login('regular');D.user.tg={connected:true,username:'anna_k'};save();return wait({done:true,token:'demo'},150)}
+      return wait({done:false},150);
+    },
+    demoConfirm:function(kind){tgFlag[kind]=true},
+    logout:function(){D=null;store.del('chlk_demo')}
+  };
+}
+
+/* ================= API: БОЕВОЙ РЕЖИМ ================= */
+function liveApi(){
+  function req(path,method,body){
+    var h={'Content-Type':'application/json'},t=store.get('chlk_token');
+    if(t)h.Authorization='Bearer '+t;
+    return fetch(C.apiBase+path,{method:method||'GET',headers:h,body:body?JSON.stringify(body):undefined,credentials:'omit'})
+      .then(function(r){return r.json().catch(function(){return{}}).then(function(j){
+        if(r.status===401&&path!=='/auth/verify'){store.del('chlk_token')}
+        if(!r.ok)throw new Error(j.message||'Не удалось выполнить запрос. Попробуйте ещё раз.');
+        return j;
+      })});
+  }
+  return{
+    sendCode:function(phone,purpose){return req('/auth/code','POST',{phone:phone,purpose:purpose})},
+    verify:function(phone,code,reg){return req('/auth/verify','POST',{phone:phone,code:code,profile:reg||null})},
+    me:function(){return req('/me')},
+    orders:function(){return req('/orders').then(function(j){return j.orders||j})},
+    updateProfile:function(p){return req('/me','PATCH',p)},
+    promo:function(code){return req('/loyalty/promo','POST',{code:code})},
+    tgLink:function(){return req('/telegram/link','POST')},
+    tgStatus:function(t){return req('/telegram/status?token='+encodeURIComponent(t))},
+    tgUnlink:function(){return req('/telegram','DELETE')},
+    tgAuthStart:function(){return req('/auth/telegram/start','POST')},
+    tgAuthStatus:function(t){return req('/auth/telegram/status?token='+encodeURIComponent(t))},
+    logout:function(){}
+  };
+}
+var DEMO=C.mode!=='live';
+var API=DEMO?demoApi():liveApi();
+
+/* ================= СОСТОЯНИЕ ================= */
+var S={view:'boot',authTab:'login',step:'form',phone:'',name:'',email:'',agree:true,code:'',err:'',busy:false,
+  tg:null,tab:'overview',filter:'all',open:{},user:null,loy:null,orders:[],draft:null,newAddr:'',promo:'',focus:null};
+var T={poll:null,resend:null,left:0};
+var STATUS={new:{t:'Принят',c:'blue'},work:{t:'В работе',c:'warn'},done:{t:'Выполнен',c:'ok'},cancel:{t:'Отменён',c:'off'}};
+
+/* ================= ИКОНКИ ================= */
+var IC={
+  grid:'<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>',
+  bag:'<path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+  tg:'<path d="M21 4L3 11l6 2.5L11 20l3-4.5 5 3.5L21 4z"/><path d="M9 13.5L21 4"/>',
+  out:'<path d="M9 4H5v16h4"/><path d="M16 8l4 4-4 4M20 12H9"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  chev:'<path d="M9 6l6 6-6 6"/>',
+  copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+  repeat:'<path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  gift:'<rect x="3" y="9" width="18" height="12" rx="2"/><path d="M12 9v12M3 13h18M12 9c-3 0-5-1-5-3a2 2 0 0 1 4 0c0 1 1 3 1 3zm0 0c3 0 5-1 5-3a2 2 0 0 0-4 0c0 1-1 3-1 3z"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>'
+};
+function ic(n,s){s=s||20;return'<svg class="k-ic" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+IC[n]+'</svg>'}
+
+/* ================= ОТРИСОВКА ================= */
+function demoBar(){
+  if(!DEMO||!C.showDemoBar)return'';
+  var btns=S.view==='app'
+    ?'<button data-act="demo-reset">Начать заново</button>'
+    :'<button data-act="demo-quick" data-v="regular">Войти как постоянный клиент</button><button data-act="demo-quick" data-v="new">Войти как новый клиент</button>';
+  return'<div class="k-demo"><span><b>Демо-режим.</b> Данные тестовые, сервер не нужен.</span><span class="k-demo-btns">'+btns+'</span></div>';
+}
+
+function render(){
+  var h;
+  if(S.view==='boot')h='<div class="k-shell"><div class="k-empty k-muted">Загружаем кабинет…</div></div>';
+  else h='<div class="k-shell">'+demoBar()+(S.view==='auth'?authView():appView())+'</div>';
+  root.innerHTML=h;
+  if(S.focus){var f=root.querySelector(S.focus);if(f)f.focus();S.focus=null}
+  if(S.view==='auth'&&S.step==='code')tickResend(true);
+}
+
+function benefits(){
+  var li=function(t){return'<li><span class="k-dot">'+ic('check',16)+'</span><span>'+t+'</span></li>'};
+  return li('Бонусы за каждый заказ, до '+C.maxPayPercent+'% можно оплатить ими')+li('История заказов и повтор в один клик')+li('Статус заказа в Telegram без звонков')+li('Адреса сохраняются, заказ оформляется быстрее');
+}
+
+function authView(){
+  var reg=S.authTab==='reg';
+  var aside='<div class="k-aside"><h2>'+(reg?'Зарегистрируйтесь и получите '+bonus(C.welcomeBonus):'Ваш личный кабинет CleanHub24')+'</h2><ul>'+benefits()+'</ul></div>';
+  var body;
+  if(S.tg&&S.tg.kind==='auth'){
+    body='<div class="k-wait"><h3 style="font-size:20px">Войти через Telegram</h3>'+
+      '<p class="k-muted">Откройте бота и нажмите «Start». Страница обновится сама.</p>'+
+      '<a class="k-btn k-tg" href="'+esc(S.tg.url)+'" target="_blank" rel="noopener">'+ic('tg')+' Открыть бота</a>'+
+      '<div class="k-row k-muted k-small"><i class="k-pulse"></i> Ждём подтверждения в Telegram…</div>'+
+      (DEMO?'<button class="k-btn k-ghost k-sm" data-act="tg-sim" data-v="auth">Демо: имитировать Start в боте</button>':'')+
+      '<button class="k-link k-small" data-act="tg-cancel">Назад</button></div>';
+  }else if(S.step==='code'){
+    body='<div class="k-field"><h3 style="font-size:20px;margin-bottom:6px">Введите код из SMS</h3>'+
+      '<p class="k-muted">Отправили на '+esc(S.phone)+'. <button class="k-link" data-act="edit-phone">Изменить номер</button></p></div>'+
+      (S.err?'<div class="k-err" role="alert">'+esc(S.err)+'</div>':'')+
+      '<div class="k-field"><label for="chlk-code">Код</label><input id="chlk-code" class="k-in k-code" inputmode="numeric" autocomplete="one-time-code" maxlength="4" placeholder="••••" data-bind="code" value="'+esc(S.code)+'"></div>'+
+      (DEMO?'<p class="k-small k-muted">Демо-режим: подходит код 1234.</p>':'')+
+      '<button class="k-btn k-block" data-act="verify"'+(S.busy?' disabled':'')+'>'+(S.busy?'Проверяем…':'Подтвердить')+'</button>'+
+      '<p class="k-small k-muted" data-resend></p>';
+  }else{
+    body='<div class="k-seg" role="tablist"><button role="tab" aria-selected="'+!reg+'" data-act="auth-tab" data-v="login">Войти</button><button role="tab" aria-selected="'+reg+'" data-act="auth-tab" data-v="reg">Регистрация</button></div>'+
+      (S.err?'<div class="k-err" role="alert">'+esc(S.err)+'</div>':'')+
+      (reg?'<div class="k-field"><label for="chlk-name">Как к вам обращаться</label><input id="chlk-name" class="k-in" autocomplete="given-name" placeholder="Анна" data-bind="name" value="'+esc(S.name)+'"></div>':'')+
+      '<div class="k-field"><label for="chlk-phone">Телефон</label><input id="chlk-phone" class="k-in" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" data-bind="phone" value="'+esc(S.phone)+'"></div>'+
+      (reg?'<div class="k-field"><label for="chlk-email">Email (необязательно)</label><input id="chlk-email" class="k-in" type="email" autocomplete="email" placeholder="you@mail.ru" data-bind="email" value="'+esc(S.email)+'"></div>'+
+        '<label class="k-check"><input type="checkbox" data-bind="agree"'+(S.agree?' checked':'')+'><span>Согласен на обработку персональных данных и принимаю <a href="'+esc(C.privacyUrl)+'" target="_blank" rel="noopener">политику конфиденциальности</a></span></label>':'')+
+      '<button class="k-btn k-block" data-act="send-code"'+(S.busy?' disabled':'')+'>'+(S.busy?'Отправляем…':'Получить код по SMS')+'</button>'+
+      '<div class="k-or">или</div>'+
+      '<button class="k-btn k-tg k-block" data-act="tg-login">'+ic('tg')+' Войти через Telegram</button>';
+  }
+  return'<div class="k-auth">'+aside+'<div class="k-form">'+body+'</div></div>';
+}
+
+function levelInfo(L){
+  var cur=L.levels[0],next=null;
+  for(var i=0;i<L.levels.length;i++){if(L.spent>=L.levels[i].from){cur=L.levels[i];next=L.levels[i+1]||null}}
+  var pct=next?Math.min(100,Math.round((L.spent-cur.from)/(next.from-cur.from)*100)):100;
+  return{cur:cur,next:next,pct:pct};
+}
+
+function loyaltyHero(){
+  var L=S.loy,li=levelInfo(L);
+  var prog=li.next
+    ?'<div class="k-prog" role="progressbar" aria-valuenow="'+li.pct+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+li.pct+'%"></i></div><p class="k-sub">Ещё '+money(li.next.from-L.spent)+' до уровня «'+esc(li.next.name)+'», кешбэк '+li.next.pct+'%</p>'
+    :'<div class="k-prog"><i style="width:100%"></i></div><p class="k-sub">У вас максимальный уровень</p>';
+  return'<section class="k-loy" aria-label="Бонусная карта">'+
+    '<div><span class="k-lvl">'+ic('star',14)+' Уровень «'+esc(li.cur.name)+'» · '+li.cur.pct+'%</span>'+
+    '<div class="k-bal">'+bonus(L.balance)+'</div><p class="k-sub">1 бонус = 1 ₽. Можно оплатить до '+L.maxPay+'% заказа.</p>'+
+    (L.expiring?'<div class="k-burn">Сгорит '+bonus(L.expiring.amount)+' — '+dFmt(L.expiring.date)+'</div>':'')+'</div>'+
+    '<div><p class="k-sub">Потрачено на услуги</p><b class="k-num" style="font-size:24px">'+money(L.spent)+'</b>'+prog+
+    '<div class="k-card-no"><span>'+esc(L.card)+'</span><button data-act="copy" data-v="'+esc(L.card)+'" aria-label="Скопировать номер карты">'+ic('copy',16)+'</button></div></div></section>';
+}
+
+function orderHead(o){
+  var st=STATUS[o.status]||STATUS.new;
+  return'<button class="k-ohead" data-act="toggle-order" data-id="'+esc(o.id)+'" aria-expanded="'+!!S.open[o.id]+'">'+
+    '<span><b>'+esc(o.title)+'</b><span class="k-muted k-small">№ '+esc(o.id)+' · '+dFmt(o.date)+'</span></span>'+
+    '<span class="k-ototal k-num">'+money(o.total)+'</span><span class="k-chip '+st.c+'">'+st.t+'</span><span class="k-chev">'+ic('chev',18)+'</span></button>';
+}
+function orderBody(o){
+  var rows=o.items.map(function(i){return'<tr><td>'+esc(i.name)+(i.qty>1?' × '+i.qty:'')+'</td><td class="k-num">'+money(i.qty*i.price)+'</td></tr>'}).join('');
+  if(o.bonusSpent)rows+='<tr><td>Оплачено бонусами</td><td class="k-num">−'+money(o.bonusSpent)+'</td></tr>';
+  rows+='<tr class="k-sum"><td>Итого</td><td class="k-num">'+money(o.total)+'</td></tr>';
+  var steps='';
+  if(o.status==='new'||o.status==='work'){
+    var i=o.status==='new'?0:1;
+    steps='<div class="k-steps">'+['Принят','В работе','Выполнен'].map(function(t,n){return'<div class="'+(n<=i?'on':'')+'">'+t+'</div>'}).join('')+'</div>';
+  }
+  var earn=o.status==='cancel'?'':'<div><dt>Бонусы</dt><dd class="k-plus">+'+bonus(o.bonusEarned)+(o.status==='done'?'':' после выполнения')+'</dd></div>';
+  return'<div class="k-obody">'+steps+'<dl class="k-meta"><div><dt>Адрес</dt><dd>'+esc(o.address)+'</dd></div><div><dt>Время</dt><dd>'+dFmt(o.date)+', '+esc(o.slot)+'</dd></div>'+earn+'</dl>'+
+    '<table class="k-items"><tbody>'+rows+'</tbody></table>'+
+    '<div class="k-row" style="margin-top:14px"><a class="k-btn k-sm" href="'+esc(C.orderUrl)+(C.orderUrl.indexOf('?')<0?'?':'&')+'repeat='+encodeURIComponent(o.id)+'">'+ic('repeat',16)+' Повторить заказ</a>'+
+    '<a class="k-btn k-ghost k-sm" href="'+esc(C.supportUrl)+'" target="_blank" rel="noopener">Вопрос по заказу</a></div></div>';
+}
+function orderCard(o){return'<div class="k-order'+(S.open[o.id]?' open':'')+'">'+orderHead(o)+orderBody(o)+'</div>'}
+
+function activeOrders(){return S.orders.filter(function(o){return o.status==='new'||o.status==='work'}).sort(function(a,b){return new Date(a.date)-new Date(b.date)})}
+
+function tgCard(){
+  var u=S.user;
+  if(u.tg&&u.tg.connected)return'<div class="k-card"><h3>Telegram</h3><p class="k-row" style="gap:8px"><span class="k-chip ok">Подключён</span><b>@'+esc(u.tg.username)+'</b></p><p class="k-muted k-small" style="margin-top:10px">Статусы заказов и бонусы приходят в чат. Настройки — в разделе «Профиль».</p></div>';
+  return'<div class="k-card"><h3>Telegram</h3><p class="k-muted">Статус заказа и бонусы в чат, без звонков и SMS. Подключите и получите '+bonus(C.telegramBonus)+'.</p><div style="margin-top:14px"><button class="k-btn k-tg k-sm" data-act="tab" data-v="profile">'+ic('tg',16)+' Подключить</button></div></div>';
+}
+
+function overviewTab(){
+  var act=activeOrders()[0],recent=S.orders.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date)}).slice(0,3);
+  var next=act
+    ?'<div class="k-card"><h3>Ближайший заказ</h3><p><b>'+esc(act.title)+'</b></p><p class="k-muted k-small">'+dFmt(act.date)+', '+esc(act.slot)+'</p><div class="k-row" style="margin-top:12px"><span class="k-chip '+STATUS[act.status].c+'">'+STATUS[act.status].t+'</span><span class="k-num"><b>'+money(act.total)+'</b></span></div><div style="margin-top:14px"><button class="k-btn k-ghost k-sm" data-act="open-order" data-id="'+esc(act.id)+'">Подробнее</button></div></div>'
+    :'<div class="k-card"><h3>Ближайший заказ</h3><p class="k-muted">Пока нет активных заказов. Закажите уборку или химчистку, бонусы начислятся автоматически.</p><div style="margin-top:14px"><a class="k-btn k-sm" href="'+esc(C.orderUrl)+'">Заказать</a></div></div>';
+  var ref='<div class="k-card"><h3>Пригласите друга</h3><p class="k-muted">Друг получит '+bonus(S.loy.referral.bonus)+' на первый заказ, и вы тоже.</p><div class="k-card-no" style="background:var(--k-bg);color:var(--k-ink);margin-top:14px"><span>'+esc(S.loy.referral.code)+'</span><button data-act="copy" data-v="'+esc(S.loy.referral.code)+'" style="background:var(--k-line);color:var(--k-ink)" aria-label="Скопировать промокод">'+ic('copy',16)+'</button></div></div>';
+  var list=recent.length
+    ?'<div class="k-orders">'+recent.map(orderCard).join('')+'</div><div><button class="k-link" data-act="tab" data-v="orders">Все заказы</button></div>'
+    :'<div class="k-card k-empty"><b>Заказов пока нет</b><p class="k-muted">Здесь появится история ваших заказов.</p><a class="k-btn k-sm" href="'+esc(C.orderUrl)+'">Сделать первый заказ</a></div>';
+  return'<div class="k-stack">'+loyaltyHero()+'<div class="k-grid">'+next+tgCard()+ref+'</div><h3 style="font-size:18px">Последние заказы</h3>'+list+'</div>';
+}
+
+function ordersTab(){
+  var f=S.filter,list=S.orders.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date)}).filter(function(o){
+    return f==='all'||(f==='active'&&(o.status==='new'||o.status==='work'))||(f==='done'&&o.status==='done');
+  });
+  var chips=[['all','Все'],['active','Активные'],['done','Выполненные']].map(function(x){return'<button data-act="filter" data-v="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+'</button>'}).join('');
+  var body=list.length?'<div class="k-orders">'+list.map(orderCard).join('')+'</div>'
+    :'<div class="k-card k-empty"><b>'+(S.orders.length?'В этом списке пусто':'Заказов пока нет')+'</b><p class="k-muted">'+(S.orders.length?'Выберите другой фильтр.':'Оформите первый заказ, и он появится здесь.')+'</p><a class="k-btn k-sm" href="'+esc(C.orderUrl)+'">Заказать</a></div>';
+  return'<div class="k-stack"><div class="k-row k-between"><h3 style="font-size:20px">Мои заказы</h3><div class="k-filters">'+chips+'</div></div>'+body+'</div>';
+}
+
+function bonusesTab(){
+  var L=S.loy,li=levelInfo(L);
+  var lv=L.levels.map(function(l){return'<div class="k-lv'+(l===li.cur?' cur':'')+'"><b>'+esc(l.name)+'</b><span class="k-muted">от '+money(l.from)+'</span><b>'+l.pct+'%</b></div>'}).join('');
+  var hist=L.history.length?'<ul class="k-hist">'+L.history.map(function(h){return'<li><span>'+esc(h.title)+'<br><span class="k-muted k-small">'+dFmt(h.date,true)+'</span></span><span class="k-num '+(h.delta>0?'k-plus':'k-minus')+'">'+(h.delta>0?'+':'−')+Math.abs(h.delta).toLocaleString('ru-RU')+'</span></li>'}).join('')+'</ul>':'<p class="k-muted">Операций пока нет.</p>';
+  return'<div class="k-stack">'+loyaltyHero()+'<div class="k-grid"><div class="k-card"><h3>Уровни программы</h3><div class="k-lvls">'+lv+'</div><p class="k-muted k-small" style="margin-top:12px">Уровень растёт от суммы выполненных заказов. Процент — кешбэк бонусами.</p></div>'+
+    '<div class="k-card"><h3>Промокод</h3><div class="k-field"><label for="chlk-promo">Введите промокод</label><input id="chlk-promo" class="k-in" placeholder="WELCOME200" data-bind="promo" value="'+esc(S.promo)+'"></div><div style="margin-top:12px"><button class="k-btn k-sm" data-act="promo"'+(S.busy?' disabled':'')+'>Применить</button></div>'+
+    '<p class="k-muted k-small" style="margin-top:14px">Бонусы действуют 12 месяцев с момента начисления.</p></div></div>'+
+    '<div class="k-card"><h3>История бонусов</h3>'+hist+'</div></div>';
+}
+
+function tgBlock(){
+  var u=S.user,tg=u.tg||{};
+  if(S.tg&&S.tg.kind==='link')return'<div class="k-wait"><p class="k-muted">Откройте бота и нажмите «Start». Подключение подтвердится автоматически.</p>'+
+    '<a class="k-btn k-tg k-sm" href="'+esc(S.tg.url)+'" target="_blank" rel="noopener">'+ic('tg',16)+' Открыть бота</a>'+
+    '<div class="k-row k-muted k-small"><i class="k-pulse"></i> Ждём подтверждения…</div>'+
+    (DEMO?'<button class="k-btn k-ghost k-sm" data-act="tg-sim" data-v="link">Демо: имитировать Start в боте</button>':'')+
+    '<button class="k-link k-small" data-act="tg-cancel">Отмена</button></div>';
+  if(!tg.connected)return'<p class="k-muted">Получайте статус заказа и бонусы в Telegram. За подключение начислим '+bonus(C.telegramBonus)+'.</p><div style="margin-top:14px"><button class="k-btn k-tg k-sm" data-act="tg-connect"'+(S.busy?' disabled':'')+'>'+ic('tg',16)+' Подключить Telegram</button></div>';
+  return'<div class="k-row k-between"><span class="k-row" style="gap:8px"><span class="k-chip ok">Подключён</span><b>@'+esc(tg.username)+'</b></span><button class="k-link k-small" data-act="tg-unlink">Отключить</button></div>';
+}
+function sw(key,label,sub,on,dis){
+  return'<div class="k-pref"><span><b>'+label+'</b><br><span class="k-muted k-small">'+sub+'</span></span><label class="k-sw"><input type="checkbox" data-sw="'+key+'"'+(on?' checked':'')+(dis?' disabled':'')+' aria-label="'+esc(label)+'"><span></span></label></div>';
+}
+function profileTab(){
+  var u=S.user,d=S.draft,conn=u.tg&&u.tg.connected;
+  var addr=u.addresses.length?u.addresses.map(function(a){return'<div class="k-addr"><span><b>'+esc(a.label)+'</b><br><span class="k-muted k-small">'+esc(a.text)+'</span></span><button class="k-x" data-act="del-addr" data-id="'+esc(a.id)+'" aria-label="Удалить адрес">'+ic('x',18)+'</button></div>'}).join(''):'<p class="k-muted">Адресов пока нет.</p>';
+  return'<div class="k-grid">'+
+    '<div class="k-card k-stack" style="gap:14px"><h3 style="margin:0">Личные данные</h3>'+
+      '<div class="k-field"><label for="chlk-d-name">Имя</label><input id="chlk-d-name" class="k-in" data-bind="d.name" value="'+esc(d.name)+'"></div>'+
+      '<div class="k-field"><label for="chlk-d-phone">Телефон</label><input id="chlk-d-phone" class="k-in" value="'+esc(u.phone)+'" disabled></div>'+
+      '<div class="k-field"><label for="chlk-d-email">Email</label><input id="chlk-d-email" class="k-in" type="email" data-bind="d.email" value="'+esc(d.email)+'"></div>'+
+      '<div class="k-field"><label for="chlk-d-bd">День рождения (дарим бонусы)</label><input id="chlk-d-bd" class="k-in" type="date" data-bind="d.birthday" value="'+esc(d.birthday)+'"></div>'+
+      '<div><button class="k-btn" data-act="save-profile"'+(S.busy?' disabled':'')+'>Сохранить</button></div></div>'+
+    '<div class="k-stack">'+
+      '<div class="k-card"><h3>Telegram</h3>'+tgBlock()+'</div>'+
+      '<div class="k-card"><h3>Уведомления</h3>'+
+        sw('tgOrders','Статусы заказов в Telegram','Принят, мастер выехал, выполнен',u.notify.tgOrders,!conn)+
+        sw('tgPromo','Акции и персональные предложения','Не чаще раза в неделю',u.notify.tgPromo,!conn)+
+        (conn?'':'<p class="k-muted k-small" style="margin-top:8px">Чтобы включить, подключите Telegram.</p>')+'</div>'+
+      '<div class="k-card"><h3>Адреса</h3><div class="k-stack" style="gap:10px">'+addr+
+        '<div class="k-row" style="flex-wrap:nowrap"><input id="chlk-addr" class="k-in" placeholder="Город, улица, дом, квартира" aria-label="Новый адрес" data-bind="newAddr" value="'+esc(S.newAddr)+'"><button class="k-btn k-ghost k-sm" data-act="add-addr" aria-label="Добавить адрес">'+ic('plus',18)+'</button></div></div></div>'+
+    '</div></div>';
+}
+
+function appView(){
+  var u=S.user;
+  var tabs=[['overview','grid','Обзор'],['orders','bag','Заказы'],['bonuses','star','Бонусы'],['profile','user','Профиль']];
+  var nav=tabs.map(function(t){return'<button role="tab" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(S.tab===t[0])+'">'+ic(t[1],18)+t[2]+'</button>'}).join('');
+  var body={overview:overviewTab,orders:ordersTab,bonuses:bonusesTab,profile:profileTab}[S.tab]();
+  return'<div class="k-top"><div class="k-hello"><h2>Здравствуйте'+(u.name?', '+esc(u.name):'')+'!</h2><p class="k-muted">'+esc(u.phone)+'</p></div>'+
+    '<div class="k-row"><div class="k-tabs" role="tablist">'+nav+'</div><button class="k-btn k-ghost k-sm" data-act="logout" aria-label="Выйти">'+ic('out',16)+' Выйти</button></div></div>'+body;
+}
+
+/* ================= ДЕЙСТВИЯ ================= */
+function toast(msg,kind){
+  var old=document.querySelector('.k-toast');if(old)old.remove();
+  var t=document.createElement('div');t.className='k-toast'+(kind?' '+kind:'');t.setAttribute('role','status');t.textContent=msg;
+  root.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove()},2800);
+}
+function fail(e){
+  S.busy=false;var m=(e&&e.message)||'Что-то пошло не так. Попробуйте ещё раз.';
+  if(S.view==='auth'){S.err=m;render()}else{render();toast(m,'bad')}
+}
+function stopTimers(){clearInterval(T.poll);clearInterval(T.resend)}
+function tickResend(restart){
+  var el=root.querySelector('[data-resend]');if(!el)return;
+  if(restart){clearInterval(T.resend);if(T.left<=0)T.left=30;
+    T.resend=setInterval(function(){T.left--;tickResend(false);if(T.left<=0)clearInterval(T.resend)},1000)}
+  var cur=root.querySelector('[data-resend]');if(!cur)return;
+  cur.innerHTML=T.left>0?'Повторно отправить код можно через '+T.left+' с':'<button class="k-link" data-act="resend">Отправить код ещё раз</button>';
+}
+function enterApp(){
+  S.busy=true;
+  return Promise.all([API.me(),API.orders()]).then(function(r){
+    S.user=r[0].user;S.loy=r[0].loyalty;S.orders=r[1]||[];S.user.notify=S.user.notify||{tgOrders:true,tgPromo:false};S.user.addresses=S.user.addresses||[];
+    S.draft={name:S.user.name||'',email:S.user.email||'',birthday:S.user.birthday||''};
+    S.view='app';S.tab='overview';S.busy=false;S.err='';S.step='form';S.tg=null;render();
+  });
+}
+function sendCode(){
+  var reg=S.authTab==='reg';S.err='';
+  if(reg&&!S.name.trim()){S.err='Укажите, как к вам обращаться.';return render()}
+  if(!phoneOk(S.phone)){S.err='Введите номер телефона полностью.';return render()}
+  if(reg&&!S.agree){S.err='Нужно согласие на обработку персональных данных.';return render()}
+  S.busy=true;render();
+  API.sendCode(S.phone,reg?'register':'login').then(function(){S.busy=false;S.step='code';S.code='';T.left=30;S.focus='#chlk-code';render()}).catch(fail);
+}
+function verify(){
+  if(S.code.length<4){S.err='Введите 4 цифры из SMS.';return render()}
+  S.busy=true;S.err='';render();
+  var reg=S.authTab==='reg'?{name:S.name.trim(),email:S.email.trim()}:null;
+  API.verify(S.phone,S.code,reg).then(function(r){if(r&&r.token)store.set('chlk_token',r.token);return enterApp()}).catch(function(e){S.code='';S.focus='#chlk-code';fail(e)});
+}
+function startPoll(kind){
+  clearInterval(T.poll);var n=0,tok=S.tg.token;
+  T.poll=setInterval(function(){
+    n++;if(n>150||!S.tg){clearInterval(T.poll);if(S.tg){S.tg=null;render()}return}
+    (kind==='auth'?API.tgAuthStatus(tok):API.tgStatus(tok)).then(function(r){
+      if(!S.tg)return;
+      if(kind==='auth'&&r.done){clearInterval(T.poll);if(r.token)store.set('chlk_token',r.token);S.tg=null;enterApp()}
+      if(kind==='link'&&r.connected){clearInterval(T.poll);S.tg=null;API.me().then(function(m){S.user=m.user;S.loy=m.loyalty;S.user.notify=S.user.notify||{tgOrders:true,tgPromo:false};render();toast('Telegram подключён')})}
+    }).catch(function(){});
+  },DEMO?1000:3000);
+}
+function logout(){stopTimers();API.logout();store.del('chlk_token');S={view:'auth',authTab:'login',step:'form',phone:'',name:'',email:'',agree:true,code:'',err:'',busy:false,tg:null,tab:'overview',filter:'all',open:{},user:null,loy:null,orders:[],draft:null,newAddr:'',promo:'',focus:null};render()}
+function copy(v){
+  var done=function(){toast('Скопировано')};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,function(){toast('Не удалось скопировать: '+v)});
+  else toast(v);
+}
+function saveProfile(){
+  S.busy=true;render();
+  API.updateProfile({name:S.draft.name.trim(),email:S.draft.email.trim(),birthday:S.draft.birthday}).then(function(r){S.busy=false;if(r&&r.user)S.user=r.user;else{S.user.name=S.draft.name;S.user.email=S.draft.email}render();toast('Данные сохранены')}).catch(fail);
+}
+
+root.addEventListener('click',function(e){
+  var el=e.target.closest('[data-act]');if(!el||!root.contains(el))return;
+  var a=el.getAttribute('data-act'),v=el.getAttribute('data-v'),id=el.getAttribute('data-id');
+  switch(a){
+    case'auth-tab':S.authTab=v;S.err='';render();break;
+    case'send-code':case'resend':sendCode();break;
+    case'edit-phone':S.step='form';S.err='';clearInterval(T.resend);S.focus='#chlk-phone';render();break;
+    case'verify':verify();break;
+    case'tg-login':S.err='';API.tgAuthStart().then(function(r){S.tg={kind:'auth',url:r.url,token:r.token};render();startPoll('auth')}).catch(fail);break;
+    case'tg-connect':S.busy=true;render();API.tgLink().then(function(r){S.busy=false;S.tg={kind:'link',url:r.url,token:r.token};render();startPoll('link')}).catch(fail);break;
+    case'tg-cancel':clearInterval(T.poll);S.tg=null;render();break;
+    case'tg-sim':API.demoConfirm(v);break;
+    case'tg-unlink':API.tgUnlink().then(function(){S.user.tg={connected:false,username:''};render();toast('Telegram отключён')}).catch(fail);break;
+    case'demo-quick':API.quick(v).then(enterApp).catch(fail);break;
+    case'demo-reset':stopTimers();API.reset();S.view='auth';S.tg=null;render();break;
+    case'tab':S.tab=v;render();break;
+    case'filter':S.filter=v;render();break;
+    case'toggle-order':S.open[id]=!S.open[id];render();break;
+    case'open-order':S.tab='orders';S.open[id]=true;render();break;
+    case'copy':copy(v);break;
+    case'save-profile':saveProfile();break;
+    case'add-addr':
+      if(!S.newAddr.trim()){toast('Введите адрес','bad');break}
+      var list=S.user.addresses.concat([{id:'a'+Date.now(),label:'Адрес '+(S.user.addresses.length+1),text:S.newAddr.trim()}]);
+      API.updateProfile({addresses:list}).then(function(r){S.user.addresses=(r&&r.user&&r.user.addresses)||list;S.newAddr='';render();toast('Адрес добавлен')}).catch(fail);break;
+    case'del-addr':
+      var rest=S.user.addresses.filter(function(x){return x.id!==id});
+      API.updateProfile({addresses:rest}).then(function(r){S.user.addresses=(r&&r.user&&r.user.addresses)||rest;render()}).catch(fail);break;
+    case'promo':
+      if(!S.promo.trim()){toast('Введите промокод','bad');break}
+      S.busy=true;render();
+      API.promo(S.promo).then(function(){S.promo='';return API.me()}).then(function(m){S.busy=false;S.user=m.user;S.loy=m.loyalty;render();toast('Промокод применён, бонусы начислены')}).catch(fail);break;
+    case'logout':logout();break;
+  }
+});
+root.addEventListener('input',function(e){
+  var el=e.target,b=el.getAttribute&&el.getAttribute('data-bind');if(!b)return;
+  if(el.type==='checkbox'){S[b]=el.checked;return}
+  var val=el.value;
+  if(b==='phone'){val=fmtPhone(val);el.value=val}
+  if(b==='code'){val=digits(val).slice(0,4);el.value=val}
+  if(b.indexOf('d.')===0)S.draft[b.slice(2)]=val;else S[b]=val;
+  if(b==='code'&&val.length===4&&!S.busy)verify();
+});
+root.addEventListener('change',function(e){
+  var el=e.target,k=el.getAttribute&&el.getAttribute('data-sw');if(!k)return;
+  S.user.notify[k]=el.checked;
+  API.updateProfile({notify:S.user.notify}).then(function(){toast('Сохранено')}).catch(function(err){el.checked=!el.checked;S.user.notify[k]=el.checked;toast(err.message,'bad')});
+});
+root.addEventListener('keydown',function(e){
+  if(e.key!=='Enter'||e.target.tagName!=='INPUT'||e.target.type==='checkbox')return;
+  if(S.view==='auth'&&S.step==='form')sendCode();
+  else if(S.view==='auth'&&S.step==='code')verify();
+});
+
+/* ================= СТАРТ ================= */
+render();
+if(store.get('chlk_token')){enterApp().catch(function(){store.del('chlk_token');S.view='auth';S.busy=false;render()})}
+else{S.view='auth';render()}
+})();
+</script>
