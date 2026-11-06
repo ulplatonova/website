@@ -1,0 +1,906 @@
+<!-- ============================================================================
+  CleanHub · Уборка после ремонта
+  Вставьте ВЕСЬ этот код в блок «T123 — HTML» (раздел «Другое» → «HTML-код») на странице Тильды.
+  Инструкция: README.md в корне репозитория.
+============================================================================= -->
+<style>
+/* CleanHub — рекламные лендинги. Все стили ограничены корнем #chl, чтобы не конфликтовать со стилями Тильды. */
+#chl{--g:#00b14f;--g-d:#008c3f;--g-l:#5fe39a;--ink:#0b2517;--ink2:#3f5548;--mute:#6b7f73;--bg:#f2f8f4;--line:#dce8e0;--card:#fff;--warn:#ffb020;--r:18px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%;overflow-x:hidden;text-align:left}
+#chl *,#chl *::before,#chl *::after{box-sizing:border-box}
+#chl h1,#chl h2,#chl h3,#chl h4,#chl p,#chl ul,#chl ol,#chl figure,#chl blockquote{margin:0;padding:0;font-family:inherit}
+#chl ul,#chl ol{list-style:none}
+#chl a{color:inherit;text-decoration:none}
+#chl img{max-width:100%;height:auto;display:block;border:0}
+#chl button{font-family:inherit}
+#chl .w{max-width:1140px;margin:0 auto;padding:0 20px}
+#chl section{padding:56px 0}
+#chl .alt{background:var(--bg)}
+#chl .eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--g-d);margin-bottom:10px}
+#chl h2{font-size:30px;line-height:1.15;font-weight:800;letter-spacing:-.01em;margin-bottom:12px}
+#chl .lead{color:var(--ink2);font-size:17px;max-width:680px;margin-bottom:28px}
+#chl .center{text-align:center}
+#chl .center .lead{margin-left:auto;margin-right:auto}
+
+/* кнопки */
+#chl .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 26px;border-radius:14px;border:0;font-size:17px;font-weight:700;line-height:1.2;cursor:pointer;text-align:center;transition:transform .15s,box-shadow .15s,background .15s}
+#chl .btn-p{background:var(--g);color:#04170d;box-shadow:0 8px 22px rgba(0,177,79,.32)}
+#chl .btn-p:hover{background:#00c257;transform:translateY(-1px)}
+#chl .btn-p:active{transform:none}
+#chl .btn-o{background:transparent;color:inherit;border:2px solid currentColor}
+#chl .btn-o:hover{background:rgba(255,255,255,.1)}
+#chl .btn-w{background:#fff;color:var(--ink);border:2px solid var(--line)}
+#chl .btn-w:hover{border-color:var(--g)}
+#chl .btn-s{min-height:42px;padding:0 18px;font-size:15px;border-radius:12px}
+#chl .btn:focus-visible,#chl a:focus-visible,#chl summary:focus-visible,#chl input:focus-visible{outline:3px solid var(--g-l);outline-offset:2px}
+#chl .ico{width:20px;height:20px;flex:0 0 auto;fill:currentColor}
+
+/* шапка */
+#chl .top{background:#fff;border-bottom:1px solid var(--line);position:relative;z-index:5}
+#chl .top .w{display:flex;align-items:center;gap:14px;min-height:64px}
+#chl .logo img{height:38px;width:auto}
+#chl .top-meta{margin-left:auto;display:flex;align-items:center;gap:18px}
+#chl .top-time{font-size:13px;color:var(--mute);line-height:1.2;text-align:right}
+#chl .top-phone{font-weight:800;font-size:18px;white-space:nowrap}
+#chl .top .btn{display:none}
+
+/* hero */
+#chl .hero{background:radial-gradient(1200px 500px at 85% -10%,#14502f 0%,transparent 60%),linear-gradient(180deg,#0b2517,#0a2014);color:#fff;padding:40px 0 56px;position:relative}
+#chl .hero .w{display:grid;gap:28px}
+#chl .hl{display:flex;flex-direction:column}
+#chl .hl>*{order:2}
+#chl .hl .tag{order:1;align-self:flex-start}
+#chl .hl h1{order:2}
+#chl .hl .sub{order:3}
+#chl .hl .cta-row{order:4}
+#chl .hl .promo{order:5}
+#chl .hl .ticks{order:6;margin:24px 0 0}
+#chl .hero .tag{display:inline-flex;align-items:center;gap:8px;background:rgba(95,227,154,.14);color:var(--g-l);border:1px solid rgba(95,227,154,.35);border-radius:99px;padding:6px 14px;font-size:14px;font-weight:600;margin-bottom:18px}
+#chl .hero h1{font-size:34px;line-height:1.1;font-weight:800;letter-spacing:-.02em;margin-bottom:16px}
+#chl .hero h1 em{font-style:normal;color:var(--g-l)}
+#chl .hero .sub{font-size:18px;color:#cfe3d7;margin-bottom:22px;max-width:560px}
+#chl .ticks{display:grid;gap:11px;margin-bottom:28px}
+#chl .hero .sub{margin-bottom:20px}
+#chl .ticks li{position:relative;padding-left:32px;font-size:16px}
+#chl .ticks li::before{content:"";position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--g) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2304170d' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/14px no-repeat}
+#chl .cta-row{display:flex;flex-wrap:wrap;gap:12px}
+#chl .cta-row .btn{flex:1 1 240px}
+#chl .promo{display:flex;align-items:center;gap:10px;margin-top:18px;font-size:15px;color:#cfe3d7}
+#chl .promo b{color:#fff}
+#chl .promo[hidden]{display:none}
+#chl .hero-pic{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:4/3;background:#14502f;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+#chl .hero-pic img{width:100%;height:100%;object-fit:cover}
+#chl .badge{position:absolute;background:#fff;color:var(--ink);border-radius:14px;padding:10px 14px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-size:13px;line-height:1.25}
+#chl .badge b{display:block;font-size:20px;line-height:1.1}
+#chl .badge-a{left:12px;bottom:12px}
+#chl .badge-b{right:12px;top:12px}
+#chl .stars{color:var(--warn);letter-spacing:2px;font-size:14px}
+
+/* цифры доверия */
+#chl .facts{background:#fff;border-bottom:1px solid var(--line);padding:0}
+#chl .facts .w{display:grid;grid-template-columns:1fr 1fr;gap:0}
+#chl .fact{padding:20px 8px;text-align:center;border-bottom:1px solid var(--line)}
+#chl .fact:nth-child(odd){border-right:1px solid var(--line)}
+#chl .fact:nth-last-child(-n+2){border-bottom:0}
+#chl .fact b{display:block;font-size:26px;line-height:1.1;font-weight:800;color:var(--g-d)}
+#chl .fact span{font-size:13px;color:var(--ink2)}
+
+/* карточки */
+#chl .grid{display:grid;gap:16px}
+#chl .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+#chl .card h3{font-size:18px;line-height:1.25;margin-bottom:8px;font-weight:700}
+#chl .card p{color:var(--ink2);font-size:15px}
+#chl .pain .card{display:flex;gap:14px;align-items:flex-start}
+#chl .pain .card .em{font-size:26px;line-height:1}
+#chl .pain .card p{color:var(--ink);font-size:16px}
+
+/* калькулятор */
+#chl .calc-wrap{display:grid;gap:18px}
+#chl .step{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px}
+#chl .step-h{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;margin-bottom:14px}
+#chl .step-n{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;font-size:14px;display:grid;place-items:center;flex:0 0 auto}
+#chl .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+#chl .chip{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:9px 14px;font-size:14px;font-weight:600;cursor:pointer;color:var(--ink);line-height:1.2}
+#chl .chip small{display:block;font-weight:500;color:var(--mute);font-size:12px}
+#chl .chip:hover{border-color:var(--g)}
+#chl .chip[aria-pressed=true]{border-color:var(--g);background:#e8f8ee}
+#chl .area{display:flex;align-items:center;gap:14px}
+#chl .area-in{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:0 14px;height:52px;flex:0 0 130px}
+#chl .area-in input{width:70px;border:0;background:transparent;font-size:24px;font-weight:800;color:var(--ink);font-family:inherit;outline:none;-moz-appearance:textfield}
+#chl .area-in input::-webkit-outer-spin-button,#chl .area-in input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+#chl .area-in span{color:var(--mute);font-weight:600}
+#chl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--g) var(--p,30%),var(--line) var(--p,30%));outline:none;margin:0}
+#chl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid var(--g);box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer}
+#chl input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--g);cursor:pointer}
+#chl .tariffs{display:grid;gap:10px}
+#chl .tar{display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:center;text-align:left;width:100%;border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;cursor:pointer;color:var(--ink);position:relative}
+#chl .tar:hover{border-color:var(--g)}
+#chl .tar[aria-pressed=true]{border-color:var(--g);background:#f1fbf5;box-shadow:0 0 0 3px rgba(0,177,79,.12)}
+#chl .tar .rd{grid-row:1/3;width:22px;height:22px;border-radius:50%;border:2px solid #b7c8be;background:#fff}
+#chl .tar[aria-pressed=true] .rd{border:7px solid var(--g)}
+#chl .tar .tn{font-weight:800;font-size:17px}
+#chl .tar .tp{font-weight:800;font-size:19px;grid-row:1/3;grid-column:3;text-align:right;white-space:nowrap}
+#chl .tar .tl{grid-column:2;font-size:13px;color:var(--ink2);line-height:1.35}
+#chl .tar .flag{display:inline-block;background:var(--ink);color:#fff;border-radius:6px;font-size:11px;padding:2px 7px;margin-left:8px;vertical-align:2px;font-weight:700;letter-spacing:.02em}
+#chl .xs{display:grid;gap:10px}
+#chl .x{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff}
+#chl .x.on{border-color:var(--g);background:#f1fbf5}
+#chl .x .xt{font-weight:700;font-size:15px;line-height:1.25}
+#chl .x .xd{grid-column:1;font-size:13px;color:var(--mute);line-height:1.3}
+#chl .x .xc{grid-row:1/3;grid-column:2;display:flex;align-items:center;gap:6px}
+#chl .x .xp{font-size:13px;font-weight:700;color:var(--ink2);white-space:nowrap;margin-right:6px}
+#chl .x .xp i{font-style:normal;color:var(--g-d)}
+#chl .qb{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:20px;line-height:1;font-weight:700;cursor:pointer;color:var(--ink)}
+#chl .qb:hover{border-color:var(--g)}
+#chl .qn{min-width:22px;text-align:center;font-weight:800}
+#chl .sw{min-width:64px;height:36px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:14px;cursor:pointer;padding:0 14px;color:var(--ink)}
+#chl .x.on .sw{background:var(--g);border-color:var(--g);color:#04170d}
+
+#chl .sum{background:var(--ink);color:#fff;border-radius:22px;padding:24px;position:relative;overflow:hidden}
+#chl .sum::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(0,177,79,.45),transparent 70%)}
+#chl .sum>*{position:relative;z-index:1}
+#chl .sum .lbl{font-size:14px;color:#a9c4b4}
+#chl .sum .tot{font-size:44px;line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px}
+#chl .sum .old{font-size:18px;color:#a9c4b4;text-decoration:line-through;margin-left:10px;font-weight:600;letter-spacing:0}
+#chl .sum .disc{display:inline-block;background:rgba(95,227,154,.16);color:var(--g-l);border-radius:8px;padding:3px 10px;font-size:13px;font-weight:700;margin:6px 0}
+#chl .sum .lines{margin:14px 0 18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14);display:grid;gap:7px;font-size:14px;color:#cfe3d7}
+#chl .sum .lines div{display:flex;justify-content:space-between;gap:12px}
+#chl .sum .lines span:last-child{color:#fff;font-weight:600;white-space:nowrap}
+#chl .sum .note{font-size:13px;color:#a9c4b4;margin-top:12px;line-height:1.4}
+#chl .sum .btn{width:100%}
+#chl .sum .alt-row{display:flex;gap:8px;margin-top:10px}
+#chl .sum .alt-row a{flex:1;min-height:46px;border-radius:12px;border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:14px}
+#chl .sum .alt-row a:hover{background:rgba(255,255,255,.08)}
+#chl .sum .tip{margin-top:12px;background:rgba(255,176,32,.12);border:1px solid rgba(255,176,32,.4);color:#ffd88a;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.4}
+#chl .sum .tip[hidden]{display:none}
+#chl .ups{margin-top:10px;font-size:13px;color:var(--g-l)}
+#chl .ups button{background:none;border:0;color:#fff;text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
+
+/* что входит */
+#chl .inc .card ul{display:grid;gap:9px;margin-top:6px}
+#chl .inc .card li{position:relative;padding-left:24px;font-size:15px;color:var(--ink)}
+#chl .inc .card li::before{content:"";position:absolute;left:0;top:5px;width:14px;height:14px;border-radius:50%;background:var(--g) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2304170d' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/9px no-repeat}
+#chl .inc .card h3 .em{margin-right:6px}
+#chl .extra-note{margin-top:18px;background:#fff8e6;border:1px solid #f4dca0;border-radius:14px;padding:14px 16px;font-size:14px;color:#6b5314}
+#chl .extra-note b{color:#4a3a0a}
+
+/* до/после */
+#chl .ba-grid{display:grid;gap:24px;align-items:center}
+#chl .ba{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:1049/940;background:#ddd;user-select:none;touch-action:pan-y;box-shadow:0 20px 50px rgba(11,37,23,.18)}
+#chl .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#chl .ba .after{clip-path:inset(0 0 0 var(--x,50%))}
+#chl .ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;z-index:3;background:none}
+#chl .ba .bar{position:absolute;top:0;bottom:0;left:var(--x,50%);width:3px;margin-left:-1.5px;background:#fff;z-index:2;box-shadow:0 0 12px rgba(0,0,0,.4)}
+#chl .ba .bar::after{content:"⇆";position:absolute;top:50%;left:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:20px;box-shadow:0 4px 14px rgba(0,0,0,.35);color:var(--ink)}
+#chl .ba .cap{position:absolute;top:12px;z-index:2;background:rgba(11,37,23,.8);color:#fff;border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+#chl .ba .cap.l{left:12px}
+#chl .ba .cap.r{right:12px;background:var(--g);color:#04170d}
+#chl .ba-cap{font-size:13px;color:var(--mute);margin-top:10px}
+
+/* тарифы-карточки + таблица */
+#chl .tcards{display:grid;gap:16px}
+#chl .tc{position:relative;display:flex;flex-direction:column}
+#chl .tc.hot{border:2px solid var(--g);box-shadow:0 14px 40px rgba(0,177,79,.15)}
+#chl .tc .hotl{position:absolute;top:-12px;left:22px;background:var(--g);color:#04170d;font-size:12px;font-weight:800;border-radius:8px;padding:3px 10px;letter-spacing:.03em}
+#chl .tc .pr{font-size:32px;font-weight:800;letter-spacing:-.02em;margin:6px 0 2px}
+#chl .tc .pr small{font-size:14px;color:var(--mute);font-weight:600;letter-spacing:0}
+#chl .tc ul{display:grid;gap:8px;margin:14px 0 20px;flex:1}
+#chl .tc li{position:relative;padding-left:22px;font-size:14px}
+#chl .tc li::before{content:"✓";position:absolute;left:0;color:var(--g-d);font-weight:800}
+#chl .tc li.no{color:var(--mute)}
+#chl .tc li.no::before{content:"—";color:#b7c8be}
+#chl details.tbl{margin-top:20px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:4px 18px}
+#chl details.tbl summary{cursor:pointer;font-weight:700;padding:14px 0;list-style:none;display:flex;justify-content:space-between;align-items:center}
+#chl summary::-webkit-details-marker{display:none}
+#chl details.tbl summary::after{content:"+";font-size:22px;color:var(--g-d);font-weight:700}
+#chl details.tbl[open] summary::after{content:"–"}
+#chl .tbl-s{overflow-x:auto;margin:0 -4px 14px}
+#chl table{border-collapse:collapse;width:100%;font-size:15px;min-width:380px}
+#chl th,#chl td{padding:10px 8px;text-align:right;border-bottom:1px solid var(--line)}
+#chl th:first-child,#chl td:first-child{text-align:left}
+#chl th{font-size:13px;color:var(--mute);font-weight:700}
+#chl td:first-child{font-weight:600}
+
+/* шаги */
+#chl .steps{display:grid;gap:14px;counter-reset:s}
+#chl .st{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px 20px 20px 74px;counter-increment:s}
+#chl .st::before{content:counter(s);position:absolute;left:20px;top:18px;width:40px;height:40px;border-radius:12px;background:var(--g);color:#04170d;font-weight:800;font-size:20px;display:grid;place-items:center}
+#chl .st h3{font-size:17px;margin-bottom:4px;font-weight:700}
+#chl .st p{font-size:15px;color:var(--ink2)}
+
+/* гарантии */
+#chl .guar{background:linear-gradient(180deg,#0b2517,#0a2014);color:#fff}
+#chl .guar .lead{color:#cfe3d7}
+#chl .guar .eyebrow{color:var(--g-l)}
+#chl .guar .card{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+#chl .guar .card h3{color:#fff}
+#chl .guar .card p{color:#bcd3c5}
+#chl .guar .em{font-size:26px;display:block;margin-bottom:10px}
+
+/* техника */
+#chl .gear .card{display:flex;gap:14px;align-items:flex-start}
+#chl .gear .em{font-size:28px;line-height:1}
+
+/* команда */
+#chl .team .card{text-align:center}
+#chl .team .av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--g-d));color:#fff;font-weight:800;font-size:26px;display:grid;place-items:center;margin:0 auto 10px}
+#chl .team .cnt{display:inline-block;margin-top:8px;background:#e8f8ee;color:var(--g-d);border-radius:8px;padding:3px 10px;font-weight:700;font-size:13px}
+
+/* отзывы */
+#chl .rev-head{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+#chl .rev-score{font-size:46px;font-weight:800;line-height:1;letter-spacing:-.02em}
+#chl .revs{display:grid;gap:14px}
+#chl .rev{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px}
+#chl .rev p{font-size:15px;color:var(--ink);margin:8px 0 12px}
+#chl .rev .who{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--mute)}
+#chl .rev .who b{color:var(--ink);font-size:14px}
+
+/* акции */
+#chl .offers .card{border-width:2px;display:flex;flex-direction:column;gap:6px}
+#chl .offers .pct{font-size:40px;font-weight:800;color:var(--g-d);line-height:1;letter-spacing:-.02em}
+#chl .offers .btn{margin-top:auto}
+#chl .offers p{margin-bottom:12px}
+
+/* faq */
+#chl .faq details{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 20px}
+#chl .faq summary{cursor:pointer;padding:18px 0;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center}
+#chl .faq summary::after{content:"+";font-size:26px;color:var(--g-d);flex:0 0 auto;line-height:1}
+#chl .faq details[open] summary::after{content:"–"}
+#chl .faq details p{padding:0 0 18px;color:var(--ink2);font-size:15px}
+
+/* финальный CTA */
+#chl .final{background:radial-gradient(900px 400px at 90% 0%,#14502f 0%,transparent 60%),#0b2517;color:#fff}
+#chl .final .w{display:grid;gap:26px}
+#chl .final h2{font-size:32px}
+#chl .final .lead{color:#cfe3d7;margin-bottom:0}
+#chl .contacts{display:grid;gap:10px}
+#chl .contacts .btn{width:100%}
+#chl .contacts .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#chl .btn-wa{background:#25d366;color:#04170d}
+#chl .btn-tg{background:#2aabee;color:#04170d}
+#chl .contacts small{color:#a9c4b4;font-size:13px;text-align:center;display:block;margin-top:2px}
+
+/* подвал */
+#chl .foot{background:#071a10;color:#8fa89a;padding:32px 0 100px;font-size:13px;line-height:1.6}
+#chl .foot a{color:#b9d0c3;text-decoration:underline}
+#chl .foot .w{display:grid;gap:14px}
+#chl .foot .links{display:flex;flex-wrap:wrap;gap:6px 18px}
+
+/* мобильная панель */
+#chl .mbar{position:fixed;left:0;right:0;bottom:0;z-index:9990;background:#fff;border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;box-shadow:0 -8px 30px rgba(0,0,0,.12);transform:translateY(110%);transition:transform .25s}
+#chl .mbar.show{transform:none}
+#chl .mbar .tt{flex:1;line-height:1.15;min-width:0}
+#chl .mbar .tt small{display:block;font-size:12px;color:var(--mute)}
+#chl .mbar .tt b{font-size:19px;white-space:nowrap}
+#chl .mbar .btn{min-height:48px;padding:0 20px;font-size:16px}
+#chl .mbar .call{width:48px;min-height:48px;padding:0;border-radius:14px;flex:0 0 48px}
+
+#chl .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+@media (min-width:720px){
+  #chl section{padding:84px 0}
+  #chl h2{font-size:38px}
+  #chl .top .btn{display:inline-flex}
+  #chl .hero{padding:56px 0 80px}
+  #chl .hero .w{grid-template-columns:1.05fr .95fr;align-items:center;gap:48px}
+  #chl .hero h1{font-size:48px}
+  #chl .hl .ticks{order:4;margin:0 0 28px}
+  #chl .hl .cta-row{order:5}
+  #chl .hl .promo{order:6}
+  #chl .cta-row .btn{flex:0 1 auto}
+  #chl .facts .w{grid-template-columns:repeat(4,1fr)}
+  #chl .fact{border-bottom:0;border-right:1px solid var(--line);padding:26px 8px}
+  #chl .fact:nth-child(odd){border-right:1px solid var(--line)}
+  #chl .fact:last-child{border-right:0}
+  #chl .grid.c2{grid-template-columns:repeat(2,1fr)}
+  #chl .grid.c3{grid-template-columns:repeat(3,1fr)}
+  #chl .grid.c4{grid-template-columns:repeat(4,1fr)}
+  #chl .calc-wrap{grid-template-columns:1.25fr .75fr;align-items:start}
+  #chl .sum{position:sticky;top:20px}
+  #chl .tariffs{grid-template-columns:repeat(3,1fr)}
+  #chl .tar{grid-template-columns:1fr;gap:6px;padding:16px}
+  #chl .tar .rd{grid-row:auto;position:absolute;right:14px;top:14px}
+  #chl .tar .tp{grid-row:auto;grid-column:1;text-align:left}
+  #chl .tar .tl{grid-column:1}
+  #chl .xs{grid-template-columns:1fr 1fr}
+  #chl .ba-grid{grid-template-columns:1fr 1fr;gap:48px}
+  #chl .tcards{grid-template-columns:repeat(3,1fr)}
+  #chl .steps{grid-template-columns:repeat(2,1fr)}
+  #chl .revs{grid-template-columns:repeat(2,1fr)}
+  #chl .final .w{grid-template-columns:1.1fr .9fr;align-items:center;gap:56px}
+  #chl .mbar{display:none}
+  #chl .foot{padding-bottom:32px}
+}
+@media (min-width:1024px){
+  #chl .top-time{display:block}
+  #chl .revs{grid-template-columns:repeat(3,1fr)}
+  #chl .steps{grid-template-columns:repeat(5,1fr)}
+  #chl .st{padding:74px 18px 20px}
+  #chl .st::before{left:18px;top:18px}
+}
+@media (max-width:719px){
+  #chl .top-time{display:none}
+  #chl .top-phone{font-size:16px}
+  #chl .logo img{height:34px}
+  #chl .hero{padding:28px 0 40px}
+  #chl .hero h1{font-size:30px}
+  #chl .hero .sub{font-size:16px}
+  #chl .hero .tag{margin-bottom:14px}
+}
+@media (prefers-reduced-motion:reduce){#chl *{transition:none!important;scroll-behavior:auto!important}}
+
+</style>
+
+<div id="chl">
+<header class="top"><div class="w">
+  <a class="logo" href="#chl-top" aria-label="CleanHub"><img src="https://optim.tildacdn.com/tild3363-3137-4433-b838-326532616464/-/resize/300x/-/format/webp/logotype___CleanHub_.png.webp" alt="CleanHub" width="82" height="38"></a>
+  <div class="top-meta">
+    <div class="top-time">Москва и область<br>ежедневно 09:00–21:00</div>
+    <a class="top-phone" href="tel:+74957777793">+7 (495) 777-77-93</a>
+    <a class="btn btn-p btn-s" href="#chl-calc">Рассчитать цену</a>
+  </div></div></header>
+<section class="hero" id="chl-top"><div class="w">
+  <div class="hl">
+    <span class="tag">📍 Москва и МО · выезд в день обращения</span>
+    <h1>Уборка после ремонта в Москве: <em>въезжайте сразу</em></h1>
+    <p class="sub">Уберём строительную пыль, следы затирки, краски и клея за один выезд. Вытягиваем мелкую пыль промышленными пылесосами Kärcher. От 11 990 ₽.</p>
+    <ul class="ticks"><li><b>Цена в договоре</b> — итоговая сумма не меняется в процессе</li><li><b>Оплата после приёмки</b> — вы проверяете результат по чек-листу</li><li><b>Выезд в день обращения</b>, обычно 5–7 часов работы бригады</li><li><b>Безопасная химия</b> для детей, аллергиков и дорогих покрытий</li></ul>
+    <div class="cta-row">
+      <a class="btn btn-p" href="#chl-calc" data-goal="hero_calc_click">Рассчитать стоимость за 1 минуту</a>
+      <a class="btn btn-o" href="tel:+74957777793"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg> +7 (495) 777-77-93</a>
+    </div>
+    <p class="promo" data-fo>🎁 <span><b>−<span data-fo-pct>10</span>% на первую уборку</b> (до <span data-fo-max>6 000 ₽</span>) — применяется в расчёте автоматически</span></p>
+  </div>
+  <div class="hero-pic">
+    <img src="https://optim.tildacdn.com/tild6433-6564-4162-b532-656362323334/-/resize/900x/-/format/webp/IMG_3303.PNG.webp" alt="Кухня после уборки после ремонта от CleanHub" width="900" height="675" fetchpriority="high">
+    <div class="badge badge-b"><span class="stars">★★★★★</span><b>5,0</b>157 оценок клиентов</div>
+    <div class="badge badge-a"><b>5–7 часов</b>работы бригады</div>
+  </div></div></section>
+<div class="facts"><div class="w"><div class="fact"><b>110 000+</b><span>проведённых уборок</span></div><div class="fact"><b>10+ лет</b><span>на рынке клининга</span></div><div class="fact"><b>5,0</b><span>по 157 оценкам клиентов</span></div><div class="fact"><b>Возврат</b><span>денег, если не устроит результат</span></div></div></div>
+<section class="pain"><div class="w">
+  <span class="eyebrow">Знакомо?</span><h2>Знакомая картина после ремонта?</h2><p class="lead">Завершение отделки — долгожданный момент, который часто омрачает строительный хаос. Обычная уборка и бытовая химия здесь не справляются.</p>
+  <div class="grid c3"><div class="card"><span class="em">🌫️</span><p>Мелкая строительная пыль оседает снова и снова, даже после влажной уборки</p></div><div class="card"><span class="em">🧱</span><p>Пятна затирки на новой плитке, следы скотча и краски на рамах</p></div><div class="card"><span class="em">🤧</span><p>Пыль вызывает аллергию и дискомфорт — жить в таком воздухе нельзя</p></div><div class="card"><span class="em">🏠</span><p>Нужно подготовить квартиру к заселению, продаже или сдаче</p></div><div class="card"><span class="em">🧴</span><p>Цемент, клей и штукатурку не берёт бытовая химия</p></div><div class="card"><span class="em">😰</span><p>Боитесь испортить паркет, дизайнерскую сантехнику или мрамор</p></div></div>
+  <div class="center" style="margin-top:28px"><a class="btn btn-p" href="#chl-calc" data-goal="pain_calc_click">Узнать, сколько это стоит</a></div></div></section>
+<section class="alt" id="chl-calc"><div class="w">
+  <span class="eyebrow">Калькулятор</span><h2>Рассчитайте стоимость уборки после ремонта</h2><p class="lead">Выберите площадь и тариф — цена посчитается сразу. Сложные загрязнения оценим по фото, чтобы итоговая сумма не изменилась.</p>
+  <div class="calc-wrap">
+    <div class="calc-steps" style="display:grid;gap:18px">
+      <div class="step"><div class="step-h"><span class="step-n">1</span>Площадь квартиры или дома</div>
+        <div class="chips" data-ref="chips"></div>
+        <div class="area"><label class="area-in"><input data-ref="areaInput" type="text" inputmode="numeric" aria-label="Площадь, м²" value="55" maxlength="4"><span>м²</span></label>
+        <input data-ref="range" type="range" min="20" max="150" step="1" value="55" aria-label="Площадь, ползунок"></div></div>
+      <div class="step"><div class="step-h"><span class="step-n">2</span>Выберите тариф</div><div class="tariffs" data-ref="tariffs"></div></div>
+      <div class="step"><div class="step-h"><span class="step-n">3</span>Добавьте, если нужно</div><div class="xs" data-ref="extras"></div></div>
+    </div>
+    <aside class="sum" data-ref="sum" aria-live="polite"></aside>
+  </div></div></section>
+<section class="inc"><div class="w">
+  <span class="eyebrow">Что входит</span><h2>Что входит в уборку после ремонта</h2><p class="lead">Работаем от потолка до пола по подробному чек-листу. Всё оборудование, химия и вынос мусора — в стоимости.</p>
+  <div class="grid c2"><div class="card"><h3><span class="em">🌫️</span>Пыль и поверхности</h3><ul><li>Обеспыливаем всё от потолка до пола сухим и влажным МОПом</li><li>Протираем корпусную мебель снаружи</li><li>Убираем пыль и грязь с подоконников</li><li>Моем радиаторы, протираем люстры и светильники</li></ul></div><div class="card"><h3><span class="em">🧱</span>Следы ремонта</h3><ul><li>Удаляем стандартные послеремонтные загрязнения</li><li>Ототираем следы краски, штукатурки, клея (не более 2 см)</li><li>Моем межкомнатные двери и проёмы, дезинфицируем ручки</li><li>Натираем зеркала и стеклянные поверхности до блеска</li></ul></div><div class="card"><h3><span class="em">🚿</span>Санузел и сантехника</h3><ul><li>Моем и дезинфицируем всю сантехнику, унитаз, ванну или душевую</li><li>Протираем полотенцесушитель и подведённые к нему трубы</li><li>Протираем держатель туалетной бумаги и аксессуары</li></ul></div><div class="card"><h3><span class="em">🛋️</span>Полы, техника, мусор</h3><ul><li>Пылесосим и моем пол и плинтуса</li><li>Пылесосим мягкую мебель и ковры</li><li>Распаковываем и протираем бытовую технику и мебель</li><li>Собираем и выносим мусор (до 10 кг)</li></ul></div></div><div class="extra-note"><b>Оплачивается отдельно:</b> сложные загрязнения вроде эпоксидной затирки, а также хрустальные люстры и сложные конструкции. Потолок в стоимость не входит. Не уверены? Пришлите фото — назовём точную цену до выезда.</div></div></section>
+<section class="alt"><div class="w ba-grid">
+  <div><span class="eyebrow">Результат</span><h2>Было — стало: кухня после ремонта</h2><p class="lead" style="margin-bottom:20px">Плёнка, пыль и следы работ — на выходе чистая кухня, готовая к жизни. Не только жильё: так же убираем дома и коммерческие помещения.</p>
+  <a class="btn btn-p" href="#chl-calc" data-goal="ba_calc_click">Хочу так же — рассчитать</a></div>
+  <div><div class="ba" role="group" aria-label="Сравнение до и после">
+    <img src="https://optim.tildacdn.com/tild3339-6231-4132-b536-656135363632/-/resize/800x/-/format/webp/IMG_3302.PNG.webp" alt="До уборки" width="700" height="627" loading="lazy">
+    <img class="after" src="https://optim.tildacdn.com/tild6433-6564-4162-b532-656362323334/-/resize/800x/-/format/webp/IMG_3303.PNG.webp" alt="После уборки" width="700" height="627" loading="lazy">
+    <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
+    <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
+  </div><p class="ba-cap">Фото реальной уборки CleanHub. Потяните ползунок.</p></div></div></section>
+<section><div class="w">
+  <span class="eyebrow">Цены</span><h2>Цены на уборку после ремонта</h2><p class="lead">Цена зависит от площади, тарифа и сложности загрязнений. В стоимость уже включены работа бригады, всё оборудование и профессиональные средства.</p>
+  <div class="tcards"><div class="card tc"><h3>Лайт</h3><div class="pr">от 11 990 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li>Мойка сантехники, полов и плинтусов</li><li class="no">Мойка шкафов внутри</li></ul><a class="btn btn-w" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div><div class="card tc hot"><span class="hotl">ОПТИМАЛЬНЫЙ</span><h3>Стандарт</h3><div class="pr">от 14 490 ₽ <small>за 40 м²</small></div><ul><li>Всё из «Лайт»</li><li>Мойка всех шкафов внутри (пустых)</li><li class="no">Мойка окон</li></ul><a class="btn btn-p" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div><div class="card tc"><h3>Премиум</h3><div class="pr">от 16 990 ₽ <small>за 40 м²</small></div><ul><li>Всё из «Стандарт»</li><li>Мойка окон: до 4–12 створок по площади</li></ul><a class="btn btn-w" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div></div>
+  <details class="tbl"><summary>Полная таблица цен по площади</summary><div class="tbl-s"><table>
+    <thead><tr><th>Площадь</th><th>Лайт</th><th>Стандарт</th><th>Премиум</th></tr></thead><tbody><tr><td>до 40 м²</td><td>11 990 ₽</td><td>14 490 ₽</td><td>16 990 ₽</td></tr><tr><td>41–60 м²</td><td>16 490 ₽</td><td>18 990 ₽</td><td>21 490 ₽</td></tr><tr><td>61–80 м²</td><td>20 990 ₽</td><td>23 490 ₽</td><td>25 990 ₽</td></tr><tr><td>81–100 м²</td><td>25 490 ₽</td><td>27 990 ₽</td><td>30 490 ₽</td></tr><tr><td>101–120 м²</td><td>29 990 ₽</td><td>32 490 ₽</td><td>34 990 ₽</td></tr>
+    <tr><td>Более 120 м²</td><td colspan="3" style="text-align:right">индивидуально, от 300 ₽ за м²</td></tr></tbody></table></div>
+    <p style="font-size:13px;color:var(--mute);padding-bottom:14px">Площадь — по документам. Мойка окон, балкон, дополнительный санузел и другие услуги добавляются в калькуляторе выше.</p></details></div></section>
+<section class="alt"><div class="w"><span class="eyebrow">Как это работает</span><h2>От заявки до готовой к жизни квартиры</h2><p class="lead">Всё прозрачно: вы знаете цену заранее и платите только за принятый результат.</p>
+  <div class="steps"><div class="st"><h3>Заявка или фото</h3><p>Оставьте заявку или пришлите фото в мессенджер — ответим в течение 5 минут.</p></div><div class="st"><h3>Расчёт и фиксация цены</h3><p>Менеджер оценит объём и сложность, назовёт точную цену и закрепит её в договоре.</p></div><div class="st"><h3>Уборка по чек-листу</h3><p>Бригада приезжает в согласованное время со всей техникой и химией.</p></div><div class="st"><h3>Контроль качества</h3><p>Менеджер дистанционно проверяет результат по подробному чек-листу.</p></div><div class="st"><h3>Приёмка</h3><p>Вы принимаете работу. Если что-то не устроит — исправим на месте.</p></div></div>
+  <div class="center" style="margin-top:28px"><a class="btn btn-p" href="#popup:order" data-lead="steps">Оставить заявку</a></div></div></section>
+<section class="guar"><div class="w"><span class="eyebrow">Гарантии</span><h2>Почему нам доверяют уборку после ремонта</h2><p class="lead">Мы специализируемся на жилой недвижимости, поэтому знаем, как бережно обращаться с паркетом, дизайнерской сантехникой и деликатными поверхностями.</p>
+  <div class="grid c3"><div class="card"><span class="em">💰</span><h3>Цена фиксируется до начала</h3><p>Менеджер называет итоговую сумму и закрепляет её в договоре. На месте никаких доплат.</p></div><div class="card"><span class="em">✅</span><h3>Платите после приёмки</h3><p>Вы вместе с клинером проходите по чек-листу и только потом оплачиваете работу.</p></div><div class="card"><span class="em">↩️</span><h3>Вернём деньги</h3><p>Если результат не устроит — переделаем бесплатно или вернём деньги.</p></div><div class="card"><span class="em">🛡️</span><h3>Отвечаем за имущество</h3><p>Несём полную материальную ответственность за сохранность вашего имущества.</p></div><div class="card"><span class="em">🪪</span><h3>Проверенный персонал</h3><p>Все сотрудники проходят проверку службой безопасности и имеют опыт от 3 лет.</p></div><div class="card"><span class="em">🌿</span><h3>Безопасно для детей и животных</h3><p>Экологичные сертифицированные средства подбираем под каждую поверхность.</p></div></div></div></section>
+<section><div class="w gear"><span class="eyebrow">Оборудование и химия</span><h2>Как мы убираем строительную пыль</h2><p class="lead">Правильный алгоритм важнее силы: профессиональная техника вытягивает пыль, а не разносит её по квартире.</p>
+  <div class="grid c3"><div class="card"><span class="em">🌀</span><div><h3>Промышленные пылесосы Kärcher</h3><p>Вытягивают пыль из радиаторов и щелей, не выбрасывая её обратно в воздух. Собирают строительную пыль, опилки и небольшое количество жидкости.</p></div></div><div class="card"><span class="em">♨️</span><div><h3>Пароочиститель Kärcher</h3><p>Очищает и дезинфицирует твёрдые поверхности без химии: плитку, стекло, сантехнику.</p></div></div><div class="card"><span class="em">🧴</span><div><h3>Химия Buzil и Pro-Brite</h3><p>Для удаления цемента и краски. Эффективна, но безопасна для детей и аллергиков.</p></div></div></div></div></section>
+<section class="alt team"><div class="w center"><span class="eyebrow">Команда</span><h2>Команда, которой можно доверить новую квартиру</h2><p class="lead">Все сотрудники проходят обучение и проверку службой безопасности. Вот несколько наших мастеров.</p>
+  <div class="grid c4" style="text-align:center"><div class="card"><div class="av">А</div><h3>Алексей</h3><p><b>Тяжёлая артиллерия</b></p><p style="margin-top:6px">Профи с мощной техникой. Справляется со сложными пятнами после ремонта и химчисткой мебели.</p><span class="cnt">678 химчисток</span></div><div class="card"><div class="av">Е</div><h3>Елена</h3><p><b>Перфекционист</b></p><p style="margin-top:6px">Видит пыль там, где её не видят другие. Мастер детальной уборки и зеркального блеска.</p><span class="cnt">2505 уборок</span></div><div class="card"><div class="av">О</div><h3>Ольга</h3><p><b>Мастер порядка</b></p><p style="margin-top:6px">После её визита вещи лежат так удобно, что в доме воцаряется гармония.</p><span class="cnt">1149 уборок</span></div><div class="card"><div class="av">Л</div><h3>Людмила</h3><p><b>Экозабота</b></p><p style="margin-top:6px">Использует только гипоаллергенные средства, безопасные для детей и питомцев.</p><span class="cnt">2103 уборки</span></div></div></div></section>
+<section><div class="w"><span class="eyebrow">Отзывы</span><h2>Что говорят клиенты CleanHub</h2>
+  <div class="rev-head"><span class="rev-score">5,0</span><div><span class="stars" style="font-size:18px">★★★★★</span><br><span style="color:var(--mute);font-size:14px">157 оценок клиентов CleanHub</span></div></div>
+  <div class="revs"><div class="rev"><span class="stars">★★★★★</span><p>«Очень довольны уборкой! Заказывали генеральную уборку при покупки вторичной квартиры, все прошло замечательно, даже тяжелые загрязнения устранили, сами бы мы никогда так не убрались. Буду советовать знакомым)»</p><div class="who"><b>Юлия Тетерева</b><span>16 июля 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Заказала генеральную уборку в квартире, которая простояла без людей целых три года, — состояние, честно говоря, было далеко от идеала. Но Зарина и Александр взялись за дело с настоящим профессионализмом: вымыли, отскребли, привели в порядок каждый уголок. Я была искренне поражена, когда увидела, что некоторые поверхности, которые я считала серыми, на самом деле белоснежные!»</p><div class="who"><b>Тюрина С.</b><span>8 сентября 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Квартира, которую сняли, оказалась очень грязной и своими силами поняли что не справимся. Быстро договорились, все обсудили, буквально через пару дней уже приехали. Я в полном восторге! Все поверхности помыты, пыль везде вытерта, в квартире стало легче дышать, туалет/ванна/плитка, плинтуса, розетки и выключатели вообще все-все не оставили без внимания!»</p><div class="who"><b>Марина Расулова</b><span>20 июня 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Нужно было убрать квартиру после проживания двух котов. У человека аллергия, перед заездом нужно было полностью избавиться от шерсти и запаха. Сотрудники справились на ура! В итоге от шерсти и запаха не осталось и следа. Проверкой стало отсутствие каких-либо признаков аллергии после уборки.»</p><div class="who"><b>Полина В.</b><span>21 апреля 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Обратилась в компанию потому что после переезда вся квартира была очень грязной. Работали спокойно, без лишних вопросов что мне даже понравилось. Ближе к концу заметила, что даже трудные места привели в порядок, которые я никогда не могла убрать самостоятельно. Честно, была очень приятно удивлена такой хорошей работой.»</p><div class="who"><b>Александра</b><span>14 апреля 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Брала тариф «Премиум», потому что мне было важно помыть холодильник и стиральную машинку, и отдельно мойку окон. Всё чистенько. Окно сияет, как никогда не сияло. Даже сетку сняла и помыла. Переживала в первый раз заказывать клининг, но всё прошло отлично.»</p><div class="who"><b>Аделина Ш.</b><span>30 июля 2026</span></div></div></div>
+  <p style="margin-top:16px;font-size:14px"><a href="https://cleanhub24.ru/reviews" target="_blank" rel="noopener" style="color:var(--g-d);text-decoration:underline" data-goal="reviews_click">Читать все отзывы и смотреть видео</a></p></div></section>
+<section class="alt offers"><div class="w"><span class="eyebrow">Акции</span><h2>Скидки на уборку</h2><p class="lead">Выберите выгодный вариант — менеджер применит скидку при подтверждении заказа.</p>
+  <div class="grid c3"><div class="card" data-fo><div class="pct">−10%</div><h3>На первую уборку</h3><p>Скидка до <span data-fo-max>6 000 ₽</span> применяется автоматически в калькуляторе.</p><a class="btn btn-p" href="#chl-calc" data-goal="offer_first_click">Рассчитать со скидкой</a></div><div class="card"><div class="pct">📸</div><h3>Расчёт по фото</h3><p>Пришлите фото квартиры в WhatsApp или Telegram — оценим загрязнения и зафиксируем цену без выезда.</p><a class="btn btn-w" href="https://wa.me/79152606655?text=Здравствуйте! Хочу рассчитать уборку после ремонта по фото. Площадь: " target="_blank" rel="noopener">Отправить фото</a></div><div class="card"><div class="pct">−10% / −15%</div><h3>Постоянным клиентам</h3><p>Скидка 10% на второй заказ и 15% на третий. Действует на любой вид уборки.</p><a class="btn btn-w" href="#popup:order" data-lead="offer" data-offer="Скидки постоянным клиентам: −10% на второй, −15% на третий заказ">Узнать подробнее</a></div></div></div></section>
+<section class="faq"><div class="w"><span class="eyebrow">Вопросы</span><h2>Частые вопросы об уборке после ремонта</h2><div style="max-width:820px"><details><summary>Сколько стоит уборка квартиры после ремонта?</summary><p>Цена зависит от метража и сложности загрязнений. Уборка начинается от 11 990 ₽ (до 40 м², тариф «Лайт»). Назовите площадь менеджеру — он рассчитает стоимость и зафиксирует её в договоре.</p></details><details><summary>Что входит в стоимость?</summary><p>Это полная мойка квартиры после ремонта: обеспыливание поверхностей, чистка окон и подоконников, радиаторов и плинтусов, удаление следов стройматериалов. В цену уже включены работа бригады, всё оборудование и профессиональные средства.</p></details><details><summary>Почему уборка после ремонта дороже обычной?</summary><p>Это в три раза больше усилий: нужно не просто протереть пыль, а вывести строительные пятна, которые не берёт бытовая химия. Профессиональный подход сохраняет новые поверхности и убирает взвесь строительной пыли из воздуха.</p></details><details><summary>Сколько времени занимает уборка?</summary><p>Обычно 5–7 часов для типовой квартиры. Для масштабных ремонтов и больших площадей может потребоваться больше — менеджер сообщит срок при расчёте.</p></details><details><summary>Что с эпоксидной затиркой и сложными пятнами?</summary><p>Сложные загрязнения вроде эпоксидной затирки оплачиваются отдельно. Пришлите фото — мы оценим объём и назовём точную цену до начала работ, чтобы вы не столкнулись с доплатами.</p></details><details><summary>Вы выносите строительный мусор?</summary><p>В стоимость входит сбор и вынос мусора до 10 кг. Крупногабаритный строительный мусор лучше обсудить с менеджером заранее.</p></details><details><summary>Нужно ли мне покупать химию и технику?</summary><p>Нет. Вся профессиональная химия и техника наши — приезжаем со всем необходимым. Вам ничего не нужно покупать.</p></details><details><summary>Можно ли заказать уборку за МКАД?</summary><p>Да, выезжаем в Подмосковье до 30 км от МКАД. Для больших домов заранее согласуем состав бригады, чтобы закончить работу за один день.</p></details><details><summary>Как быстро вы можете приехать?</summary><p>Если нужно срочно, постараемся направить мобильную бригаду в день обращения: подача клинеров с оборудованием по Москве занимает несколько часов. В обычном режиме рекомендуем оставлять заявку за 1–2 дня.</p></details></div></div></section>
+<section class="final" id="chl-final"><div class="w">
+  <div><h2>Закажите уборку после ремонта — и заезжайте в чистоту</h2><p class="lead">Оставьте заявку или пришлите фото: менеджер ответит в течение 5 минут, назовёт точную цену и согласует время.</p></div>
+  <div class="contacts" id="chl-contacts">
+    <a class="btn btn-p" href="#popup:order" data-lead="final">Оставить заявку</a>
+    <div class="row"><a class="btn btn-wa" href="https://wa.me/79152606655?text=Здравствуйте! Хочу заказать уборку после ремонта. Подскажите, пожалуйста, стоимость." target="_blank" rel="noopener">WhatsApp</a><a class="btn btn-tg" href="https://t.me/cleanhubru" target="_blank" rel="noopener">Telegram</a></div>
+    <a class="btn btn-o" href="tel:+74957777793"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg> +7 (495) 777-77-93</a>
+    <small>Работаем ежедневно с 09:00 до 21:00 · отвечаем в течение 5 минут</small>
+  </div></div></section>
+<footer class="foot"><div class="w">
+  <div>CleanHub — клининговая компания в Москве и Московской области. Основной сайт: <a href="https://cleanhub24.ru" target="_blank" rel="noopener">cleanhub24.ru</a></div>
+  <div>ИП Филиппов Александр Вячеславович · ИНН 771823811610 · ОГРНИП 322774600229554</div>
+  <div>Московская область, Одинцовский г.о., Новоивановское рп, Можайское ш., вл165 · Московская область, г. Красногорск, Ильинское ш., 1А</div>
+  <div class="links"><a href="https://cleanhub24.ru/policy" target="_blank" rel="noopener">Политика обработки персональных данных</a><a href="https://cleanhub24.ru/oferta" target="_blank" rel="noopener">Договор оферты</a><a href="https://cleanhub24.ru/personal" target="_blank" rel="noopener">Согласие на обработку персональных данных</a><a href="https://cleanhub24.ru/advertising" target="_blank" rel="noopener">Согласие на получение рекламы</a><a href="https://cleanhub24.ru/cookies" target="_blank" rel="noopener">Файлы cookies</a></div></div></footer>
+<div class="mbar" data-ref="bar" role="region" aria-label="Быстрый заказ">
+  <div class="tt"><small data-ref="barLabel">Фиксированная цена</small><b data-ref="barTotal">от 8 990 ₽</b></div>
+  <a class="btn btn-w call" href="tel:+74957777793" aria-label="Позвонить"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></a>
+  <a class="btn btn-p" href="#chl-calc" data-ref="barBtn">Рассчитать</a></div>
+</div>
+
+<script>
+/* ========================= НАСТРОЙКИ (можно править) =========================
+   metrikaId   — ID Яндекс.Метрики (null — не отправлять цели)
+   popupHook   — якорь попапа Тильды с формой (должен совпадать с настройкой блока попапа)
+   fields      — имена скрытых полей формы, куда попадёт расчёт
+   firstOrder  — скидка на первую уборку: {percent: 10, max: 6000} или null, чтобы выключить
+   wa / tg     — WhatsApp (цифры без «+») и логин Telegram
+   service/extras/tariffs — цены и услуги калькулятора (взяты из cleanhub24.ru/price)
+============================================================================= */
+window.CHL_CONFIG = {
+  "page": "rem",
+  "metrikaId": 108429981,
+  "popupHook": "#popup:order",
+  "fields": {
+    "summary": [
+      "Расчёт",
+      "Расчет",
+      "calc"
+    ],
+    "total": [
+      "Сумма"
+    ]
+  },
+  "wa": "79152606655",
+  "tg": "cleanhubru",
+  "firstOrder": {
+    "percent": 10,
+    "max": 6000
+  },
+  "defaults": {
+    "area": 55,
+    "tariff": "standard"
+  },
+  "chips": [
+    {
+      "label": "Студия / 1-комн.",
+      "area": 36
+    },
+    {
+      "label": "2-комн.",
+      "area": 55
+    },
+    {
+      "label": "3-комн.",
+      "area": 75
+    },
+    {
+      "label": "4-комн. / дом",
+      "area": 100
+    }
+  ],
+  "tariffs": [
+    {
+      "id": "lite",
+      "title": "Лайт",
+      "desc": "Полный чек-лист уборки после ремонта"
+    },
+    {
+      "id": "standard",
+      "title": "Стандарт",
+      "desc": "Плюс шкафы внутри",
+      "hot": "Оптимальный"
+    },
+    {
+      "id": "premium",
+      "title": "Премиум",
+      "desc": "Шкафы и окна"
+    }
+  ],
+  "note": "Цена фиксируется до начала работ. Эпоксидная затирка и особо сложные загрязнения оплачиваются отдельно — пришлите фото в WhatsApp или Telegram, и мы назовём точную сумму без выезда.",
+  "service": {
+    "title": "Уборка после ремонта",
+    "tiers": [
+      40,
+      60,
+      80,
+      100,
+      120
+    ],
+    "prices": {
+      "lite": [
+        11990,
+        16490,
+        20990,
+        25490,
+        29990
+      ],
+      "standard": [
+        14490,
+        18990,
+        23490,
+        27990,
+        32490
+      ],
+      "premium": [
+        16990,
+        21490,
+        25990,
+        30490,
+        34990
+      ]
+    },
+    "perM2": 300,
+    "perks": {
+      "lite": [],
+      "standard": [
+        "мойка всех шкафов внутри (пустых)"
+      ],
+      "premium": [
+        "мойка всех шкафов внутри (пустых)",
+        "окна до {windows} створок"
+      ]
+    },
+    "includes": {
+      "standard": {
+        "wardrobe": 999
+      },
+      "premium": {
+        "wardrobe": 999,
+        "windows": [
+          4,
+          6,
+          8,
+          10,
+          12
+        ]
+      }
+    }
+  },
+  "extras": [
+    {
+      "id": "windows",
+      "title": "Мойка окон после ремонта",
+      "desc": "пыль, краска, клей, плёнка",
+      "price": 750,
+      "unit": "створок",
+      "unitShort": "створка",
+      "max": 40
+    },
+    {
+      "id": "wardrobe",
+      "title": "Мойка пустых шкафов",
+      "desc": "внутри и снаружи",
+      "price": 2000,
+      "from": true,
+      "unit": "шт.",
+      "max": 20
+    },
+    {
+      "id": "bathroom",
+      "title": "Дополнительный санузел",
+      "desc": "если санузлов больше одного",
+      "price": 2000,
+      "unit": "шт.",
+      "max": 5
+    },
+    {
+      "id": "balcony",
+      "title": "Уборка балкона",
+      "desc": "строительная пыль, мойка пола",
+      "price": 2000,
+      "from": true,
+      "unit": "шт.",
+      "max": 5
+    },
+    {
+      "id": "chandelier",
+      "title": "Сложные люстры",
+      "desc": "плафоны, подвески, хрусталь",
+      "price": 1000,
+      "from": true,
+      "unit": "шт.",
+      "max": 10
+    },
+    {
+      "id": "hard",
+      "title": "Сложные загрязнения",
+      "desc": "эпоксидная затирка, монтажная пена, лак — оценим по фото",
+      "price": 0,
+      "quote": true,
+      "toggle": true
+    },
+    {
+      "id": "sofa",
+      "title": "Химчистка дивана / ковра",
+      "desc": "оценим по фото",
+      "price": 0,
+      "quote": true,
+      "toggle": true
+    }
+  ]
+};
+</script>
+<script>
+/* CleanHub — логика лендинга: калькулятор, передача расчёта в форму Тильды, цели Метрики, слайдер «до/после», мобильная панель. */
+(function () {
+  'use strict';
+  var C = window.CHL_CONFIG;
+  var root = document.getElementById('chl');
+  if (!C || !root || root.getAttribute('data-ready')) return;
+  root.setAttribute('data-ready', '1');
+
+  var S = C.service;
+  var state = { area: C.defaults.area, tariff: C.defaults.tariff, x: {}, touched: false, started: false };
+  var refs = {};
+  [].forEach.call(root.querySelectorAll('[data-ref]'), function (n) { refs[n.getAttribute('data-ref')] = n; });
+
+  /* ---------- утилиты ---------- */
+  function money(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function plural(n, f) { var a = n % 100, b = a % 10; return a > 10 && a < 20 ? f[2] : b > 1 && b < 5 ? f[1] : b === 1 ? f[0] : f[2]; }
+  function tariff(id) { for (var i = 0; i < C.tariffs.length; i++) if (C.tariffs[i].id === id) return C.tariffs[i]; return C.tariffs[0]; }
+  function track(goal, params) {
+    try { if (C.metrikaId && typeof window.ym === 'function') window.ym(C.metrikaId, 'reachGoal', C.page + '_' + goal, params || {}); } catch (e) { /* ignore */ }
+  }
+  function tierIdx(area) { for (var i = 0; i < S.tiers.length; i++) if (area <= S.tiers[i]) return i; return -1; }
+  function tierLabel(i) { return i < 0 ? 'более ' + S.tiers[S.tiers.length - 1] + ' м²' : i === 0 ? 'до ' + S.tiers[0] + ' м²' : (S.tiers[i - 1] + 1) + '–' + S.tiers[i] + ' м²'; }
+  function includedQty(tid, xid, i) {
+    var m = (S.includes && S.includes[tid]) || {}, v = m[xid];
+    if (v == null) return 0;
+    if (Object.prototype.toString.call(v) === '[object Array]') return i < 0 ? v[v.length - 1] : v[i];
+    return v;
+  }
+  function perksFor(tid, i) {
+    return (S.perks[tid] || []).map(function (p) {
+      var w = includedQty(tid, 'windows', i);
+      return p.replace('{windows}', w || '');
+    });
+  }
+
+  /* ---------- расчёт ---------- */
+  function compute(tid) {
+    var i = tierIdx(state.area), big = i < 0;
+    var base = big ? Math.round(state.area * S.perM2) : S.prices[tid][i];
+    var lines = [], extras = 0, quote = false, from = big;
+    C.extras.forEach(function (x) {
+      var q = state.x[x.id] || 0;
+      if (!q) return;
+      var inc = includedQty(tid, x.id, i), paid = Math.max(0, q - inc);
+      var cost = x.quote ? 0 : paid * x.price;
+      if (x.quote && !inc) quote = true;
+      if (paid && x.from) from = true;
+      extras += cost;
+      lines.push({ x: x, qty: q, inc: Math.min(inc, q), paid: paid, cost: cost });
+    });
+    var total = base + extras, disc = 0, fo = C.firstOrder;
+    if (fo) disc = Math.min(Math.round(total * fo.percent / 100), fo.max);
+    return { tid: tid, i: i, big: big, base: base, extras: extras, lines: lines, quote: quote, approx: from || quote, total: total, disc: disc, pay: total - disc };
+  }
+  function priceText(r, key) { return (r.approx ? 'от ' : '') + money(key === 'total' ? r.total : r.pay); }
+
+  function summaryText(r, source) {
+    var t = tariff(state.tariff), L = [];
+    if (!state.touched) {
+      L.push('Расчёт на странице не выполнялся.');
+      L.push('Услуга: ' + S.title + ' (цены от ' + money(S.prices.lite[0]) + ')');
+    } else {
+      L.push(S.title + ', ' + (r.big ? '' : 'тариф «' + t.title + '», ') + state.area + ' м²');
+      L.push('Итого: ' + priceText(r, 'pay') + (r.disc ? ' (с учётом скидки −' + money(r.disc) + ' на первую уборку)' : ''));
+      L.push('Базовая цена: ' + money(r.base) + (r.big ? ' (индивидуальный расчёт, от ' + S.perM2 + ' ₽/м²)' : ' (' + tierLabel(r.i) + ')'));
+      var pk = perksFor(state.tariff, r.i);
+      if (pk.length && !r.big) L.push('В тарифе: ' + pk.join(', '));
+      if (r.lines.length) {
+        L.push('Доп. услуги:');
+        r.lines.forEach(function (l) {
+          L.push(' • ' + l.x.title + (l.x.toggle ? '' : ', ' + l.qty + ' ' + (l.x.unit || 'шт.')) +
+            (l.x.quote ? ' — оценить по фото' : !l.paid ? ' — входит в тариф' : ' — ' + (l.x.from ? 'от ' : '') + money(l.cost)));
+        });
+      }
+    }
+    if (source && source.offer) L.push('Интересует акция: ' + source.offer);
+    L.push('Кнопка: ' + ((source && source.name) || 'не указана'));
+    return L.join('\n');
+  }
+
+  /* ---------- рендер ---------- */
+  var result = compute(state.tariff);
+
+  function renderTariffs() {
+    var html = '';
+    C.tariffs.forEach(function (t) {
+      var r = compute(t.id), pk = perksFor(t.id, r.i);
+      html += '<button type="button" class="tar" data-act="tariff" data-v="' + t.id + '" aria-pressed="' + (t.id === state.tariff) + '">' +
+        '<span class="rd"></span><span class="tn">' + esc(t.title) + (t.hot ? '<span class="flag">' + esc(t.hot) + '</span>' : '') + '</span>' +
+        '<span class="tp">' + (r.big ? 'от ' : '') + money(r.base) + '</span>' +
+        '<span class="tl">' + esc(t.desc) + (pk.length ? ': ' + esc(pk.join(', ')) : '') + '</span></button>';
+    });
+    refs.tariffs.innerHTML = html;
+  }
+
+  function renderExtras() {
+    var html = '', i = result.i;
+    C.extras.forEach(function (x) {
+      var q = state.x[x.id] || 0, inc = includedQty(state.tariff, x.id, i), on = q > 0;
+      var priceLbl = x.quote ? 'по фото' : (x.from ? 'от ' : '') + money(x.price) + (x.unitShort ? '/' + x.unitShort : '');
+      var incLbl = inc ? '<i>' + (inc > 99 ? 'входит в тариф' : 'в тарифе: ' + inc) + '</i> · ' : '';
+      html += '<div class="x' + (on ? ' on' : '') + '"><div class="xt">' + esc(x.title) + '</div>' +
+        '<div class="xd">' + incLbl + priceLbl + (x.desc ? ' · ' + esc(x.desc) : '') + '</div><div class="xc">' +
+        (x.toggle
+          ? '<button type="button" class="sw" data-act="toggle" data-id="' + x.id + '" aria-pressed="' + on + '">' + (on ? 'Добавлено' : 'Добавить') + '</button>'
+          : '<button type="button" class="qb" data-act="dec" data-id="' + x.id + '" aria-label="Меньше">−</button><span class="qn">' + q + '</span>' +
+            '<button type="button" class="qb" data-act="inc" data-id="' + x.id + '" aria-label="Больше">+</button>') +
+        '</div></div>';
+    });
+    refs.extras.innerHTML = html;
+  }
+
+  function waLink(text) { return 'https://wa.me/' + C.wa + '?text=' + encodeURIComponent(text); }
+
+  function renderSum() {
+    var r = result, t = tariff(state.tariff), html = '';
+    html += '<div class="lbl">' + (state.touched ? 'Ваш расчёт' : 'Ориентировочная стоимость') + '</div>';
+    html += '<div class="tot">' + priceText(r, 'pay') + (r.disc ? '<span class="old">' + priceText(r, 'total') + '</span>' : '') + '</div>';
+    if (r.disc) html += '<div class="disc">−' + money(r.disc) + ' · скидка ' + C.firstOrder.percent + '% на первую уборку</div>';
+    html += '<div class="lines">' +
+      '<div><span>' + esc(S.title) + (r.big ? '' : ', «' + esc(t.title) + '»') + '</span><span>' + money(r.base) + '</span></div>' +
+      '<div><span>Площадь</span><span>' + state.area + ' м²' + (r.big ? ' (индивид.)' : '') + '</span></div>';
+    r.lines.forEach(function (l) {
+      html += '<div><span>' + esc(l.x.title) + (l.x.toggle ? '' : ' × ' + l.qty) + '</span><span>' +
+        (l.x.quote ? 'по фото' : !l.paid ? 'в тарифе' : (l.x.from ? 'от ' : '') + money(l.cost)) + '</span></div>';
+    });
+    html += '</div>';
+    html += '<a class="btn btn-p" href="' + esc(C.popupHook) + '" data-lead="calc">Зафиксировать цену и заказать</a>';
+    html += '<div class="alt-row"><a href="' + esc(waLink(summaryText(r, { name: 'whatsapp' }))) + '" target="_blank" rel="noopener" data-msg="wa">WhatsApp</a>' +
+      '<a href="https://t.me/' + esc(C.tg) + '" target="_blank" rel="noopener" data-msg="tg">Telegram</a></div>';
+    html += '<div class="note">' + esc(C.note) + '</div>';
+    // подсказка про более выгодный тариф
+    var best = null, cur = -1;
+    C.tariffs.forEach(function (tt, k) { if (tt.id === state.tariff) cur = k; });
+    C.tariffs.forEach(function (tt, k) {
+      if (k <= cur || r.big) return; // предлагаем только более высокий тариф, в который входят выбранные услуги
+      var rr = compute(tt.id);
+      if (rr.pay < r.pay && (!best || rr.pay < best.r.pay)) best = { t: tt, r: rr };
+    });
+    if (best) html += '<div class="ups">С тарифом «' + esc(best.t.title) + '» выйдет на ' + money(r.pay - best.r.pay) + ' дешевле — доп. услуги уже входят. <button type="button" data-act="tariff" data-v="' + best.t.id + '">Выбрать</button></div>';
+    refs.sum.innerHTML = html;
+    refs.barLabel.textContent = state.touched ? 'Ваш расчёт' : 'Фиксированная цена';
+    refs.barTotal.textContent = state.touched ? priceText(r, 'pay') : 'от ' + money(S.prices.lite[0]);
+    refs.barBtn.textContent = state.touched ? 'Заказать' : 'Рассчитать';
+    refs.barBtn.setAttribute('href', state.touched ? C.popupHook : '#chl-calc');
+    if (state.touched) refs.barBtn.setAttribute('data-lead', 'bar'); else refs.barBtn.removeAttribute('data-lead');
+  }
+
+  function renderChips() {
+    var html = '';
+    C.chips.forEach(function (c) {
+      html += '<button type="button" class="chip" data-act="area" data-v="' + c.area + '" aria-pressed="' + (c.area === state.area) + '">' + esc(c.label) + '<small>~' + c.area + ' м²</small></button>';
+    });
+    refs.chips.innerHTML = html;
+  }
+
+  function renderArea() {
+    refs.range.value = Math.min(Math.max(state.area, +refs.range.min), +refs.range.max);
+    refs.range.style.setProperty('--p', ((refs.range.value - refs.range.min) / (refs.range.max - refs.range.min) * 100) + '%');
+    if (document.activeElement !== refs.areaInput) refs.areaInput.value = state.area;
+  }
+
+  function render() {
+    result = compute(state.tariff);
+    renderChips(); renderArea(); renderTariffs(); renderExtras(); renderSum();
+    fillForms();
+  }
+
+  function touch() {
+    state.touched = true;
+    if (!state.started) { state.started = true; track('calc_start'); }
+  }
+  function set(patch) { for (var k in patch) state[k] = patch[k]; touch(); render(); }
+  function setX(id, v) {
+    var x = C.extras.filter(function (e) { return e.id === id; })[0];
+    if (!x) return;
+    v = Math.max(0, Math.min(x.toggle ? 1 : (x.max || 30), v));
+    state.x[id] = v; touch(); render();
+  }
+
+  /* ---------- передача расчёта в форму Тильды ---------- */
+  function fillForms(source) {
+    var text = summaryText(result, source), f = C.fields || {};
+    [].concat(f.summary || []).forEach(function (name) {
+      [].forEach.call(document.querySelectorAll('form [name="' + name + '"]'), function (input) { input.value = text; });
+    });
+    [].concat(f.total || []).forEach(function (name) {
+      [].forEach.call(document.querySelectorAll('form [name="' + name + '"]'), function (input) { input.value = state.touched ? priceText(result, 'pay') : ''; });
+    });
+  }
+
+  function popupExists() { return !!document.querySelector('[data-tooltip-hook="' + C.popupHook + '"]'); }
+
+  function onLead(e, el) {
+    var src = { name: el.getAttribute('data-lead'), offer: el.getAttribute('data-offer') || '' };
+    fillForms(src);
+    track('lead_click', { button: src.name });
+    if (popupExists()) return; // попап откроет Тильда
+    e.preventDefault();
+    var t = document.getElementById('chl-contacts');
+    if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'center' }); t.style.outline = '3px solid #5fe39a'; setTimeout(function () { t.style.outline = ''; }, 1800); }
+    if (window.console) console.warn('CleanHub: на странице нет попапа ' + C.popupHook + ' — см. README, шаг 3');
+  }
+
+  /* ---------- события ---------- */
+  root.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-act]');
+    if (a && root.contains(a)) {
+      var act = a.getAttribute('data-act'), v = a.getAttribute('data-v'), id = a.getAttribute('data-id');
+      if (act === 'tariff') set({ tariff: v });
+      else if (act === 'area') set({ area: +v });
+      else if (act === 'inc') setX(id, (state.x[id] || 0) + 1);
+      else if (act === 'dec') setX(id, (state.x[id] || 0) - 1);
+      else if (act === 'toggle') setX(id, state.x[id] ? 0 : 1);
+      return;
+    }
+    var l = e.target.closest('[data-lead]');
+    if (l && root.contains(l)) { onLead(e, l); return; }
+    var c = e.target.closest('[data-goal]');
+    if (c && root.contains(c)) track(c.getAttribute('data-goal'));
+    var s = e.target.closest('a[href^="#chl-"]');
+    if (s) {
+      var tg = document.getElementById(s.getAttribute('href').slice(1));
+      if (tg) { e.preventDefault(); tg.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    }
+  });
+  // Кнопки вне корня не бывают, но попап Тильды может открыться по якорю — подстрахуем заполнение формы
+  refs.areaInput.addEventListener('input', function () {
+    var v = refs.areaInput.value.replace(/\D+/g, '');
+    if (v !== refs.areaInput.value) refs.areaInput.value = v;
+    var n = +v;
+    if (n >= 10) { n = Math.min(n, 5000); state.area = n; touch(); result = compute(state.tariff); renderChips(); renderArea(); renderTariffs(); renderExtras(); renderSum(); fillForms(); }
+  });
+  refs.areaInput.addEventListener('blur', function () { refs.areaInput.value = state.area; });
+  refs.areaInput.addEventListener('focus', function () { refs.areaInput.select(); });
+  refs.range.addEventListener('input', function () { set({ area: +refs.range.value }); });
+
+  /* ---------- слайдер «до/после» ---------- */
+  [].forEach.call(root.querySelectorAll('.ba'), function (ba) {
+    var inp = ba.querySelector('input');
+    function upd() { ba.style.setProperty('--x', inp.value + '%'); }
+    inp.addEventListener('input', upd); upd();
+  });
+
+  /* ---------- мобильная панель ---------- */
+  var heroEl = root.querySelector('.hero'), finalEl = root.querySelector('.final'), ticking = false;
+  function updateBar() {
+    ticking = false;
+    var h = heroEl.getBoundingClientRect(), f = finalEl.getBoundingClientRect(), vh = window.innerHeight || 800;
+    // показываем после первого экрана и прячем, когда виден финальный блок с формой
+    refs.bar.classList.toggle('show', h.bottom < 0 && f.top > vh * 0.75);
+  }
+  function onScroll() { if (!ticking) { ticking = true; (window.requestAnimationFrame || setTimeout)(updateBar); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  updateBar();
+
+  /* ---------- цели для звонков и мессенджеров ---------- */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('#chl a');
+    if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (h.indexOf('tel:') === 0) track('call_click');
+    else if (h.indexOf('wa.me') > -1) track('wa_click');
+    else if (h.indexOf('t.me') > -1) track('tg_click');
+  }, true);
+
+  /* ---------- скидка на первую уборку: показать/скрыть тексты ---------- */
+  [].forEach.call(root.querySelectorAll('[data-fo]'), function (n) { n.hidden = !C.firstOrder; });
+  if (C.firstOrder) [].forEach.call(root.querySelectorAll('[data-fo-pct]'), function (n) { n.textContent = C.firstOrder.percent; });
+  [].forEach.call(root.querySelectorAll('[data-fo-max]'), function (n) { if (C.firstOrder) n.textContent = money(C.firstOrder.max); });
+
+  // отправка формы Тильды → цель Метрики (если Тильда отдаёт jQuery-событие)
+  try {
+    if (window.jQuery) window.jQuery(document).on('tildaform:aftersuccess', function () { track('lead_sent'); });
+  } catch (e) { /* ignore */ }
+
+  render();
+})();
+
+</script>
