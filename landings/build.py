@@ -130,7 +130,6 @@ def hero(h1, sub, ticks, pic, pic_alt, badge, tag, secondary_label):
       <a class="btn btn-p" href="#chl-calc" data-goal="hero_calc_click">Рассчитать стоимость за 1 минуту</a>
       <a class="btn btn-o" href="tel:%s">%s %s</a>
     </div>
-    <p class="promo" data-fo>🎁 <span><b>−<span data-fo-pct>10</span>%% на первую уборку</b> (до <span data-fo-max>6 000 ₽</span>) — применяется в расчёте автоматически</span></p>
   </div>
   <div class="hero-pic">
     <img src="%s" alt="%s" width="900" height="675" fetchpriority="high">
@@ -254,7 +253,7 @@ def offers(cards):
     for pct, name, text, btn, extra_attr, offer in cards:
         c += '<div class="card"%s><div class="pct">%s</div><h3>%s</h3><p>%s</p>%s</div>' % (extra_attr, pct, name, text, btn)
     return '''<section class="alt offers"><div class="w"><span class="eyebrow">Акции</span><h2>Скидки на уборку</h2><p class="lead">Выберите выгодный вариант — менеджер применит скидку при подтверждении заказа.</p>
-  <div class="grid c3">%s</div></div></section>''' % c
+  <div class="grid c2">%s</div></div></section>''' % c
 
 
 def faq(title, items):
@@ -295,7 +294,7 @@ def page_general():
         'page': 'gen', 'metrikaId': METRIKA, 'popupHook': POPUP,
         'fields': {'summary': ['Расчёт', 'Расчет', 'calc'], 'total': ['Сумма']},
         'wa': WA, 'tg': TG,
-        'firstOrder': {'percent': 10, 'max': 6000},
+        'firstOrder': None,
         'defaults': {'area': 55, 'tariff': 'standard'},
         'chips': CHIPS, 'tariffs': TARIFFS_GENERAL,
         'note': 'Менеджер подтвердит цену перед выездом, и она не изменится во время уборки. При сильных загрязнениях (завалы, сложные пятна) цена может быть скорректирована — мы назовём её до начала работ.',
@@ -385,8 +384,6 @@ def page_general():
              ['elena', 'olga', 'lyudmila', 'alexey']),
         reviews('Что говорят клиенты', ['yulia', 'tyurina', 'maria', 'adelina', 'alex', 'marina']),
         offers([
-            ('−10%', 'На первую уборку', 'Скидка до <span data-fo-max>6 000 ₽</span> применяется автоматически в калькуляторе.',
-             '<a class="btn btn-p" href="#chl-calc" data-goal="offer_first_click">Рассчитать со скидкой</a>', ' data-fo', ''),
             ('−15%', 'Пакет «Всё включено»', 'Генеральная уборка + мытьё всех окон + химчистка дивана по специальной цене.',
              lead('Хочу пакет', cls='btn btn-w', source='offer', offer='Пакет «Всё включено» −15%: генеральная + окна + химчистка дивана'), '', ''),
             ('−10% / −15%', 'Постоянным клиентам', 'Скидка 10% на второй заказ и 15% на третий. Действует на любой вид уборки.',
@@ -412,7 +409,7 @@ def page_reno():
         'page': 'rem', 'metrikaId': METRIKA, 'popupHook': POPUP,
         'fields': {'summary': ['Расчёт', 'Расчет', 'calc'], 'total': ['Сумма']},
         'wa': WA, 'tg': TG,
-        'firstOrder': {'percent': 10, 'max': 6000},
+        'firstOrder': None,
         'defaults': {'area': 55, 'tariff': 'standard'},
         'chips': CHIPS, 'tariffs': TARIFFS_RENO,
         'note': 'Цена фиксируется до начала работ. Эпоксидная затирка и особо сложные загрязнения оплачиваются отдельно — пришлите фото в WhatsApp или Telegram, и мы назовём точную сумму без выезда.',
@@ -500,8 +497,6 @@ def page_reno():
              ['alexey', 'elena', 'olga', 'lyudmila']),
         reviews('Что говорят клиенты CleanHub', ['yulia', 'tyurina', 'marina', 'polina', 'alex', 'adelina']),
         offers([
-            ('−10%', 'На первую уборку', 'Скидка до <span data-fo-max>6 000 ₽</span> применяется автоматически в калькуляторе.',
-             '<a class="btn btn-p" href="#chl-calc" data-goal="offer_first_click">Рассчитать со скидкой</a>', ' data-fo', ''),
             ('📸', 'Расчёт по фото', 'Пришлите фото квартиры в WhatsApp или Telegram — оценим загрязнения и зафиксируем цену без выезда.',
              '<a class="btn btn-w" href="https://wa.me/%s?text=%s" target="_blank" rel="noopener">Отправить фото</a>' % (WA, 'Здравствуйте! Хочу рассчитать уборку после ремонта по фото. Площадь: '), '', ''),
             ('−10% / −15%', 'Постоянным клиентам', 'Скидка 10% на второй заказ и 15% на третий. Действует на любой вид уборки.',
@@ -554,7 +549,7 @@ def fragment(cfg, body, title):
    metrikaId   — ID Яндекс.Метрики (null — не отправлять цели)
    popupHook   — якорь попапа Тильды с формой (должен совпадать с настройкой блока попапа)
    fields      — имена скрытых полей формы, куда попадёт расчёт
-   firstOrder  — скидка на первую уборку: {percent: 10, max: 6000} или null, чтобы выключить
+   firstOrder  — скидка на первую уборку: сейчас выключена (null); включить: {percent: 10, max: 6000}
    wa / tg     — WhatsApp (цифры без «+») и логин Telegram
    service/extras/tariffs — цены и услуги калькулятора (взяты из cleanhub24.ru/price)
 ============================================================================= */
