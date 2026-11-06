@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>CleanHub — баннер для постоянных клиентов</title>
+<style>
+:root{--g:#00b14f;--dg:#0b2517;--mint:#5fe39a;--w:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ddd}
+.b{position:relative;width:800px;height:600px;overflow:hidden;background:var(--dg);font-family:'Montserrat','Manrope','Inter','Noto Sans','DejaVu Sans',Arial,sans-serif;color:var(--w)}
+.photo{position:absolute;inset:0;background:url(assets/bg.jpg) 78% 50%/cover}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,37,23,.97) 0%,rgba(11,37,23,.93) 42%,rgba(11,37,23,.55) 66%,rgba(11,37,23,.05) 100%)}
+.blob{position:absolute;right:-90px;bottom:-130px;width:260px;height:260px;border-radius:70px;background:var(--g);opacity:.9;transform:rotate(18deg)}
+.logo{position:absolute;left:44px;top:34px;background:#fff;border-radius:16px;padding:8px 16px;height:64px;display:flex;align-items:center}
+.logo img{height:46px}
+.c{position:absolute;left:44px;top:118px;width:500px}
+.tag{display:inline-block;background:var(--mint);color:var(--dg);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:30px}
+h1{font-size:34px;line-height:1.1;font-weight:800;margin:16px 0 20px}
+h1 span{color:var(--mint)}
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.1);border:1.5px solid rgba(95,227,154,.5);border-radius:20px;padding:12px 20px;backdrop-filter:blur(6px);width:400px}
+.pct{font-size:54px;font-weight:800;line-height:1;color:var(--w);background:var(--g);border-radius:16px;padding:8px 14px;min-width:132px;text-align:center}
+.card b{display:block;white-space:nowrap;font-size:21px;font-weight:800;line-height:1.15}
+.card small{font-size:14px;opacity:.85}
+.thx{margin-top:20px;font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px}
+.thx svg{width:22px;height:22px;flex:none}
+.note{position:absolute;left:44px;bottom:26px;font-size:11.5px;line-height:1.5;opacity:.8;width:480px}
+</style></head><body>
+<div class="b" id="banner">
+ <div class="photo"></div><div class="shade"></div><div class="blob"></div>
+ <div class="logo"><img src="assets/logo.png" alt="CleanHub"></div>
+ <div class="c">
+  <span class="tag">Нашим постоянным клиентам</span>
+  <h1>Дарим <span>скидку</span><br>за доверие</h1>
+  <div class="cards">
+   <div class="card"><div class="pct">10%</div><div><b>на второй заказ*</b></div></div>
+   <div class="card"><div class="pct">15%</div><div><b>на третий заказ*</b></div></div>
+  </div>
+  <div class="thx">Спасибо, что вы с нами остаетесь
+   <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 2.9 4.5 6.6 4.5c2 0 3.7 1.1 5.4 3 1.700-1.900 3.400-3 5.400-3 3.700 0 5.700 3.800 4.200 7.200C19.500 16.400 12 21 12 21z"/></svg></div>
+ </div>
+ <div class="note">* скидки распространяются на генеральную уборку и уборку после ремонта<br>* для получения скидки обратитесь к менеджеру</div>
+</div></body></html>
