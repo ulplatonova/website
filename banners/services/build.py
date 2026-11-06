@@ -10,11 +10,17 @@ items=[
  ("fire","Уборка после пожара","Профессиональная","очистка квартиры после пожара","8.990","руб.","50% 50%"),
  ("elite","Элитный клининг квартиры","Уборка дизайнерского ремонта","только профессионалами высшего уровня","8.990","руб.","50% 50%"),
  ("death","Уборка после смерти","Уборка с соблюдением","максимальной конфиденциальности","8.990","руб.","50% 50%"),
+ ("flood","Уборка квартиры после потопа","Профессиональный клининг","для оперативного удаления воды","8.990","руб.","50% 50%"),
+ ("animals","Уборка после животных","Клининг квартиры после животных —","это глубокая очистка поверхностей от шерсти, аллергенов и тд.","8.990","руб.","50% 40%"),
+ ("neglected","Уборка запущенной квартиры","Профессиональный клининг","сильно запущенных, захламленных и очень грязных квартир в Москве","8.990","руб.","50% 50%"),
+ ("business","Клининг для бизнеса","Профессиональный клининг B2B от CleanHub.","Надежная уборка для юридических лиц","","","50% 50%"),
+ ("offices","Уборка офисов","Качественная уборка","офисов в Москве","","","50% 50%"),
 ]
-photo={"general":"general","repair":"repair","support":"support","drycleaning":"dry","windows":"window","rental":"rental","baby":"baby","fire":"fire","elite":"elite","death":"death"}
+photo={"general":"general","repair":"repair","support":"support","drycleaning":"dry","windows":"window","rental":"rental","baby":"baby","fire":"fire","elite":"elite","death":"death","flood":"flood","animals":"animals","neglected":"neglected","business":"business","offices":"offices"}
 T=open('template.html',encoding='utf8').read()
 for k,t,b,r,p,u,pos in items:
-    h=(T.replace('{{TITLE}}',t).replace('{{BOLD}}',b).replace('{{REST}}',r).replace('{{PRICE}}',p)
-        .replace('{{UNIT}}',u).replace('{{PHOTO}}',f'photos/{photo[k]}.jpg').replace('{{POS}}',pos).replace('{{NAME}}',k))
+    ph=(f'<span>от</span><b>{p}</b><span>{u}</span>' if p else '<b style="font-size:27px">Цена по запросу у менеджера</b>')
+    h=(T.replace('{{TITLE}}',t).replace('{{BOLD}}',b).replace('{{REST}}',r)
+        .replace('{{PRICEHTML}}',ph).replace('{{PHOTO}}',f'photos/{photo[k]}.jpg').replace('{{POS}}',pos).replace('{{NAME}}',k))
     open(f'{k}.html','w',encoding='utf8').write(h)
 json.dump([i[0] for i in items],open('names.json','w'))
