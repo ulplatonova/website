@@ -1,0 +1,9 @@
+@font-face{font-family:Montserrat;font-weight:400;src:url(../assets/fonts/mont-400.ttf)}@font-face{font-family:Montserrat;font-weight:500;src:url(../assets/fonts/mont-500.ttf)}@font-face{font-family:Montserrat;font-weight:700;src:url(../assets/fonts/mont-700.ttf)}@font-face{font-family:Montserrat;font-weight:800;src:url(../assets/fonts/mont-800.ttf)}
+:root{--g:#00b14f;--dg:#0b2517}*{box-sizing:border-box;margin:0;padding:0}
+.b{width:800px;height:600px;overflow:hidden;background:#fff;font-family:Montserrat,Arial,sans-serif;color:var(--dg);padding:36px 40px 40px;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center}.top img{height:38px;mix-blend-mode:multiply}
+.pill{border:2px solid var(--g);color:var(--g);border-radius:40px;padding:6px 24px;font-size:17px;font-weight:500}
+.main{flex:1;display:flex;gap:26px;margin-top:24px;min-height:0}
+h1{font-weight:800;color:var(--g);letter-spacing:-.01em;line-height:1.1}
+.desc{font-size:20px;line-height:1.4}.desc b{font-weight:700}
+.ph{border-radius:28px;background-size:cover;box-shadow:0 12px 26px rgba(11,37,23,.18)}
