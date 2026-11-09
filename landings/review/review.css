@@ -1,0 +1,96 @@
+/* Дизайн-план: рабочий стол ревью. Слева панель комментариев, справа лендинг как есть (десктоп или телефон).
+   Рабочая зона нейтральная (зелёный с лёгким оттенком), оранжевый = комментарии, синий = правки текста. */
+:root{--bg:#e9efeb;--panel:#ffffff;--panel2:#f3f7f4;--fg:#0b2517;--mute:#5a6f62;--line:#d3dfd7;--brand:#00b14f;--brand-ink:#04170d;--pin:#e8590c;--pin-bg:#fff1e8;--edit:#2563eb;--edit-bg:#e8effe;--ok:#1b7f45;--shadow:0 10px 40px rgba(11,37,23,.14);--r:12px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1710;--panel:#14231a;--panel2:#1a2c21;--fg:#e5f0e8;--mute:#93aa9b;--line:#284034;--pin:#ff8a4c;--pin-bg:#3a2314;--edit:#7aa2ff;--edit-bg:#1c2745;--ok:#5fe39a;--shadow:0 10px 40px rgba(0,0,0,.5);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1710;--panel:#14231a;--panel2:#1a2c21;--fg:#e5f0e8;--mute:#93aa9b;--line:#284034;--pin:#ff8a4c;--pin-bg:#3a2314;--edit:#7aa2ff;--edit-bg:#1c2745;--ok:#5fe39a;--shadow:0 10px 40px rgba(0,0,0,.5);color-scheme:dark}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow:hidden}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:360px minmax(0,1fr);height:100%}
+
+/* левая панель */
+.panel{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;min-height:0;padding-left:env(safe-area-inset-left,0px)}
+.p-head{padding:14px 16px 0;display:flex;flex-direction:column;gap:10px}
+.p-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.p-title h1{margin:0;font-size:16px;line-height:1.2;font-weight:800;letter-spacing:-.01em}
+.p-title small{display:block;font-weight:500;color:var(--mute);font-size:12px;margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:0 -16px;padding:0 16px}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:8px 10px;font-weight:700;color:var(--mute);margin-bottom:-1px}
+.tab[aria-selected=true]{color:var(--fg);border-color:var(--brand)}
+.tab .n{display:inline-block;min-width:20px;padding:0 6px;margin-left:4px;border-radius:99px;background:var(--panel2);font-size:12px;line-height:18px;text-align:center}
+.p-body{flex:1;min-height:0;overflow:auto;padding:12px 16px 20px;display:flex;flex-direction:column;gap:10px}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:4px 11px;font-size:12px;font-weight:600;color:var(--mute)}
+.chip[aria-pressed=true]{background:var(--fg);color:var(--panel);border-color:var(--fg)}
+.empty{border:1px dashed var(--line);border-radius:var(--r);padding:16px;color:var(--mute);font-size:13px;line-height:1.5}
+.empty b{color:var(--fg)}
+.notice{background:var(--pin-bg);color:var(--pin);border-radius:8px;padding:8px 10px;font-size:12px;font-weight:600}
+
+.composer{border:2px solid var(--pin);border-radius:var(--r);background:var(--panel);padding:12px;display:flex;flex-direction:column;gap:8px}
+.composer .q{font-size:12px;color:var(--mute);border-left:3px solid var(--pin);padding-left:8px;max-height:64px;overflow:hidden}
+.composer textarea{width:100%;min-height:76px;resize:vertical;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--fg);padding:8px 10px;font:inherit}
+.composer textarea:focus-visible{outline:2px solid var(--pin);outline-offset:1px}
+.row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:7px 12px;font-weight:700;font-size:13px}
+.btn:hover{border-color:var(--fg)}
+.btn.pri{background:var(--pin);border-color:var(--pin);color:#fff}
+.btn.sm{padding:3px 8px;font-size:12px}
+.btn:focus-visible,.tab:focus-visible,.chip:focus-visible,.pin:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+.card{border:1px solid var(--line);border-radius:var(--r);padding:11px 12px;background:var(--panel);display:flex;flex-direction:column;gap:6px;position:relative}
+.card.sel{border-color:var(--pin);box-shadow:0 0 0 3px var(--pin-bg)}
+.card.done{opacity:.62}
+.card .top{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mute)}
+.card .top b{color:var(--fg);font-size:13px}
+.num{width:22px;height:22px;border-radius:50%;background:var(--pin);color:#fff;font-weight:800;font-size:12px;display:grid;place-items:center;flex:0 0 auto}
+.card.done .num{background:var(--mute)}
+.card .quote{font-size:12px;color:var(--mute);border-left:3px solid var(--line);padding-left:8px;cursor:pointer;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card .quote:hover{border-color:var(--pin);color:var(--fg)}
+.card .txt{white-space:pre-wrap;overflow-wrap:anywhere}
+.card .acts{display:flex;gap:6px;flex-wrap:wrap}
+.diff{font-size:12px;display:flex;flex-direction:column;gap:4px}
+.diff .o{color:var(--mute);text-decoration:line-through;overflow-wrap:anywhere}
+.diff .n{color:var(--fg);background:var(--edit-bg);border-radius:6px;padding:3px 6px;overflow-wrap:anywhere}
+
+/* правая часть */
+.main{display:flex;flex-direction:column;min-width:0;min-height:0;padding-right:env(safe-area-inset-right,0px)}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel);padding-top:max(10px,env(safe-area-inset-top,0px))}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--panel2)}
+.seg button{border:0;background:none;padding:7px 12px;font-weight:700;font-size:13px;color:var(--mute)}
+.seg button[aria-pressed=true]{background:var(--fg);color:var(--panel)}
+.seg.pin button[aria-pressed=true]{background:var(--pin);color:#fff}
+.seg.edit button[aria-pressed=true]{background:var(--edit);color:#fff}
+.bar .sp{flex:1}
+.hint{font-size:12px;color:var(--mute)}
+#toggle-panel,.hide-wide{display:none}
+.canvas{flex:1;min-height:0;overflow:auto;padding:22px 18px 80px;position:relative}
+.sheet{position:relative;margin:0 auto;width:max-content;max-width:none}
+.stage{background:#fff;container:chl / inline-size;box-shadow:var(--shadow);border-radius:6px;overflow:hidden;position:relative}
+.device-mobile .stage{border-radius:28px;border:8px solid #101a14}
+.pins{position:absolute;inset:0;pointer-events:none;z-index:20}
+.pin{position:absolute;pointer-events:auto;width:24px;height:24px;border-radius:50% 50% 50% 4px;background:var(--pin);color:#fff;border:2px solid #fff;font-weight:800;font-size:12px;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.35);padding:0}
+.pin.sel{transform:scale(1.25);z-index:2}
+
+/* подсветка элементов лендинга */
+.mode-edit .stage [data-eid][data-kind=text]{cursor:text;transition:outline-color .1s}
+.mode-edit .stage [data-eid][data-kind=text]:hover{outline:2px dashed var(--edit);outline-offset:2px}
+.mode-edit .stage [data-eid][data-kind=text]:focus{outline:2px solid var(--edit);outline-offset:2px}
+.mode-comment .stage [data-eid]{cursor:copy}
+.mode-comment .stage [data-eid]:hover{outline:2px solid var(--pin);outline-offset:2px;background-image:linear-gradient(var(--pin-bg),var(--pin-bg));background-blend-mode:multiply}
+.mode-comment .stage [data-kind=block]:hover{outline-offset:-3px}
+.stage [data-edited]{box-shadow:0 0 0 3px rgba(37,99,235,.28);border-radius:3px}
+.stage .rv-flash{animation:rvflash 1.4s ease-out}
+@keyframes rvflash{0%,40%{outline:3px solid var(--pin);outline-offset:3px;background:rgba(232,89,12,.18)}100%{outline:3px solid transparent}}
+.stage .mbar{display:none!important}
+.stage [data-edited]::after{content:none}
+
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .panel{position:fixed;z-index:50;left:0;top:0;bottom:0;width:min(380px,92vw);transform:translateX(-102%);transition:transform .2s;box-shadow:var(--shadow)}
+  .panel.open{transform:none}
+  #toggle-panel,.hide-wide{display:inline-flex}
+  .canvas{padding:14px 10px 80px}
+  .hide-narrow{display:none}
+}
+@media (prefers-reduced-motion:reduce){.panel{transition:none}.stage .rv-flash{animation:none;outline:3px solid var(--pin)}}
