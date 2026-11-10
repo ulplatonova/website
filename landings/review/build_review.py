@@ -48,6 +48,24 @@ def embed_images(html):
     return re.sub(r'https://optim\.tildacdn\.com/[^"\')\s]+', one, html)
 
 
+def embed_fonts(css):
+    """Шрифты бренда в артефакте: чужие домены заблокированы, встраиваем woff как data: URI."""
+    os.makedirs(CACHE, exist_ok=True)
+
+    def one(m):
+        url = m.group(1)
+        f = os.path.join(CACHE, os.path.basename(url))
+        if not (os.path.exists(f) and os.path.getsize(f) > 5000):
+            for _ in range(8):
+                subprocess.run(['curl', '-sSL', '-m', '60', '-o', f, url])
+                if os.path.exists(f) and os.path.getsize(f) > 5000:
+                    break
+                time.sleep(2)
+        return "url('data:font/woff;base64," + base64.b64encode(open(f, 'rb').read()).decode() + "')"
+
+    return re.sub(r"url\('(https://static\.tildacdn\.com/[^']+\.woff)'\)", one, css)
+
+
 def tpl(key, fn):
     cfg, body = fn()
     body = embed_images(build.nbsp(body))
@@ -118,7 +136,7 @@ window.__chlInit = function () {
 def main():
     out = HTML % {
         'css_review': CSS_REVIEW,
-        'css_landing': container_css(build.CSS),
+        'css_landing': embed_fonts(container_css(build.CSS)),
         'templates': tpl('general', build.page_general) + tpl('reno', build.page_reno),
         'js_landing': build.JS,
         'js_review': JS_REVIEW,

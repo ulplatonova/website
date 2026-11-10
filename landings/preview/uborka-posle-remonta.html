@@ -6,11 +6,17 @@
   Инструкция: README.md в корне репозитория.
 ============================================================================= -->
 <style>
+@font-face{font-family:'UA-brand';src:url('https://static.tildacdn.com/tild3434-3839-4830-a366-326661663237/ua-BRAND-regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'UA-brand';src:url('https://static.tildacdn.com/tild3032-6561-4961-a135-333136313139/ua-BRAND-bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'GothamPro';src:url('https://static.tildacdn.com/tild3237-3065-4361-b037-316637376363/gothampro.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'GothamPro';src:url('https://static.tildacdn.com/tild6464-3139-4739-b638-653766393930/gothampro_medium.woff') format('woff');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'chc-sup';src:url('https://static.tildacdn.com/tild3434-3839-4830-a366-326661663237/ua-BRAND-regular.woff') format('woff');font-weight:100 900;unicode-range:U+00B2;font-display:swap}
 /* CleanHub — рекламные лендинги. Все стили ограничены корнем #chl, чтобы не конфликтовать со стилями Тильды. */
 #chl{--g:#00b14f;--g-d:#008c3f;--g-l:#5fe39a;--ink:#0b2517;--ink2:#3f5548;--mute:#6b7f73;--bg:#f2f8f4;--line:#dce8e0;--card:#fff;--warn:#ffb020;--r:18px;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%;overflow-x:hidden;text-align:left}
+  --hf:'UA-brand','GothamPro',Arial,sans-serif;font-family:'chc-sup','GothamPro',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-synthesis:none;color:var(--ink);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%;overflow-x:hidden;text-align:left}
 #chl *,#chl *::before,#chl *::after{box-sizing:border-box}
 #chl h1,#chl h2,#chl h3,#chl h4,#chl p,#chl ul,#chl ol,#chl figure,#chl blockquote{margin:0;padding:0;font-family:inherit}
+#chl h1,#chl h2,#chl h3,#chl h4,#chl .fact b,#chl .tc .pr,#chl .tar .tp,#chl .sum .tot,#chl .offers .pct,#chl .rev-score,#chl .step-n,#chl .st::before,#chl .num,#chl .badge b{font-family:var(--hf)}
 #chl ul,#chl ol{list-style:none}
 #chl a{color:inherit;text-decoration:none}
 #chl img{max-width:100%;height:auto;display:block;border:0}
@@ -295,7 +301,7 @@
   #chl .top .btn{display:inline-flex}
   #chl .hero{padding:56px 0 80px}
   #chl .hero .w{grid-template-columns:1.05fr .95fr;align-items:center;gap:48px}
-  #chl .hero h1{font-size:48px}
+  #chl .hero h1{font-size:44px}
   #chl .hl .ticks{order:4;margin:0 0 28px}
   #chl .hl .cta-row{order:5}
   #chl .hl .promo{order:6}

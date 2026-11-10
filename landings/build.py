@@ -17,7 +17,17 @@ import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-CSS = open(os.path.join(HERE, 'src', 'base.css'), encoding='utf-8').read()
+# Шрифты бренда (загружены в проект Тильды): заголовки UA-brand, текст GothamPro
+FONT_FILES = {
+    ('UA-brand', 400): 'https://static.tildacdn.com/tild3434-3839-4830-a366-326661663237/ua-BRAND-regular.woff',
+    ('UA-brand', 700): 'https://static.tildacdn.com/tild3032-6561-4961-a135-333136313139/ua-BRAND-bold.woff',
+    ('GothamPro', 400): 'https://static.tildacdn.com/tild3237-3065-4361-b037-316637376363/gothampro.woff',
+    ('GothamPro', 500): 'https://static.tildacdn.com/tild6464-3139-4739-b638-653766393930/gothampro_medium.woff',
+}
+FONT_FACES = ''.join("@font-face{font-family:'%s';src:url('%s') format('woff');font-weight:%d;font-style:normal;font-display:swap}\n" % (n, u, w) for (n, w), u in FONT_FILES.items())
+# В GothamPro нет знака «²» — берём его из UA-brand (как в калькуляторе основного сайта)
+FONT_FACES += "@font-face{font-family:'chc-sup';src:url('%s') format('woff');font-weight:100 900;unicode-range:U+00B2;font-display:swap}\n" % FONT_FILES[('UA-brand', 400)]
+CSS = FONT_FACES + open(os.path.join(HERE, 'src', 'base.css'), encoding='utf-8').read()
 JS = open(os.path.join(HERE, 'src', 'app.js'), encoding='utf-8').read()
 
 # ---------------------------------------------------------------- общее
@@ -599,10 +609,10 @@ def preview(frag, title):
 THANKS = '''<!-- CleanHub · страница «Спасибо». Вставьте в блок T123 на отдельной странице Тильды (адрес: /spasibo).
      Цель Метрики «Посещение страницы /spasibo» фиксирует каждую отправленную заявку. -->
 <style>
-#chl-thx{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#0b2517;min-height:70vh;display:grid;place-items:center;padding:48px 20px;background:#f2f8f4;text-align:center}
+%(fonts)s#chl-thx{font-family:'GothamPro',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-synthesis:none;color:#0b2517;min-height:70vh;display:grid;place-items:center;padding:48px 20px;background:#f2f8f4;text-align:center}
 #chl-thx .c{max-width:560px}
 #chl-thx .ok{width:84px;height:84px;border-radius:50%%;background:#00b14f;margin:0 auto 24px;display:grid;place-items:center}
-#chl-thx h1{font-size:34px;line-height:1.15;margin:0 0 12px;font-weight:800}
+#chl-thx h1{font-family:'UA-brand','GothamPro',Arial,sans-serif;font-size:34px;line-height:1.15;margin:0 0 12px;font-weight:800}
 #chl-thx p{font-size:18px;color:#3f5548;margin:0 0 24px}
 #chl-thx a.b{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 26px;border-radius:14px;font-weight:700;font-size:17px;text-decoration:none;margin:6px;color:#04170d}
 </style>
@@ -615,7 +625,7 @@ THANKS = '''<!-- CleanHub · страница «Спасибо». Вставьт
   <a class="b" style="background:#2aabee" href="https://t.me/%(tg)s" target="_blank" rel="noopener">Telegram</a>
   <a class="b" style="background:#fff;border:2px solid #dce8e0" href="tel:%(ph)s">%(pht)s</a>
 </div></div>
-''' % {'wa': WA, 'tg': TG, 'ph': PHONE, 'pht': PHONE_TXT}
+''' % {'wa': WA, 'tg': TG, 'ph': PHONE, 'pht': PHONE_TXT, 'fonts': FONT_FACES}
 
 
 def write(path, text):
