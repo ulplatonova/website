@@ -31,8 +31,9 @@
 
 /* шапка */
 #chl .top{background:#fff;border-bottom:1px solid var(--line);position:relative;z-index:5}
-#chl .top .w{display:flex;align-items:center;gap:14px;min-height:64px}
-#chl .logo img{height:38px;width:auto}
+#chl .top .w{display:flex;align-items:center;gap:14px;min-height:76px}
+#chl .logo svg{height:46px;width:auto;display:block}
+#chl .logo{display:block;line-height:0}
 #chl .top-meta{margin-left:auto;display:flex;align-items:center;gap:18px}
 #chl .top-time{font-size:13px;color:var(--mute);line-height:1.2;text-align:right}
 #chl .top-phone{font-weight:800;font-size:18px;white-space:nowrap}
@@ -324,7 +325,8 @@
 @media (max-width:719px){
   #chl .top-time{display:none}
   #chl .top-phone{font-size:16px}
-  #chl .logo img{height:34px}
+  #chl .logo svg{height:30px}
+  #chl .top .w{min-height:64px;gap:10px}
   #chl .hero{padding:28px 0 40px}
   #chl .hero h1{font-size:30px}
   #chl .hero .sub{font-size:16px}

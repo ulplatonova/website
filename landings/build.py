@@ -35,7 +35,7 @@ def img(tild, name, w):
     return IMG % (tild, w, name)
 
 
-LOGO = img('tild3363-3137-4433-b838-326532616464', 'logotype___CleanHub_.png', 300)
+LOGO_SVG = open(os.path.join(HERE, 'assets', 'logo.inline.txt'), encoding='utf-8').read()  # векторный логотип (landings/assets/make_logo.py)
 
 ICON_PHONE = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>'
 
@@ -104,12 +104,12 @@ def lead(label, cls='btn btn-p', source='cta', offer=None, extra=''):
 
 def topbar():
     return '''<header class="top"><div class="w">
-  <a class="logo" href="#chl-top" aria-label="CleanHub"><img src="%s" alt="CleanHub" width="82" height="38"></a>
+  <a class="logo" href="#chl-top" aria-label="CleanHub: наверх">%s</a>
   <div class="top-meta">
     <div class="top-time">Москва и область<br>ежедневно 09:00–21:00</div>
     <a class="top-phone" href="tel:%s">%s</a>
     <a class="btn btn-p btn-s" href="#chl-calc">Рассчитать цену</a>
-  </div></div></header>''' % (LOGO, PHONE, PHONE_TXT)
+  </div></div></header>''' % (LOGO_SVG, PHONE, PHONE_TXT)
 
 
 def hero(h1, sub, ticks, pic, pic_alt, badge, tag, secondary_label):
@@ -527,8 +527,12 @@ def js_config(cfg):
 
 
 def nbsp(html):
-    html = re.sub(r'(\d) (\d{3})(?=\D)', '\\1\u00a0\\2', html)
-    return html.replace(' ₽', '\u00a0₽')
+    """Неразрывные пробелы в ценах. SVG-блоки (логотип, иконки) не трогаем: в путях пробелы значимы."""
+    def fix(t):
+        t = re.sub(r'(\d) (\d{3})(?=\D)', '\\1\u00a0\\2', t)
+        return t.replace(' ₽', '\u00a0₽')
+    parts = re.split(r'(<svg[\s\S]*?</svg>)', html)
+    return ''.join(p if p.startswith('<svg') else fix(p) for p in parts)
 
 
 def fragment(cfg, body, title):
