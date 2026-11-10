@@ -31,7 +31,7 @@
   }
 
   /* ---------- разметка лендинга ---------- */
-  var TEXT_SEL = 'h1,h2,h3,p,li,summary,td,th,.btn,.eyebrow,.tag,.fact b,.fact span,.badge b,.cap,.who b,.who span,.cnt,.pct,.top-time,.foot .w > div';
+  var TEXT_SEL = 'h1,h2,h3,p,li,summary,td,th,.btn,.ba-cap,.chip,.eyebrow,.tag,.fact b,.fact span,.badge b,.cap,.who b,.who span,.cnt,.pct,.top-time,.foot .w > div';
   var BLOCK_SEL = 'header.top,.facts,section,footer.foot,.ba,.hero-pic';
 
   function annotate() {
@@ -200,7 +200,18 @@
   }
 
   /* ---------- события ---------- */
+  var mock = $('#mock');
+  function openMock() { var v = $('#mock-calc'); $('#mock-view').textContent = v ? v.value : ''; $('#mock-ok').hidden = true; mock.hidden = false; }
+  $('#mock-close').onclick = function () { mock.hidden = true; };
+  mock.addEventListener('click', function (e) { if (e.target === mock) mock.hidden = true; });
+  $('#mock-form').addEventListener('submit', function (e) { e.preventDefault(); $('#mock-ok').hidden = false; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !mock.hidden) mock.hidden = true; });
+  stage.addEventListener('click', function (e) {   // в режиме просмотра кнопки заявки открывают пример окна
+    if (S.mode !== 'view') return;
+    var l = e.target.closest('[data-lead]'); if (l) { e.preventDefault(); openMock(); }
+  });
   stage.addEventListener('click', function (e) {
+    if (e.target.closest('[data-ba]')) return;   // переключатель примеров «до/после» работает во всех режимах
     if (S.mode === 'view') return;
     if (e.target.closest('a,button,summary,label,input')) e.preventDefault();
     e.stopPropagation();

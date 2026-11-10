@@ -49,20 +49,14 @@ FOOT_LINKS = [
 ]
 
 TARIFFS_GENERAL = [
+    {'id': 'premium', 'title': 'Премиум', 'desc': 'Максимум', 'hot': 'Хит продаж'},
+    {'id': 'standard', 'title': 'Стандарт', 'desc': 'Плюс чистка техники на кухне'},
     {'id': 'lite', 'title': 'Лайт', 'desc': 'Полный чек-лист генеральной уборки'},
-    {'id': 'standard', 'title': 'Стандарт', 'desc': 'Плюс чистка техники на кухне', 'hot': 'Оптимальный'},
-    {'id': 'premium', 'title': 'Премиум', 'desc': 'Максимум'},
 ]
 TARIFFS_RENO = [
+    {'id': 'premium', 'title': 'Премиум', 'desc': 'Шкафы и окна', 'hot': 'Хит продаж'},
+    {'id': 'standard', 'title': 'Стандарт', 'desc': 'Плюс шкафы внутри'},
     {'id': 'lite', 'title': 'Лайт', 'desc': 'Полный чек-лист уборки после ремонта'},
-    {'id': 'standard', 'title': 'Стандарт', 'desc': 'Плюс шкафы внутри', 'hot': 'Оптимальный'},
-    {'id': 'premium', 'title': 'Премиум', 'desc': 'Шкафы и окна'},
-]
-CHIPS = [
-    {'label': 'Студия / 1-комн.', 'area': 36},
-    {'label': '2-комн.', 'area': 55},
-    {'label': '3-комн.', 'area': 75},
-    {'label': '4-комн. / дом', 'area': 100},
 ]
 
 # ---------------------------------------------------------------- блоки
@@ -158,10 +152,9 @@ def calc(title, lead_txt):
   <span class="eyebrow">Калькулятор</span><h2>%s</h2><p class="lead">%s</p>
   <div class="calc-wrap">
     <div class="calc-steps" style="display:grid;gap:18px">
-      <div class="step"><div class="step-h"><span class="step-n">1</span>Площадь квартиры или дома</div>
-        <div class="chips" data-ref="chips"></div>
-        <div class="area"><label class="area-in"><input data-ref="areaInput" type="text" inputmode="numeric" aria-label="Площадь, м²" value="55" maxlength="4"><span>м²</span></label>
-        <input data-ref="range" type="range" min="20" max="150" step="1" value="55" aria-label="Площадь, ползунок"></div></div>
+      <div class="step"><div class="step-h"><span class="step-n">1</span>Площадь помещения</div>
+        <div class="area"><label class="area-in"><input data-ref="areaInput" type="text" inputmode="numeric" aria-label="Площадь, м²" value="50" maxlength="4"><span>м²</span></label>
+        <span class="area-hint">Введите общую площадь по документам</span></div></div>
       <div class="step"><div class="step-h"><span class="step-n">2</span>Выберите тариф</div><div class="tariffs" data-ref="tariffs"></div></div>
       <div class="step"><div class="step-h"><span class="step-n">3</span>Добавьте, если нужно</div><div class="xs" data-ref="extras"></div></div>
     </div>
@@ -179,32 +172,38 @@ def includes(title, lead_txt, groups, note_html):
   <div class="grid c2">%s</div>%s</div></section>''' % (title, lead_txt, cards, note_html)
 
 
-def before_after(title, lead_txt, before, after, caption):
+def before_after(title, lead_txt, pairs):
+    """pairs: [(подпись, фото «до», фото «после»)] — галерея со сравнением и переключателем."""
+    chips = ''.join('<button type="button" class="chip" data-ba="%d" aria-pressed="%s">%s</button>' % (i, 'true' if i == 0 else 'false', p[0]) for i, p in enumerate(pairs))
+    slides = ''
+    for i, (name, before, after) in enumerate(pairs):
+        slides += '''<div class="ba-slide"%s data-i="%d"><div class="ba" role="group" aria-label="Сравнение до и после: %s">
+      <img src="%s" alt="%s до уборки" width="700" height="627" loading="lazy">
+      <img class="after" src="%s" alt="%s после уборки" width="700" height="627" loading="lazy">
+      <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
+      <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
+    </div><p class="ba-cap">%s — фото реальной уборки CleanHub. Потяните ползунок.</p></div>''' % (
+            '' if i == 0 else ' hidden', i, name, before, name, after, name, name)
     return '''<section class="alt"><div class="w ba-grid">
   <div><span class="eyebrow">Результат</span><h2>%s</h2><p class="lead" style="margin-bottom:20px">%s</p>
-  %s</div>
-  <div><div class="ba" role="group" aria-label="Сравнение до и после">
-    <img src="%s" alt="До уборки" width="700" height="627" loading="lazy">
-    <img class="after" src="%s" alt="После уборки" width="700" height="627" loading="lazy">
-    <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
-    <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
-  </div><p class="ba-cap">%s. Потяните ползунок.</p></div></div></section>''' % (title, lead_txt, '<a class="btn btn-p" href="#chl-calc" data-goal="ba_calc_click">Хочу так же — рассчитать</a>', before, after, caption)
+  <a class="btn btn-p" href="#chl-calc" data-goal="ba_calc_click">Хочу так же — рассчитать</a></div>
+  <div class="ba-gal"><div class="chips gal-chips" role="group" aria-label="Выберите пример">%s</div>%s</div></div></section>''' % (title, lead_txt, chips, slides)
 
 
 def tariffs_block(title, lead_txt, cards, table_rows, perm2, svc_note):
     """cards: [(name, from_price, hot, [(text, ok)])]"""
     cs = ''
-    for name, price, hot, items in cards:
+    for name, price, hot, items in cards[::-1]:
         li = ''.join('<li%s>%s</li>' % ('' if ok else ' class="no"', t) for t, ok in items)
         cs += '''<div class="card tc%s">%s<h3>%s</h3><div class="pr">от %s <small>за 40 м²</small></div><ul>%s</ul>%s</div>''' % (
-            ' hot' if hot else '', '<span class="hotl">ОПТИМАЛЬНЫЙ</span>' if hot else '', name, price, li,
+            ' hot' if hot else '', '<span class="hotl">ХИТ ПРОДАЖ</span>' if hot else '', name, price, li,
             '<a class="btn %s" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a>' % ('btn-p' if hot else 'btn-w'))
-    rows = ''.join('<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % r for r in table_rows)
+    rows = ''.join('<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (r[0], r[3], r[2], r[1]) for r in table_rows)
     return '''<section><div class="w">
   <span class="eyebrow">Цены</span><h2>%s</h2><p class="lead">%s</p>
   <div class="tcards">%s</div>
   <details class="tbl"><summary>Полная таблица цен по площади</summary><div class="tbl-s"><table>
-    <thead><tr><th>Площадь</th><th>Лайт</th><th>Стандарт</th><th>Премиум</th></tr></thead><tbody>%s
+    <thead><tr><th>Площадь</th><th>Премиум</th><th>Стандарт</th><th>Лайт</th></tr></thead><tbody>%s
     <tr><td>Более 120 м²</td><td colspan="3" style="text-align:right">индивидуально, от %s ₽ за м²</td></tr></tbody></table></div>
     <p style="font-size:13px;color:var(--mute);padding-bottom:14px">%s</p></details></div></section>''' % (title, lead_txt, cs, rows, perm2, svc_note)
 
@@ -251,7 +250,8 @@ def reviews(title, keys):
 def offers(cards):
     c = ''
     for pct, name, text, btn, extra_attr, offer in cards:
-        c += '<div class="card"%s><div class="pct">%s</div><h3>%s</h3><p>%s</p>%s</div>' % (extra_attr, pct, name, text, btn)
+        fine = '<p class="fine">Хотите скидку — напишите об этом менеджеру при оформлении заказа.</p>' if 'скидк' in (offer or '').lower() or pct.startswith('−') else ''
+        c += '<div class="card"%s><div class="pct">%s</div><h3>%s</h3><p>%s</p>%s%s</div>' % (extra_attr, pct, name, text, fine, btn)
     return '''<section class="alt offers"><div class="w"><span class="eyebrow">Акции</span><h2>Скидки на уборку</h2><p class="lead">Выберите выгодный вариант — менеджер применит скидку при подтверждении заказа.</p>
   <div class="grid c2">%s</div></div></section>''' % c
 
@@ -295,8 +295,8 @@ def page_general():
         'fields': {'summary': ['Расчёт', 'Расчет', 'calc'], 'total': ['Сумма']},
         'wa': WA, 'tg': TG,
         'firstOrder': None,
-        'defaults': {'area': 55, 'tariff': 'standard'},
-        'chips': CHIPS, 'tariffs': TARIFFS_GENERAL,
+        'defaults': {'area': 50, 'tariff': 'premium'},
+        'tariffs': TARIFFS_GENERAL,
         'note': 'Менеджер подтвердит цену перед выездом, и она не изменится во время уборки. При сильных загрязнениях (завалы, сложные пятна) цена может быть скорректирована — мы назовём её до начала работ.',
         'service': {
             'title': 'Генеральная уборка',
@@ -350,17 +350,20 @@ def page_general():
                   ('🚿', 'Санузел', ['Полностью очищаем и дезинфицируем сантехнику, ванну и душ', 'Убираем известковый налёт и плесень в швах паром', 'Моем плитку, полотенцесушитель, трубы и держатели', 'Протираем зеркала и стеклянные поверхности']),
                   ('🛋️', 'Жилые комнаты', ['Обеспыливаем всё сверху вниз: подоконники, двери, ручки, выключатели', 'Моем шкафы сверху, люстры и светильники, радиаторы', 'Пылесосим мягкую мебель и ковры', 'Моем полы и плинтуса']),
                   ('📦', 'Труднодоступные места', ['Отодвигаем доступную мебель и технику и моем под ними', 'Чистим пол за диванами и шкафами промышленным Kärcher', 'Аккуратно раскладываем мелкие вещи, расставляем обувь', 'Выносим мусор (до 10 кг)'])],
-                 '<div class="extra-note"><b>Список — для тарифа «Лайт».</b> Глубокая чистка кухонной техники (духовка, СВЧ, посудомойка, холодильник, стиральная машина) входит в «Стандарт» и «Премиум» либо добавляется отдельно. Хрустальные люстры и сложные конструкции оплачиваются отдельно.</div>'),
-        before_after('Было — стало: микроволновка после генеральной',
-                     'Жир, подтёки и пятна, которые годами «въедались» в технику, — уходят за один выезд. Так же мы работаем с плитой, вытяжкой, сантехникой и плиткой.',
-                     img('tild3033-6535-4036-b865-633163313739', 'IMG_3284.PNG', 800),
-                     img('tild3639-3936-4964-b530-376362366235', 'IMG_3285.PNG', 800),
-                     'Фото реальной уборки CleanHub'),
+                 '<div class="extra-note"><b>Список выше — тариф «Лайт».</b> Что добавляется в других тарифах:<ul><li><b>«Стандарт»</b> = «Лайт» + глубокая чистка кухонной техники внутри и снаружи: <b>микроволновка, духовка, посудомоечная машина</b>.</li><li><b>«Премиум»</b> = «Стандарт» + <b>вытяжка, холодильник (внутри) и стиральная машина</b>.</li></ul>Хрустальные люстры и сложные конструкции оплачиваются отдельно. Любую услугу можно добавить и к «Лайт» в калькуляторе.</div>'),
+        before_after('Было — стало: реальные результаты',
+                     'Жир, налёт, пятна и «въевшаяся» грязь уходят за один выезд. Выберите пример и потяните ползунок: слева было, справа стало.',
+                     [('Плита', img('tild3565-3336-4530-a332-356437366433', 'IMG_3292.PNG', 800), img('tild6137-3064-4164-b432-636264623865', 'IMG_3293.PNG', 800)),
+                      ('Кухня', img('tild3661-3137-4464-b331-356435363461', 'IMG_4941.PNG', 800), img('tild3061-3230-4233-a234-376334353432', 'IMG_4940.PNG', 800)),
+                      ('Мойка', img('tild6234-6238-4465-a564-653638623032', 'IMG_4939.PNG', 800), img('tild3462-3065-4761-b632-623061616663', 'IMG_4938.PNG', 800)),
+                      ('Микроволновка', img('tild3033-6535-4036-b865-633163313739', 'IMG_3284.PNG', 800), img('tild3639-3936-4964-b530-376362366235', 'IMG_3285.PNG', 800)),
+                      ('Холодильник', img('tild3933-3434-4631-b833-666232313137', 'IMG_5021.PNG', 800), img('tild3962-3565-4363-b235-383733666334', 'IMG_5022.PNG', 800)),
+                      ('Диван (химчистка)', img('tild3265-3634-4736-a336-613234623436', 'IMG_3319.PNG', 800), img('tild3061-6433-4637-b766-323033613138', 'IMG_3320.PNG', 800))]),
         tariffs_block('Цены на генеральную уборку',
                       'Фиксированная цена зависит только от площади по документам, тарифа и доп. услуг. Выезд, техника Kärcher, химия и расходники уже включены.',
                       [('Лайт', '8 990 ₽', False, [('Полный чек-лист генеральной уборки', True), ('Санузел и кухня: поверхности и сантехника', True), ('Чистка техники внутри', False)]),
-                       ('Стандарт', '10 990 ₽', True, [('Всё из «Лайт»', True), ('Чистка СВЧ', True), ('Чистка духовки', True), ('Чистка посудомойки', True)]),
-                       ('Премиум', '12 990 ₽', False, [('Всё из «Стандарт»', True), ('Мойка холодильника', True), ('Чистка стиральной машины', True), ('Чистка вытяжки', True)])],
+                       ('Стандарт', '10 990 ₽', False, [('Всё из «Лайт»', True), ('Чистка СВЧ', True), ('Чистка духовки', True), ('Чистка посудомойки', True)]),
+                       ('Премиум', '12 990 ₽', True, [('Всё из «Стандарт»', True), ('Мойка холодильника', True), ('Чистка стиральной машины', True), ('Чистка вытяжки', True)])],
                       [('до 40 м²', '8 990 ₽', '10 990 ₽', '12 990 ₽'), ('41–60 м²', '13 990 ₽', '15 990 ₽', '17 990 ₽'),
                        ('61–80 м²', '18 490 ₽', '20 490 ₽', '22 490 ₽'), ('81–100 м²', '23 490 ₽', '25 490 ₽', '27 490 ₽'),
                        ('101–120 м²', '27 990 ₽', '29 990 ₽', '31 990 ₽')],
@@ -410,8 +413,8 @@ def page_reno():
         'fields': {'summary': ['Расчёт', 'Расчет', 'calc'], 'total': ['Сумма']},
         'wa': WA, 'tg': TG,
         'firstOrder': None,
-        'defaults': {'area': 55, 'tariff': 'standard'},
-        'chips': CHIPS, 'tariffs': TARIFFS_RENO,
+        'defaults': {'area': 50, 'tariff': 'premium'},
+        'tariffs': TARIFFS_RENO,
         'note': 'Цена фиксируется до начала работ. Эпоксидная затирка и особо сложные загрязнения оплачиваются отдельно — пришлите фото в WhatsApp или Telegram, и мы назовём точную сумму без выезда.',
         'service': {
             'title': 'Уборка после ремонта',
@@ -463,17 +466,16 @@ def page_reno():
                   ('🧱', 'Следы ремонта', ['Удаляем стандартные послеремонтные загрязнения', 'Ототираем следы краски, штукатурки, клея (не более 2 см)', 'Моем межкомнатные двери и проёмы, дезинфицируем ручки', 'Натираем зеркала и стеклянные поверхности до блеска']),
                   ('🚿', 'Санузел и сантехника', ['Моем и дезинфицируем всю сантехнику, унитаз, ванну или душевую', 'Протираем полотенцесушитель и подведённые к нему трубы', 'Протираем держатель туалетной бумаги и аксессуары']),
                   ('🛋️', 'Полы, техника, мусор', ['Пылесосим и моем пол и плинтуса', 'Пылесосим мягкую мебель и ковры', 'Распаковываем и протираем бытовую технику и мебель', 'Собираем и выносим мусор (до 10 кг)'])],
-                 '<div class="extra-note"><b>Оплачивается отдельно:</b> сложные загрязнения вроде эпоксидной затирки, а также хрустальные люстры и сложные конструкции. Потолок в стоимость не входит. Не уверены? Пришлите фото — назовём точную цену до выезда.</div>'),
-        before_after('Было — стало: кухня после ремонта',
-                     'Плёнка, пыль и следы работ — на выходе чистая кухня, готовая к жизни. Не только жильё: так же убираем дома и коммерческие помещения.',
-                     img('tild3339-6231-4132-b536-656135363632', 'IMG_3302.PNG', 800),
-                     img('tild6433-6564-4162-b532-656362323334', 'IMG_3303.PNG', 800),
-                     'Фото реальной уборки CleanHub'),
+                 '<div class="extra-note"><b>Список выше — тариф «Лайт».</b> Что добавляется в других тарифах:<ul><li><b>«Стандарт»</b> = «Лайт» + <b>мойка всех шкафов внутри</b> (пустых).</li><li><b>«Премиум»</b> = «Стандарт» + <b>мойка окон</b>: до 4 створок при площади до 40 м², до 6 (41–60 м²), до 8 (61–80 м²), до 10 (81–100 м²), до 12 (101–120 м²).</li></ul><b>Оплачивается отдельно:</b> сложные загрязнения вроде эпоксидной затирки, хрустальные люстры и сложные конструкции. Потолок в стоимость не входит. Не уверены? Пришлите фото — назовём точную цену до выезда.</div>'),
+        before_after('Было — стало: после ремонта',
+                     'Плёнка, строительная пыль и следы работ — на выходе чистая квартира, готовая к жизни. Выберите пример и потяните ползунок: слева было, справа стало.',
+                     [('Кухня', img('tild3339-6231-4132-b536-656135363632', 'IMG_3302.PNG', 800), img('tild6433-6564-4162-b532-656362323334', 'IMG_3303.PNG', 800)),
+                      ('Окна', img('tild6634-3161-4233-a565-343637666464', 'IMG_3294.PNG', 800), img('tild3266-3464-4762-b663-656130616161', 'IMG_3295.PNG', 800))]),
         tariffs_block('Цены на уборку после ремонта',
                       'Цена зависит от площади, тарифа и сложности загрязнений. В стоимость уже включены работа бригады, всё оборудование и профессиональные средства.',
                       [('Лайт', '11 990 ₽', False, [('Полный чек-лист уборки после ремонта', True), ('Мойка сантехники, полов и плинтусов', True), ('Мойка шкафов внутри', False)]),
-                       ('Стандарт', '14 490 ₽', True, [('Всё из «Лайт»', True), ('Мойка всех шкафов внутри (пустых)', True), ('Мойка окон', False)]),
-                       ('Премиум', '16 990 ₽', False, [('Всё из «Стандарт»', True), ('Мойка окон: до 4–12 створок по площади', True)])],
+                       ('Стандарт', '14 490 ₽', False, [('Всё из «Лайт»', True), ('Мойка всех шкафов внутри (пустых)', True), ('Мойка окон', False)]),
+                       ('Премиум', '16 990 ₽', True, [('Всё из «Стандарт»', True), ('Мойка окон: до 4–12 створок по площади', True)])],
                       [('до 40 м²', '11 990 ₽', '14 490 ₽', '16 990 ₽'), ('41–60 м²', '16 490 ₽', '18 990 ₽', '21 490 ₽'),
                        ('61–80 м²', '20 990 ₽', '23 490 ₽', '25 990 ₽'), ('81–100 м²', '25 490 ₽', '27 990 ₽', '30 490 ₽'),
                        ('101–120 м²', '29 990 ₽', '32 490 ₽', '34 990 ₽')],

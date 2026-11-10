@@ -99,8 +99,10 @@
 #chl .chip:hover{border-color:var(--g)}
 #chl .chip[aria-pressed=true]{border-color:var(--g);background:#e8f8ee}
 #chl .area{display:flex;align-items:center;gap:14px}
-#chl .area-in{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:0 14px;height:52px;flex:0 0 130px}
-#chl .area-in input{width:70px;border:0;background:transparent;font-size:24px;font-weight:800;color:var(--ink);font-family:inherit;outline:none;-moz-appearance:textfield}
+#chl .area-in{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:0 16px;height:56px;flex:0 0 150px}
+#chl .area-in:focus-within{border-color:var(--g);box-shadow:0 0 0 3px rgba(0,177,79,.15)}
+#chl .area-hint{font-size:13px;color:var(--mute);line-height:1.35}
+#chl .area-in input{width:80px;border:0;background:transparent;font-size:24px;font-weight:800;color:var(--ink);font-family:inherit;outline:none;-moz-appearance:textfield}
 #chl .area-in input::-webkit-outer-spin-button,#chl .area-in input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 #chl .area-in span{color:var(--mute);font-weight:600}
 #chl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--g) var(--p,30%),var(--line) var(--p,30%));outline:none;margin:0}
@@ -115,7 +117,7 @@
 #chl .tar .tn{font-weight:800;font-size:17px}
 #chl .tar .tp{font-weight:800;font-size:19px;grid-row:1/3;grid-column:3;text-align:right;white-space:nowrap}
 #chl .tar .tl{grid-column:2;font-size:13px;color:var(--ink2);line-height:1.35}
-#chl .tar .flag{display:inline-block;background:var(--ink);color:#fff;border-radius:6px;font-size:11px;padding:2px 7px;margin-left:8px;vertical-align:2px;font-weight:700;letter-spacing:.02em}
+#chl .tar .flag{position:absolute;top:-10px;left:14px;background:var(--g);color:#04170d;border-radius:6px;font-size:11px;padding:2px 8px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
 #chl .xs{display:grid;gap:10px}
 #chl .x{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff}
 #chl .x.on{border-color:var(--g);background:#f1fbf5}
@@ -157,7 +159,14 @@
 #chl .inc .card h3 .em{margin-right:6px}
 #chl .extra-note{margin-top:18px;background:#fff8e6;border:1px solid #f4dca0;border-radius:14px;padding:14px 16px;font-size:14px;color:#6b5314}
 #chl .extra-note b{color:#4a3a0a}
+#chl .extra-note ul{margin:8px 0 10px;display:grid;gap:6px}
+#chl .extra-note li{padding-left:16px;position:relative}
+#chl .extra-note li::before{content:"•";position:absolute;left:3px;color:#b8860b}
 
+#chl [hidden]{display:none!important}
+#chl .gal-chips{margin-bottom:14px}
+#chl .ba-slide .ba-cap{margin-top:10px}
+#chl .offers .fine{font-size:13px;color:var(--ink2);background:var(--bg);border-radius:10px;padding:8px 10px;margin:0 0 12px;line-height:1.4}
 /* до/после */
 #chl .ba-grid{display:grid;gap:24px;align-items:center}
 #chl .ba{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:1049/940;background:#ddd;user-select:none;touch-action:pan-y;box-shadow:0 20px 50px rgba(11,37,23,.18)}

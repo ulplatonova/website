@@ -134,7 +134,7 @@
     var best = null, cur = -1;
     C.tariffs.forEach(function (tt, k) { if (tt.id === state.tariff) cur = k; });
     C.tariffs.forEach(function (tt, k) {
-      if (k <= cur || r.big) return; // предлагаем только более высокий тариф, в который входят выбранные услуги
+      if (k >= cur || r.big) return; // предлагаем только более высокий тариф (в списке он выше), в который входят выбранные услуги
       var rr = compute(tt.id);
       if (rr.pay < r.pay && (!best || rr.pay < best.r.pay)) best = { t: tt, r: rr };
     });
@@ -147,23 +147,13 @@
     if (state.touched) refs.barBtn.setAttribute('data-lead', 'bar'); else refs.barBtn.removeAttribute('data-lead');
   }
 
-  function renderChips() {
-    var html = '';
-    C.chips.forEach(function (c) {
-      html += '<button type="button" class="chip" data-act="area" data-v="' + c.area + '" aria-pressed="' + (c.area === state.area) + '">' + esc(c.label) + '<small>~' + c.area + ' м²</small></button>';
-    });
-    refs.chips.innerHTML = html;
-  }
-
   function renderArea() {
-    refs.range.value = Math.min(Math.max(state.area, +refs.range.min), +refs.range.max);
-    refs.range.style.setProperty('--p', ((refs.range.value - refs.range.min) / (refs.range.max - refs.range.min) * 100) + '%');
     if (document.activeElement !== refs.areaInput) refs.areaInput.value = state.area;
   }
 
   function render() {
     result = compute(state.tariff);
-    renderChips(); renderArea(); renderTariffs(); renderExtras(); renderSum();
+    renderArea(); renderTariffs(); renderExtras(); renderSum();
     fillForms();
   }
 
@@ -209,7 +199,6 @@
     if (a && root.contains(a)) {
       var act = a.getAttribute('data-act'), v = a.getAttribute('data-v'), id = a.getAttribute('data-id');
       if (act === 'tariff') set({ tariff: v });
-      else if (act === 'area') set({ area: +v });
       else if (act === 'inc') setX(id, (state.x[id] || 0) + 1);
       else if (act === 'dec') setX(id, (state.x[id] || 0) - 1);
       else if (act === 'toggle') setX(id, state.x[id] ? 0 : 1);
@@ -230,11 +219,21 @@
     var v = refs.areaInput.value.replace(/\D+/g, '');
     if (v !== refs.areaInput.value) refs.areaInput.value = v;
     var n = +v;
-    if (n >= 10) { n = Math.min(n, 5000); state.area = n; touch(); result = compute(state.tariff); renderChips(); renderArea(); renderTariffs(); renderExtras(); renderSum(); fillForms(); }
+    if (n >= 10) { n = Math.min(n, 5000); state.area = n; touch(); result = compute(state.tariff); renderArea(); renderTariffs(); renderExtras(); renderSum(); fillForms(); }
   });
   refs.areaInput.addEventListener('blur', function () { refs.areaInput.value = state.area; });
   refs.areaInput.addEventListener('focus', function () { refs.areaInput.select(); });
-  refs.range.addEventListener('input', function () { set({ area: +refs.range.value }); });
+
+  /* ---------- галерея «до/после»: переключатель примеров ---------- */
+  [].forEach.call(root.querySelectorAll('.ba-gal'), function (g) {
+    g.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-ba]'); if (!b) return;
+      var i = b.getAttribute('data-ba');
+      [].forEach.call(g.querySelectorAll('[data-ba]'), function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      [].forEach.call(g.querySelectorAll('.ba-slide'), function (x) { x.hidden = x.getAttribute('data-i') !== i; });
+      track('ba_tab');
+    });
+  });
 
   /* ---------- слайдер «до/после» ---------- */
   [].forEach.call(root.querySelectorAll('.ba'), function (ba) {

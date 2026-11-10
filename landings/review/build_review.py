@@ -9,6 +9,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
@@ -33,12 +34,12 @@ def embed_images(html):
     def one(m):
         url = m.group(0)
         f = os.path.join(CACHE, re.sub(r'[^A-Za-z0-9.]+', '_', url[-90:]))
-        if not os.path.exists(f):
-            for _ in range(4):  # Тильда отдаёт webp со второго запроса (первый — редирект на оригинал)
-                subprocess.run(['curl', '-sSL', '-m', '60', '-o', f, '-w', '', url], check=True)
-                with open(f, 'rb') as fh:
-                    if fh.read(4) == b'RIFF':
-                        break
+        if not (os.path.exists(f) and open(f, 'rb').read(4) == b'RIFF'):
+            for _ in range(8):  # Тильда отдаёт webp со 2-го запроса (первый — редирект на оригинал); сеть тоже бывает нестабильна
+                subprocess.run(['curl', '-sSL', '-m', '60', '-o', f, url])
+                if os.path.exists(f) and open(f, 'rb').read(4) == b'RIFF':
+                    break
+                time.sleep(2)
         data = open(f, 'rb').read()
         if data[:4] != b'RIFF':
             raise SystemExit('не удалось получить webp: ' + url)
@@ -75,7 +76,7 @@ HTML = '''<title>Правки лендингов CleanHub</title>
     <div class="p-body" id="p-body"></div>
   </aside>
   <main class="main">
-    <div class="bar">
+    <div class="tb">
       <button class="btn" id="toggle-panel" type="button">Комментарии · <span id="tp-count">0</span></button>
       <div class="seg" id="page" role="group" aria-label="Лендинг"><button type="button" data-v="general" aria-pressed="true">Генеральная</button><button type="button" data-v="reno" aria-pressed="false">После ремонта</button></div>
       <div class="seg" id="device" role="group" aria-label="Устройство"><button type="button" data-v="mobile" aria-pressed="false">Телефон</button><button type="button" data-v="desktop" aria-pressed="true">Десктоп</button></div>
@@ -84,6 +85,20 @@ HTML = '''<title>Правки лендингов CleanHub</title>
     </div>
     <div class="canvas" id="canvas"><div class="sheet" id="sheet"><div class="stage" id="stage"></div><div class="pins" id="pins"></div></div></div>
   </main>
+</div>
+<div id="mock" data-tooltip-hook="#popup:order" hidden>
+  <form class="mock-card" id="mock-form">
+    <h2>Оставить заявку</h2>
+    <div class="mock-tag">ПРИМЕР. Так будет выглядеть окно заявки. В Тильде вместо него откроется ваша форма, а заявка придёт менеджеру на почту, в Telegram или CRM (как на основном сайте).</div>
+    <input type="text" id="mock-name" placeholder="Ваше имя" aria-label="Имя" autocomplete="off">
+    <input type="tel" id="mock-phone" placeholder="+7 (___) ___-__-__" aria-label="Телефон" autocomplete="off">
+    <small>Менеджер получит вместе с заявкой ваш расчёт:</small>
+    <pre id="mock-view"></pre>
+    <input type="hidden" name="Расчёт" id="mock-calc"><input type="hidden" name="Сумма" id="mock-sum">
+    <small>Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных и договором оферты.</small>
+    <div class="row"><button class="btn" id="mock-close" type="button">Закрыть</button><button class="btn pri" type="submit">Отправить заявку</button></div>
+    <div class="ok" id="mock-ok" hidden>В примере заявка никуда не уходит. В Тильде здесь откроется страница «Спасибо».</div>
+  </form>
 </div>
 <div id="toast" hidden style="position:fixed;left:50%%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%%);background:var(--fg);color:var(--panel);padding:9px 14px;border-radius:9px;font-weight:600;font-size:13px;z-index:99;max-width:90vw"></div>
 
