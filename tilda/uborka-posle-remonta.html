@@ -678,7 +678,7 @@ window.CHL_CONFIG = {
     } else {
       L.push(S.title + ', ' + (r.big ? '' : 'тариф «' + t.title + '», ') + state.area + ' м²');
       L.push('Итого: ' + priceText(r, 'pay') + (r.disc ? ' (с учётом скидки −' + money(r.disc) + ' на первую уборку)' : ''));
-      L.push('Базовая цена: ' + money(r.base) + (r.big ? ' (индивидуальный расчёт, от ' + S.perM2 + ' ₽/м²)' : ' (' + tierLabel(r.i) + ')'));
+      if (r.big) L.push('Индивидуальный расчёт, от ' + S.perM2 + ' ₽ за м²');
       var pk = perksFor(state.tariff, r.i);
       if (pk.length && !r.big) L.push('В тарифе: ' + pk.join(', '));
       if (r.lines.length) {
