@@ -30,16 +30,16 @@ def text_path(font_file, text, cap_h, x0, baseline, width=None, tracking=0):
 
 
 clean = text_path('m600.woff', 'CLEAN', cap_h=80, x0=117, baseline=112, width=378)
-hub = text_path('m600.woff', 'HUB', cap_h=68, x0=530, baseline=108, width=215)
+hub = text_path('m600.woff', 'HUB', cap_h=80, x0=547, baseline=112, width=253)  # та же высота букв, что у CLEAN
 
-svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="766" height="152" viewBox="0 0 766 152" role="img" aria-label="CleanHub">
+svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="830" height="152" viewBox="0 0 830 152" role="img" aria-label="CleanHub">
 <rect width="100" height="152" rx="16" fill="{GREEN}"/>
 <rect x="23" width="55" height="76" fill="#fff"/>
 <rect x="23" y="76" width="55" height="20" rx="3" fill="{INK}"/>
 <rect x="43" y="92" width="12" height="60" fill="{INK}"/>
 <g fill="{INK}"><circle cx="41" cy="55" r="6"/><circle cx="61" cy="62" r="5"/><circle cx="54" cy="42" r="4"/><circle cx="36" cy="31" r="2.2"/><circle cx="48" cy="29" r="2.2"/><circle cx="63" cy="32" r="2.2"/></g>
 <path d="{clean}" fill="{INK}"/>
-<rect x="516" y="15" width="250" height="115" rx="40" fill="{GREEN}"/>
+<rect x="516" y="4" width="314" height="136" rx="44" fill="{GREEN}"/>
 <path d="{hub}" fill="{INK}"/>
 </svg>'''
 open(os.path.join(HERE, 'logo.svg'), 'w', encoding='utf-8').write(svg)
