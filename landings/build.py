@@ -152,14 +152,14 @@ def facts():
 def pain(title, lead_txt, cards):
     c = ''.join('<div class="card"><span class="em">%s</span><p>%s</p></div>' % x for x in cards)
     return '''<section class="pain"><div class="w">
-  <span class="eyebrow">Знакомо?</span><h2>%s</h2><p class="lead">%s</p>
+  <h2>%s</h2><p class="lead">%s</p>
   <div class="grid c3">%s</div>
   <div class="center" style="margin-top:28px"><a class="btn btn-p" href="#chl-calc" data-goal="pain_calc_click">Узнать, сколько это стоит</a></div></div></section>''' % (title, lead_txt, c)
 
 
 def calc(title, lead_txt):
     return '''<section class="alt" id="chl-calc"><div class="w">
-  <span class="eyebrow">Калькулятор</span><h2>%s</h2><p class="lead">%s</p>
+  <h2>%s</h2><p class="lead">%s</p>
   <div class="calc-wrap">
     <div class="calc-steps" style="display:grid;gap:18px">
       <div class="step"><div class="step-h"><span class="step-n">1</span>Площадь помещения</div>
@@ -178,7 +178,7 @@ def includes(title, lead_txt, groups, note_html):
         cards += '<div class="card"><h3><span class="em">%s</span>%s</h3><ul>%s</ul></div>' % (
             em, name, ''.join('<li>%s</li>' % i for i in items))
     return '''<section class="inc"><div class="w">
-  <span class="eyebrow">Что входит</span><h2>%s</h2><p class="lead">%s</p>
+  <h2>%s</h2><p class="lead">%s</p>
   <div class="grid c2">%s</div>%s</div></section>''' % (title, lead_txt, cards, note_html)
 
 
@@ -195,7 +195,7 @@ def before_after(title, lead_txt, pairs):
     </div><p class="ba-cap">%s — фото реальной уборки CleanHub. Потяните ползунок.</p></div>''' % (
             '' if i == 0 else ' hidden', i, name, before, name, after, name, name)
     return '''<section class="alt"><div class="w ba-grid">
-  <div><span class="eyebrow">Результат</span><h2>%s</h2><p class="lead" style="margin-bottom:20px">%s</p>
+  <div><h2>%s</h2><p class="lead" style="margin-bottom:20px">%s</p>
   <a class="btn btn-p" href="#chl-calc" data-goal="ba_calc_click">Хочу так же — рассчитать</a></div>
   <div class="ba-gal"><div class="chips gal-chips" role="group" aria-label="Выберите пример">%s</div>%s</div></div></section>''' % (title, lead_txt, chips, slides)
 
@@ -210,7 +210,7 @@ def tariffs_block(title, lead_txt, cards, table_rows, perm2, svc_note):
             '<a class="btn %s" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a>' % ('btn-p' if hot else 'btn-w'))
     rows = ''.join('<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (r[0], r[3], r[2], r[1]) for r in table_rows)
     return '''<section><div class="w">
-  <span class="eyebrow">Цены</span><h2>%s</h2><p class="lead">%s</p>
+  <h2>%s</h2><p class="lead">%s</p>
   <div class="tcards">%s</div>
   <details class="tbl"><summary>Полная таблица цен по площади</summary><div class="tbl-s"><table>
     <thead><tr><th>Площадь</th><th>Премиум</th><th>Стандарт</th><th>Лайт</th></tr></thead><tbody>%s
@@ -220,20 +220,20 @@ def tariffs_block(title, lead_txt, cards, table_rows, perm2, svc_note):
 
 def steps(title, lead_txt, items):
     s = ''.join('<div class="st"><h3>%s</h3><p>%s</p></div>' % i for i in items)
-    return '''<section class="alt"><div class="w"><span class="eyebrow">Как это работает</span><h2>%s</h2><p class="lead">%s</p>
+    return '''<section class="alt"><div class="w"><h2>%s</h2><p class="lead">%s</p>
   <div class="steps">%s</div>
   <div class="center" style="margin-top:28px">%s</div></div></section>''' % (title, lead_txt, s, lead('Оставить заявку', source='steps'))
 
 
 def guarantees(title, lead_txt):
     g = ''.join('<div class="card"><span class="em">%s</span><h3>%s</h3><p>%s</p></div>' % x for x in GUARANTEES)
-    return '''<section class="guar"><div class="w"><span class="eyebrow">Гарантии</span><h2>%s</h2><p class="lead">%s</p>
+    return '''<section class="guar"><div class="w"><h2>%s</h2><p class="lead">%s</p>
   <div class="grid c3">%s</div></div></section>''' % (title, lead_txt, g)
 
 
 def gear(title, lead_txt, items):
     g = ''.join('<div class="card"><span class="em">%s</span><div><h3>%s</h3><p>%s</p></div></div>' % x for x in items)
-    return '''<section><div class="w gear"><span class="eyebrow">Оборудование и химия</span><h2>%s</h2><p class="lead">%s</p>
+    return '''<section><div class="w gear"><h2>%s</h2><p class="lead">%s</p>
   <div class="grid c3">%s</div></div></section>''' % (title, lead_txt, g)
 
 
@@ -242,7 +242,7 @@ def team(title, lead_txt, keys):
     for k in keys:
         n, role, d, cnt = TEAM[k]
         t += '<div class="card"><div class="av">%s</div><h3>%s</h3><p><b>%s</b></p><p style="margin-top:6px">%s</p><span class="cnt">%s</span></div>' % (n[0], n, role, d, cnt)
-    return '''<section class="alt team"><div class="w center"><span class="eyebrow">Команда</span><h2>%s</h2><p class="lead">%s</p>
+    return '''<section class="alt team"><div class="w center"><h2>%s</h2><p class="lead">%s</p>
   <div class="grid c4" style="text-align:center">%s</div></div></section>''' % (title, lead_txt, t)
 
 
@@ -251,7 +251,7 @@ def reviews(title, keys):
     for k in keys:
         n, d, t = REVIEWS[k]
         r += '<div class="rev"><span class="stars">★★★★★</span><p>«%s»</p><div class="who"><b>%s</b><span>%s</span></div></div>' % (e(t), n, d)
-    return '''<section><div class="w"><span class="eyebrow">Отзывы</span><h2>%s</h2>
+    return '''<section><div class="w"><h2>%s</h2>
   <div class="rev-head"><span class="rev-score">5,0</span><div><span class="stars" style="font-size:18px">★★★★★</span><br><span style="color:var(--mute);font-size:14px">157 оценок клиентов CleanHub</span></div></div>
   <div class="revs">%s</div>
   <p style="margin-top:16px;font-size:14px"><a href="https://cleanhub24.ru/reviews" target="_blank" rel="noopener" style="color:var(--g-d);text-decoration:underline" data-goal="reviews_click">Читать все отзывы и смотреть видео</a></p></div></section>''' % (title, r)
@@ -262,13 +262,13 @@ def offers(cards):
     for pct, name, text, btn, extra_attr, offer in cards:
         fine = '<p class="fine">Хотите скидку — напишите об этом менеджеру при оформлении заказа.</p>' if 'скидк' in (offer or '').lower() or pct.startswith('−') else ''
         c += '<div class="card"%s><div class="pct">%s</div><h3>%s</h3><p>%s</p>%s%s</div>' % (extra_attr, pct, name, text, fine, btn)
-    return '''<section class="alt offers"><div class="w"><span class="eyebrow">Акции</span><h2>Скидки на уборку</h2><p class="lead">Выберите выгодный вариант — менеджер применит скидку при подтверждении заказа.</p>
+    return '''<section class="alt offers"><div class="w"><h2>Скидки на уборку</h2><p class="lead">Выберите выгодный вариант — менеджер применит скидку при подтверждении заказа.</p>
   <div class="grid c2">%s</div></div></section>''' % c
 
 
 def faq(title, items):
     f = ''.join('<details><summary>%s</summary><p>%s</p></details>' % i for i in items)
-    return '<section class="faq"><div class="w"><span class="eyebrow">Вопросы</span><h2>%s</h2><div style="max-width:820px">%s</div></div></section>' % (title, f)
+    return '<section class="faq"><div class="w"><h2>%s</h2><div style="max-width:820px">%s</div></div></section>' % (title, f)
 
 
 def final(title, lead_txt, wa_text):
@@ -346,12 +346,12 @@ def page_general():
         facts(),
         pain('Когда пора заказывать генеральную уборку',
              'Обычное наведение порядка лишь маскирует пыль — она остаётся на верхах шкафов и в глубине радиаторов. Генеральная уборка — это полная «перезагрузка» дома.',
-             [('🧽', 'Давно не было генеральной уборки, а жир и налёт уже не берутся бытовой химией'),
-              ('🎉', 'Готовитесь к празднику, приезду гостей или к Новому году'),
-              ('⏳', 'Нет времени: лучше провести выходные с семьёй, а не со шваброй'),
-              ('🔑', 'Купили вторичку, сняли квартиру или переехали — нужно отмыть «до человека»'),
-              ('🚿', 'Плесень и известковый налёт в санузле, чёрные швы между плиткой'),
-              ('🐾', 'Дети, аллергия или питомцы — важна глубокая чистота и безопасная химия')]),
+             [('🧽', 'Давно не было генеральной уборки'),
+              ('🎉', 'Готовитесь к празднику или гостям'),
+              ('⏳', 'Нет времени на уборку'),
+              ('🔑', 'Купили, сняли или переехали'),
+              ('🚿', 'Плесень и налёт в санузле'),
+              ('🐾', 'Дети, аллергия или питомцы')]),
         calc('Рассчитайте стоимость генеральной уборки',
              'Выберите площадь и тариф — цена посчитается сразу. Это итоговая стоимость: после подтверждения менеджером она не изменится.'),
         includes('Что входит в генеральную уборку',
@@ -462,12 +462,12 @@ def page_reno():
         facts(),
         pain('Знакомая картина после ремонта?',
              'Завершение отделки — долгожданный момент, который часто омрачает строительный хаос. Обычная уборка и бытовая химия здесь не справляются.',
-             [('🌫️', 'Мелкая строительная пыль оседает снова и снова, даже после влажной уборки'),
-              ('🧱', 'Пятна затирки на новой плитке, следы скотча и краски на рамах'),
-              ('🤧', 'Пыль вызывает аллергию и дискомфорт — жить в таком воздухе нельзя'),
-              ('🏠', 'Нужно подготовить квартиру к заселению, продаже или сдаче'),
-              ('🧴', 'Цемент, клей и штукатурку не берёт бытовая химия'),
-              ('😰', 'Боитесь испортить паркет, дизайнерскую сантехнику или мрамор')]),
+             [('🌫️', 'Строительная пыль оседает снова и снова'),
+              ('🧱', 'Следы затирки, скотча и краски'),
+              ('🤧', 'Пыль вызывает аллергию'),
+              ('🏠', 'Готовим квартиру к заселению или продаже'),
+              ('🧴', 'Цемент и клей не берёт бытовая химия'),
+              ('😰', 'Боитесь испортить паркет и сантехнику')]),
         calc('Рассчитайте стоимость уборки после ремонта',
              'Выберите площадь и тариф — цена посчитается сразу. Сложные загрязнения оценим по фото, чтобы итоговая сумма не изменилась.'),
         includes('Что входит в уборку после ремонта',
