@@ -127,6 +127,7 @@
     var html = '', i = result.i;
     C.extras.forEach(function (x) {
       if (x.group) { html += renderGroup(x); return; }
+      if (x.info) { html += '<div class="x info"><div class="xt">' + esc(x.title) + '</div><div class="xd">' + esc(x.desc || '') + '</div></div>'; return; }  // строка без кнопки: только пояснение
       var q = state.x[x.id] || 0, inc = includedQty(state.tariff, x.id, i), on = q > 0;
       var priceLbl = (x.quote || x.hidePrice) ? '' : (x.from ? 'от\u00a0' : '') + money(x.price) + (x.unitShort ? '\u00a0за\u00a0' + x.unitShort : '');  // у «по фото» цены нет
       var forms = x.unitForms || [x.unit || 'шт.', x.unit || 'шт.', x.unit || 'шт.'];

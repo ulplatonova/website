@@ -141,6 +141,7 @@
 #chl .x .xp{font-size:13px;font-weight:700;color:var(--ink2);white-space:nowrap;margin-right:6px}
 #chl .x .xp i{font-style:normal;color:var(--g-d)}
 #chl .x.grp{align-items:start}
+#chl .x.info{grid-template-columns:1fr;background:var(--bg);border-style:dashed}
 #chl .x .xg{grid-column:1/-1;display:grid;gap:8px;margin-top:6px;padding-top:12px;border-top:1px dashed var(--line)}
 #chl .x .xr{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:600;font-size:15px}
 #chl .x .xr .xc{grid-row:auto;grid-column:auto}
@@ -874,6 +875,7 @@ window.CHL_CONFIG = {
     var html = '', i = result.i;
     C.extras.forEach(function (x) {
       if (x.group) { html += renderGroup(x); return; }
+      if (x.info) { html += '<div class="x info"><div class="xt">' + esc(x.title) + '</div><div class="xd">' + esc(x.desc || '') + '</div></div>'; return; }  // строка без кнопки: только пояснение
       var q = state.x[x.id] || 0, inc = includedQty(state.tariff, x.id, i), on = q > 0;
       var priceLbl = (x.quote || x.hidePrice) ? '' : (x.from ? 'от\u00a0' : '') + money(x.price) + (x.unitShort ? '\u00a0за\u00a0' + x.unitShort : '');  // у «по фото» цены нет
       var forms = x.unitForms || [x.unit || 'шт.', x.unit || 'шт.', x.unit || 'шт.'];
