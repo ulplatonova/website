@@ -7,7 +7,7 @@
   root.setAttribute('data-ready', '1');
 
   var S = C.service;
-  var state = { area: C.defaults.area, tariff: C.defaults.tariff, x: {}, touched: false, started: false };
+  var state = { area: C.defaults.area, tariff: C.defaults.tariff, x: {}, open: {}, touched: false, started: false };
   var refs = {};
   [].forEach.call(root.querySelectorAll('[data-ref]'), function (n) { refs[n.getAttribute('data-ref')] = n; });
 
@@ -40,6 +40,15 @@
     var base = big ? Math.round(state.area * S.perM2) : S.prices[tid][i];
     var lines = [], extras = 0, quote = false, from = big;
     C.extras.forEach(function (x) {
+      if (x.group) {   // химчистка: набор позиций со счётчиками, цена по фото
+        x.group.forEach(function (g) {
+          var gq = state.x[x.id + ':' + g.id] || 0;
+          if (!gq) return;
+          quote = true;
+          lines.push({ x: { title: x.shortTitle + ': ' + g.title.toLowerCase(), quote: true, unit: 'шт.' }, qty: gq, inc: 0, paid: gq, cost: 0 });
+        });
+        return;
+      }
       var q = state.x[x.id] || 0;
       if (!q) return;
       var inc = includedQty(tid, x.id, i), paid = Math.max(0, q - inc);
@@ -94,9 +103,30 @@
     refs.tariffs.innerHTML = html;
   }
 
+  function groupCount(x) { var n = 0; x.group.forEach(function (g) { n += state.x[x.id + ':' + g.id] || 0; }); return n; }
+  function renderGroup(x) {
+    var n = groupCount(x), open = !!state.open[x.id];
+    var h = '<div class="x grp' + (n ? ' on' : '') + '"><div class="xt">' + esc(x.title) + '</div><div class="xd">' + esc(x.desc || '') + '</div><div class="xc">' +
+      '<button type="button" class="sw" data-act="grp" data-id="' + x.id + '" aria-expanded="' + open + '">' + (open ? 'Свернуть' : n ? 'Выбрано: ' + n : 'Выбрать') + '</button></div>';
+    if (open) {
+      h += '<div class="xg">';
+      x.group.forEach(function (g) {
+        var q = state.x[x.id + ':' + g.id] || 0, gid = x.id + ':' + g.id;
+        h += '<div class="xr"><span>' + esc(g.title) + '</span><span class="xc">' +
+          '<button type="button" class="qb" data-act="dec" data-id="' + gid + '" aria-label="Меньше: ' + esc(g.title) + '">−</button><span class="qn">' + q + '</span>' +
+          '<button type="button" class="qb" data-act="inc" data-id="' + gid + '" aria-label="Больше: ' + esc(g.title) + '">+</button></span></div>';
+      });
+      h += '<p class="xnote">Стоимость зависит от материала и загрязнения, поэтому оценим её по фото. Пришлите фото менеджеру: ' +
+        '<a href="' + esc(waLink('Здравствуйте! Хочу рассчитать химчистку по фото.')) + '" target="_blank" rel="noopener">WhatsApp</a> или ' +
+        '<a href="https://t.me/' + esc(C.tg) + '" target="_blank" rel="noopener">Telegram</a>.</p></div>';
+    }
+    return h + '</div>';
+  }
+
   function renderExtras() {
     var html = '', i = result.i;
     C.extras.forEach(function (x) {
+      if (x.group) { html += renderGroup(x); return; }
       var q = state.x[x.id] || 0, inc = includedQty(state.tariff, x.id, i), on = q > 0;
       var priceLbl = (x.quote || x.hidePrice) ? '' : (x.from ? 'от\u00a0' : '') + money(x.price) + (x.unitShort ? '\u00a0за\u00a0' + x.unitShort : '');  // у «по фото» цены нет
       var forms = x.unitForms || [x.unit || 'шт.', x.unit || 'шт.', x.unit || 'шт.'];
@@ -166,8 +196,8 @@
   function set(patch) { for (var k in patch) state[k] = patch[k]; touch(); render(); }
   function setX(id, v) {
     var x = C.extras.filter(function (e) { return e.id === id; })[0];
-    if (!x) return;
-    v = Math.max(0, Math.min(x.toggle ? 1 : (x.max || 30), v));
+    if (!x && id.indexOf(':') < 0) return;          // позиции химчистки имеют id вида «dryclean:sofa»
+    v = Math.max(0, Math.min(x ? (x.toggle ? 1 : (x.max || 30)) : 30, v));
     state.x[id] = v; touch(); render();
   }
 
@@ -204,6 +234,7 @@
       else if (act === 'inc') setX(id, (state.x[id] || 0) + 1);
       else if (act === 'dec') setX(id, (state.x[id] || 0) - 1);
       else if (act === 'toggle') setX(id, state.x[id] ? 0 : 1);
+      else if (act === 'grp') { state.open[id] = !state.open[id]; render(); }
       return;
     }
     var l = e.target.closest('[data-lead]');

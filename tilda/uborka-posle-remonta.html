@@ -139,6 +139,12 @@
 #chl .x .xc{grid-row:1/3;grid-column:2;display:flex;align-items:center;gap:6px}
 #chl .x .xp{font-size:13px;font-weight:700;color:var(--ink2);white-space:nowrap;margin-right:6px}
 #chl .x .xp i{font-style:normal;color:var(--g-d)}
+#chl .x.grp{align-items:start}
+#chl .x .xg{grid-column:1/-1;display:grid;gap:8px;margin-top:6px;padding-top:12px;border-top:1px dashed var(--line)}
+#chl .x .xr{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:600;font-size:15px}
+#chl .x .xr .xc{grid-row:auto;grid-column:auto}
+#chl .x .xnote{font-size:13px;line-height:1.35;color:var(--ink2);margin:4px 0 0}
+#chl .x .xnote a{color:var(--g-d);text-decoration:underline;font-weight:600}
 #chl .qb{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:20px;line-height:1;font-weight:700;cursor:pointer;color:var(--ink)}
 #chl .qb:hover{border-color:var(--g)}
 #chl .qn{min-width:22px;text-align:center;font-weight:800}
@@ -405,7 +411,7 @@
     <div class="calc-steps" style="display:grid;gap:18px">
       <div class="step"><div class="step-h"><span class="step-n">1</span>Площадь помещения</div>
         <div class="area"><label class="area-in"><input data-ref="areaInput" type="text" inputmode="numeric" aria-label="Площадь, м²" value="50" maxlength="4"><span>м²</span></label>
-        <span class="area-hint">Введите общую площадь по документам</span></div></div>
+        <span class="area-hint">Введите общую площадь помещения</span></div></div>
       <div class="step"><div class="step-h"><span class="step-n">2</span>Выберите тариф</div><div class="tariffs" data-ref="tariffs"></div></div>
       <div class="step"><div class="step-h"><span class="step-n">3</span>Добавьте, если нужно</div><div class="xs" data-ref="extras"></div></div>
     </div>
@@ -431,7 +437,7 @@
 <section><div class="w">
   <h2>Цены на уборку после ремонта</h2><p class="lead">Цена зависит от площади, тарифа и сложности загрязнений. В стоимость уже включены работа бригады и профессиональные средства. Технику согласуем с менеджером.</p>
   <div class="tcards"><div class="card tc hot"><span class="hotl">ХИТ ПРОДАЖ</span><h3>Премиум</h3><div class="pr">от 16 990 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li>Включены доп. услуги: мойка всех шкафов внутри (пустых), мойка окон: от 4 до 12 створок в зависимости от площади</li></ul><a class="btn btn-p" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div><div class="card tc"><h3>Стандарт</h3><div class="pr">от 14 490 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li>Включены доп. услуги: мойка всех шкафов внутри (пустых)</li></ul><a class="btn btn-w" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div><div class="card tc"><h3>Лайт</h3><div class="pr">от 11 990 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li>Мойка сантехники, полов и плинтусов</li><li class="no">Доп. услуги не включены</li></ul><a class="btn btn-w" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div></div>
-  <p style="font-size:13px;color:var(--mute);margin-top:16px">Для площади больше 120 м² расчёт индивидуальный, от 300 ₽ за м². Площадь указывается по документам. Мойка окон, балкон, дополнительный санузел и другие услуги добавляются в калькуляторе выше.</p></div></section>
+  <p style="font-size:13px;color:var(--mute);margin-top:16px">Для площади больше 120 м² расчёт индивидуальный, от 300 ₽ за м². Мойка окон, балкон, дополнительный санузел и другие услуги добавляются в калькуляторе выше.</p></div></section>
 <section class="alt"><div class="w"><h2>От заявки до готовой к жизни квартиры</h2><p class="lead">Всё прозрачно: вы знаете цену заранее, а основную часть платите только за принятый результат.</p>
   <div class="steps"><div class="st"><h3>Заявка или фото</h3><p>Оставьте заявку или пришлите фото в мессенджер, ответим в течение 5 минут.</p></div><div class="st"><h3>Расчёт и фиксация цены</h3><p>Менеджер оценит объём и сложность, назовёт точную цену и закрепит её в договоре. Вы вносите онлайн предоплату 10%.</p></div><div class="st"><h3>Уборка по чек-листу</h3><p>Бригада приезжает в согласованное время с профессиональной химией. Технику берём вашу или привозим свою, как договорились.</p></div><div class="st"><h3>Контроль качества</h3><p>Менеджер дистанционно проверяет результат по подробному чек-листу.</p></div><div class="st"><h3>Приёмка и оплата</h3><p>Вы принимаете работу. Если что-то не устроит, исправим на месте. Остаток оплачиваете онлайн по ссылке или наличными.</p></div></div>
   <div class="center" style="margin-top:28px"><a class="btn btn-p" href="#popup:order" data-lead="steps">Оставить заявку</a></div></div></section>
@@ -634,12 +640,37 @@ window.CHL_CONFIG = {
       "toggle": true
     },
     {
-      "id": "sofa",
-      "title": "Химчистка дивана / ковра",
+      "id": "dryclean",
+      "title": "Химчистка мебели и текстиля",
+      "shortTitle": "Химчистка",
       "desc": "оценим по фото",
-      "price": 0,
       "quote": true,
-      "toggle": true
+      "group": [
+        {
+          "id": "chair",
+          "title": "Стул"
+        },
+        {
+          "id": "mattress",
+          "title": "Матрас"
+        },
+        {
+          "id": "curtains",
+          "title": "Шторы"
+        },
+        {
+          "id": "sofa",
+          "title": "Диван"
+        },
+        {
+          "id": "armchair",
+          "title": "Кресло"
+        },
+        {
+          "id": "carpet",
+          "title": "Ковёр"
+        }
+      ]
     }
   ]
 };
@@ -654,7 +685,7 @@ window.CHL_CONFIG = {
   root.setAttribute('data-ready', '1');
 
   var S = C.service;
-  var state = { area: C.defaults.area, tariff: C.defaults.tariff, x: {}, touched: false, started: false };
+  var state = { area: C.defaults.area, tariff: C.defaults.tariff, x: {}, open: {}, touched: false, started: false };
   var refs = {};
   [].forEach.call(root.querySelectorAll('[data-ref]'), function (n) { refs[n.getAttribute('data-ref')] = n; });
 
@@ -687,6 +718,15 @@ window.CHL_CONFIG = {
     var base = big ? Math.round(state.area * S.perM2) : S.prices[tid][i];
     var lines = [], extras = 0, quote = false, from = big;
     C.extras.forEach(function (x) {
+      if (x.group) {   // химчистка: набор позиций со счётчиками, цена по фото
+        x.group.forEach(function (g) {
+          var gq = state.x[x.id + ':' + g.id] || 0;
+          if (!gq) return;
+          quote = true;
+          lines.push({ x: { title: x.shortTitle + ': ' + g.title.toLowerCase(), quote: true, unit: 'шт.' }, qty: gq, inc: 0, paid: gq, cost: 0 });
+        });
+        return;
+      }
       var q = state.x[x.id] || 0;
       if (!q) return;
       var inc = includedQty(tid, x.id, i), paid = Math.max(0, q - inc);
@@ -741,9 +781,30 @@ window.CHL_CONFIG = {
     refs.tariffs.innerHTML = html;
   }
 
+  function groupCount(x) { var n = 0; x.group.forEach(function (g) { n += state.x[x.id + ':' + g.id] || 0; }); return n; }
+  function renderGroup(x) {
+    var n = groupCount(x), open = !!state.open[x.id];
+    var h = '<div class="x grp' + (n ? ' on' : '') + '"><div class="xt">' + esc(x.title) + '</div><div class="xd">' + esc(x.desc || '') + '</div><div class="xc">' +
+      '<button type="button" class="sw" data-act="grp" data-id="' + x.id + '" aria-expanded="' + open + '">' + (open ? 'Свернуть' : n ? 'Выбрано: ' + n : 'Выбрать') + '</button></div>';
+    if (open) {
+      h += '<div class="xg">';
+      x.group.forEach(function (g) {
+        var q = state.x[x.id + ':' + g.id] || 0, gid = x.id + ':' + g.id;
+        h += '<div class="xr"><span>' + esc(g.title) + '</span><span class="xc">' +
+          '<button type="button" class="qb" data-act="dec" data-id="' + gid + '" aria-label="Меньше: ' + esc(g.title) + '">−</button><span class="qn">' + q + '</span>' +
+          '<button type="button" class="qb" data-act="inc" data-id="' + gid + '" aria-label="Больше: ' + esc(g.title) + '">+</button></span></div>';
+      });
+      h += '<p class="xnote">Стоимость зависит от материала и загрязнения, поэтому оценим её по фото. Пришлите фото менеджеру: ' +
+        '<a href="' + esc(waLink('Здравствуйте! Хочу рассчитать химчистку по фото.')) + '" target="_blank" rel="noopener">WhatsApp</a> или ' +
+        '<a href="https://t.me/' + esc(C.tg) + '" target="_blank" rel="noopener">Telegram</a>.</p></div>';
+    }
+    return h + '</div>';
+  }
+
   function renderExtras() {
     var html = '', i = result.i;
     C.extras.forEach(function (x) {
+      if (x.group) { html += renderGroup(x); return; }
       var q = state.x[x.id] || 0, inc = includedQty(state.tariff, x.id, i), on = q > 0;
       var priceLbl = (x.quote || x.hidePrice) ? '' : (x.from ? 'от\u00a0' : '') + money(x.price) + (x.unitShort ? '\u00a0за\u00a0' + x.unitShort : '');  // у «по фото» цены нет
       var forms = x.unitForms || [x.unit || 'шт.', x.unit || 'шт.', x.unit || 'шт.'];
@@ -813,8 +874,8 @@ window.CHL_CONFIG = {
   function set(patch) { for (var k in patch) state[k] = patch[k]; touch(); render(); }
   function setX(id, v) {
     var x = C.extras.filter(function (e) { return e.id === id; })[0];
-    if (!x) return;
-    v = Math.max(0, Math.min(x.toggle ? 1 : (x.max || 30), v));
+    if (!x && id.indexOf(':') < 0) return;          // позиции химчистки имеют id вида «dryclean:sofa»
+    v = Math.max(0, Math.min(x ? (x.toggle ? 1 : (x.max || 30)) : 30, v));
     state.x[id] = v; touch(); render();
   }
 
@@ -851,6 +912,7 @@ window.CHL_CONFIG = {
       else if (act === 'inc') setX(id, (state.x[id] || 0) + 1);
       else if (act === 'dec') setX(id, (state.x[id] || 0) - 1);
       else if (act === 'toggle') setX(id, state.x[id] ? 0 : 1);
+      else if (act === 'grp') { state.open[id] = !state.open[id]; render(); }
       return;
     }
     var l = e.target.closest('[data-lead]');

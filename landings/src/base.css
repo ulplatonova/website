@@ -128,6 +128,12 @@
 #chl .x .xc{grid-row:1/3;grid-column:2;display:flex;align-items:center;gap:6px}
 #chl .x .xp{font-size:13px;font-weight:700;color:var(--ink2);white-space:nowrap;margin-right:6px}
 #chl .x .xp i{font-style:normal;color:var(--g-d)}
+#chl .x.grp{align-items:start}
+#chl .x .xg{grid-column:1/-1;display:grid;gap:8px;margin-top:6px;padding-top:12px;border-top:1px dashed var(--line)}
+#chl .x .xr{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:600;font-size:15px}
+#chl .x .xr .xc{grid-row:auto;grid-column:auto}
+#chl .x .xnote{font-size:13px;line-height:1.35;color:var(--ink2);margin:4px 0 0}
+#chl .x .xnote a{color:var(--g-d);text-decoration:underline;font-weight:600}
 #chl .qb{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:20px;line-height:1;font-weight:700;cursor:pointer;color:var(--ink)}
 #chl .qb:hover{border-color:var(--g)}
 #chl .qn{min-width:22px;text-align:center;font-weight:800}
