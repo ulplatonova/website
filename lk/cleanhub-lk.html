@@ -47,6 +47,9 @@
 .k-num{font-variant-numeric:tabular-nums}
 .k-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr))}
 .k-stack{display:flex;flex-direction:column;gap:16px}
+.k-sec{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding-top:24px;border-top:2px solid var(--k-line)}
+.chlk .k-sec h3{font-size:22px;margin:0}
+.k-sec h3::before{content:"";display:inline-block;width:8px;height:22px;border-radius:4px;background:var(--k-acc);vertical-align:-3px;margin-right:10px}
 .k-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .k-between{justify-content:space-between}
 
@@ -486,9 +489,9 @@ function overviewTab(){
     :'<div class="k-card"><h3>Ближайший заказ</h3><p class="k-muted">Пока нет активных заказов. Закажите уборку или химчистку, бонусы начислятся автоматически.</p><div style="margin-top:14px"><a class="k-btn k-sm" href="'+esc(C.orderUrl)+'">Заказать</a></div></div>';
   var ref='<div class="k-card"><h3>Пригласите друга</h3><p class="k-muted">Друг получит '+bonus(S.loy.referral.bonus)+' на первый заказ, и вы тоже.</p><div class="k-card-no" style="background:var(--k-bg);color:var(--k-ink);margin-top:14px"><span>'+esc(S.loy.referral.code)+'</span><button data-act="copy" data-v="'+esc(S.loy.referral.code)+'" style="background:var(--k-line);color:var(--k-ink)" aria-label="Скопировать промокод">'+ic('copy',16)+'</button></div></div>';
   var list=recent.length
-    ?'<div class="k-orders">'+recent.map(orderCard).join('')+'</div><div><button class="k-link" data-act="tab" data-v="orders">Все заказы</button></div>'
+    ?'<div class="k-orders">'+recent.map(orderCard).join('')+'</div>'
     :'<div class="k-card k-empty"><b>Заказов пока нет</b><p class="k-muted">Здесь появится история ваших заказов.</p><a class="k-btn k-sm" href="'+esc(C.orderUrl)+'">Сделать первый заказ</a></div>';
-  return'<div class="k-stack">'+loyaltyHero()+'<div class="k-grid">'+next+tgCard()+ref+'</div><h3 style="font-size:18px">Последние заказы</h3>'+list+'</div>';
+  return'<div class="k-stack">'+loyaltyHero()+'<div class="k-grid">'+next+tgCard()+ref+'</div><div class="k-sec"><h3>Последние заказы</h3>'+(recent.length?'<button class="k-link" data-act="tab" data-v="orders">Все заказы</button>':'')+'</div>'+list+'</div>';
 }
 
 function ordersTab(){
