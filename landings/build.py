@@ -218,14 +218,10 @@ def tariffs_block(title, lead_txt, cards, table_rows, perm2, svc_note):
         cs += '''<div class="card tc%s">%s<h3>%s</h3><div class="pr">от %s <small>за 40 м²</small></div><ul>%s</ul>%s</div>''' % (
             ' hot' if hot else '', '<span class="hotl">ХИТ ПРОДАЖ</span>' if hot else '', name, price, li,
             '<a class="btn %s" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a>' % ('btn-p' if hot else 'btn-w'))
-    rows = ''.join('<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (r[0], r[3], r[2], r[1]) for r in table_rows)
     return '''<section><div class="w">
   <h2>%s</h2><p class="lead">%s</p>
   <div class="tcards">%s</div>
-  <details class="tbl"><summary>Полная таблица цен по площади</summary><div class="tbl-s"><table>
-    <thead><tr><th>Площадь</th><th>Премиум</th><th>Стандарт</th><th>Лайт</th></tr></thead><tbody>%s
-    <tr><td>Более 120 м²</td><td colspan="3" style="text-align:right">индивидуально, от %s ₽ за м²</td></tr></tbody></table></div>
-    <p style="font-size:13px;color:var(--mute);padding-bottom:14px">%s</p></details></div></section>''' % (title, lead_txt, cs, rows, perm2, svc_note)
+  <p style="font-size:13px;color:var(--mute);margin-top:16px">Для площади больше 120 м² расчёт индивидуальный, от %s ₽ за м². %s</p></div></section>''' % (title, lead_txt, cs, perm2, svc_note)
 
 
 def steps(title, lead_txt, items):
