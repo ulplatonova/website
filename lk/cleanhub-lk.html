@@ -22,6 +22,7 @@
 .chlk a:not(.k-btn){color:var(--k-acc-t)}
 .chlk :where(button){font:inherit;color:inherit;cursor:pointer}
 .chlk :focus-visible{outline:3px solid var(--k-acc);outline-offset:2px}
+.k-cq{container-type:inline-size;container-name:chlkw}
 .k-shell{background:var(--k-bg);border-radius:24px;padding:20px}
 .k-ic{flex:none;display:block}
 .k-demo{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:13px;background:var(--k-warn-bg);color:var(--k-warn);padding:10px 14px;border-radius:12px;margin-bottom:16px}
@@ -144,7 +145,7 @@
 .k-x{border:0;background:none;color:var(--k-muted);display:flex;padding:4px}
 .k-toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--k-ink);color:var(--k-card);padding:11px 18px;border-radius:12px;font-size:14px;z-index:99999;max-width:calc(100vw - 32px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .k-toast.bad{background:var(--k-bad);color:#fff}
-@media (max-width:760px){
+@container chlkw (max-width:760px){
   .k-shell{padding:12px;border-radius:18px}
   .k-auth{grid-template-columns:minmax(0,1fr)}
   .k-aside{padding:24px 20px;gap:16px}
@@ -384,7 +385,7 @@ function render(){
   var h;
   if(S.view==='boot')h='<div class="k-shell"><div class="k-empty k-muted">Загружаем кабинет…</div></div>';
   else h='<div class="k-shell">'+demoBar()+(S.view==='auth'?authView():appView())+'</div>';
-  root.innerHTML=h;
+  root.innerHTML='<div class="k-cq">'+h+'</div>';
   if(S.focus){var f=root.querySelector(S.focus);if(f)f.focus();S.focus=null}
   if(S.view==='auth'&&S.step==='code')tickResend(true);
 }
