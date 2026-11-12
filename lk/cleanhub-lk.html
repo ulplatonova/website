@@ -157,9 +157,13 @@
   .k-ohead .k-chip{grid-column:1;grid-row:3;justify-self:start}
   .k-ohead .k-chev{grid-column:2;grid-row:1}
   .k-demo-btns{margin-left:0}
-  .k-top>.k-row{width:100%;flex-wrap:nowrap}
-  .k-top>.k-row .k-tabs{flex:1 1 auto}
-  .k-top>.k-row>.k-btn{padding:9px 11px;font-size:0;gap:0}
+  .k-top>.k-row{display:contents}
+  .k-top .k-hello{order:1;flex:1;min-width:0}
+  .k-top .k-btn{order:2;padding:9px 11px;font-size:0;gap:0}
+  .k-top .k-tabs{order:3;flex:1 1 100%}
+  .k-tabs button{flex:1;justify-content:center;padding:10px 4px;font-size:14px}
+  .k-tabs button .k-ic{display:none}
+  .k-hello h2{font-size:20px}
 }
 .chlk h1,.chlk h2,.chlk h3{font-family:var(--t-headline-font,'UA-brand',Arial,sans-serif);font-weight:900;letter-spacing:.005em}
 .chlk .k-card h3{font-size:17px}
