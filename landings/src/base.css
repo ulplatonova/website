@@ -79,7 +79,7 @@
 #chl .fact:nth-child(odd){border-right:1px solid var(--line)}
 #chl .fact:nth-last-child(-n+2){border-bottom:0}
 #chl .fact b{display:block;font-size:26px;line-height:1.1;font-weight:800;color:var(--g-d)}
-#chl .fact span{font-size:13px;color:var(--ink2)}
+#chl .fact span{display:block;font-size:13px;line-height:1.25;color:var(--ink2);margin-top:2px}
 
 /* карточки */
 #chl .grid{display:grid;gap:16px}
@@ -182,7 +182,7 @@
 #chl .ba .cap{position:absolute;top:12px;z-index:2;background:rgba(11,37,23,.8);color:#fff;border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 #chl .ba .cap.l{left:12px}
 #chl .ba .cap.r{right:12px;background:var(--g);color:#04170d}
-#chl .ba-cap{font-size:13px;color:var(--mute);margin-top:10px}
+#chl .ba-cap{font-size:13px;line-height:1.3;color:var(--mute);margin-top:10px}
 
 /* тарифы-карточки + таблица */
 #chl .tcards{display:grid;gap:16px}
@@ -233,7 +233,7 @@
 #chl .team .ph{aspect-ratio:1/1;border-radius:14px;background:linear-gradient(180deg,#e2f7ea,#c2e9d2);overflow:hidden;margin-bottom:12px}
 #chl .team .ph img{width:100%;height:100%;object-fit:cover;object-position:center top}
 #chl .team .av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--g-d));color:#fff;font-weight:800;font-size:26px;display:grid;place-items:center;margin:0 auto 10px}
-#chl .team .cnt{display:inline-block;margin-top:8px;background:#e8f8ee;color:var(--g-d);border-radius:8px;padding:3px 10px;font-weight:700;font-size:13px}
+#chl .team .cnt{line-height:1.3;display:inline-block;margin-top:8px;background:#e8f8ee;color:var(--g-d);border-radius:8px;padding:3px 10px;font-weight:700;font-size:13px}
 
 /* отзывы */
 #chl .rev-head{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
@@ -241,7 +241,7 @@
 #chl .revs{display:grid;gap:14px}
 #chl .rev{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px}
 #chl .rev p{font-size:15px;color:var(--ink);margin:8px 0 12px}
-#chl .rev .who{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--mute)}
+#chl .rev .who{display:flex;justify-content:space-between;gap:10px;font-size:13px;line-height:1.3;color:var(--mute)}
 #chl .rev .who b{color:var(--ink);font-size:14px}
 
 /* акции */
