@@ -41,7 +41,7 @@ POPUP = '#popup:order'
 IMG = 'https://optim.tildacdn.com/%s/-/resize/%sx/-/format/webp/%s.webp'
 
 
-PHOTO_SHA = '8bc74d3d69d88b97655d1801d5f46e32eaa68f77'  # коммит с фото в landings/photos (jsDelivr кэширует по нему)
+PHOTO_SHA = '12f3e0e58fd24ff50efbf39a0153d96708cc142d'  # коммит с фото в landings/photos (jsDelivr кэширует по нему)
 
 
 def photo(name):
@@ -502,7 +502,9 @@ def page_reno():
                      [('Лестница', photo('remont-lestnitsa-do'), photo('remont-lestnitsa-posle'), 'p'),
                       ('Кухня с островом', photo('remont-ostrov-do'), photo('remont-ostrov-posle'), 'p'),
                       ('Кухня', img('tild3339-6231-4132-b536-656135363632', 'IMG_3302.PNG', 800), img('tild6433-6564-4162-b532-656362323334', 'IMG_3303.PNG', 800)),
-                      ('Окна', img('tild6634-3161-4233-a565-343637666464', 'IMG_3294.PNG', 800), img('tild3266-3464-4762-b663-656130616161', 'IMG_3295.PNG', 800))]),
+                      ('Окна', img('tild6634-3161-4233-a565-343637666464', 'IMG_3294.PNG', 800), img('tild3266-3464-4762-b663-656130616161', 'IMG_3295.PNG', 800)),
+                      ('Рама окна', photo('remont-okno-do'), photo('remont-okno-posle'), 'p'),
+                      ('Гаражные ворота', photo('remont-vorota-do'), photo('remont-vorota-posle'), 'p')]),
         tariffs_block('Цены на уборку после ремонта',
                       'Цена зависит от площади, тарифа и сложности загрязнений. В стоимость уже включены работа бригады, профессиональные средства и пылесос. Стремянка и пароочиститель оплачиваются отдельно.',
                       [('Лайт', '11 990 ₽', False, [('Полный чек-лист уборки после ремонта', True), ('Доп. услуги не включены', False)]),
