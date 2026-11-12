@@ -153,7 +153,7 @@ def hero(h1, sub, ticks, pic, pic_alt, badge, tag, secondary_label):
 
 def facts():
     items = [('110 000+', 'проведённых уборок'), ('10+ лет', 'на рынке клининга'),
-             ('5,0', 'по 157 оценкам клиентов'), ('Возврат', 'денег, если не устроит результат')]
+             ('5,0', 'по 157 оценкам клиентов'), ('возврат', 'денег, если не устроит результат')]
     return '<div class="facts"><div class="w">%s</div></div>' % ''.join(
         '<div class="fact"><b>%s</b><span>%s</span></div>' % i for i in items)
 
