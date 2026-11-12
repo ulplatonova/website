@@ -273,6 +273,9 @@
 #chl .foot{background:#071a10;color:#8fa89a;padding:32px 0 100px;font-size:13px;line-height:1.6}
 #chl .foot a{color:#b9d0c3;text-decoration:underline}
 #chl .foot .w{display:grid;gap:14px}
+#chl .foot .addr{list-style:disc;padding-left:20px;margin-top:4px}
+#chl .foot .addr li{display:list-item;padding-left:2px}
+#chl .foot .addr li::marker{color:#5fe39a}
 #chl .foot .links{display:flex;flex-wrap:wrap;gap:6px 18px}
 
 /* мобильная панель */

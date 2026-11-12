@@ -295,7 +295,7 @@ def footer():
     return '''<footer class="foot"><div class="w">
   <div>CleanHub — клининговая компания в Москве и Московской области. Основной сайт: <a href="https://cleanhub24.ru" target="_blank" rel="noopener">cleanhub24.ru</a></div>
   <div>%s</div>
-  <div>Адреса офисов:<br>Московская область, Одинцовский г.о., Новоивановское рп, Можайское ш., вл165<br>Московская область, г. Красногорск, Ильинское ш., 1А</div>
+  <div>Адреса офисов:<ul class="addr"><li>Московская область, Одинцовский г.о., Новоивановское рп, Можайское ш., вл165</li><li>Московская область, г. Красногорск, Ильинское ш., 1А</li></ul></div>
   <div class="links">%s</div></div></footer>''' % (REQUISITES, links)
 
 
