@@ -127,7 +127,8 @@
 .k-plus{color:var(--k-acc-t);font-weight:700}
 .k-minus{color:var(--k-bad);font-weight:700}
 .k-lvls{display:grid;gap:8px}
-.k-lv{display:flex;justify-content:space-between;gap:10px;border:1.5px solid var(--k-line);border-radius:12px;padding:10px 14px}
+.k-lv{display:flex;align-items:baseline;gap:8px;white-space:nowrap;border:1.5px solid var(--k-line);border-radius:12px;padding:10px 12px;font-size:13.5px}
+.k-lv b:first-child{flex:1;min-width:0}
 .k-lv.cur{border-color:var(--k-acc);background:var(--k-tint)}
 .k-empty{text-align:center;padding:32px 16px;display:flex;flex-direction:column;gap:12px;align-items:center}
 .k-banner{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--k-card);border:1px solid var(--k-line);border-radius:24px;padding:16px 20px}
@@ -149,6 +150,7 @@
 .k-toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--k-ink);color:var(--k-card);padding:11px 18px;border-radius:12px;font-size:14px;z-index:99999;max-width:calc(100vw - 32px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .k-toast.bad{background:var(--k-bad);color:#fff}
 @container chlkw (max-width:760px){
+  .k-card{padding:18px}
   .k-shell{padding:12px;border-radius:18px}
   .k-auth{grid-template-columns:minmax(0,1fr)}
   .k-aside{padding:24px 20px;gap:16px}
@@ -230,13 +232,13 @@ function failP(m){return new Promise(function(_,rej){setTimeout(function(){rej(n
 function demoApi(){
   var RATE=.05;
   function day(n){var d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+n);return d.toISOString()}
-  function mk(id,off,status,title,items,spent,addr,slot){
+  function mk(id,off,status,title,items,spent,addr,slot,area){
     var sum=0;items.forEach(function(i){sum+=i[1]*i[2]});
     var total=sum-spent;
     return{id:id,date:day(off),status:status,title:title,
       items:items.map(function(i){return{name:i[0],qty:i[1],price:i[2]}}),
       bonusSpent:spent,total:total,bonusEarned:status==='cancel'?0:Math.round(total*RATE),
-      address:addr,slot:slot};
+      address:addr,slot:slot,area:area||0};
   }
   var LEVELS=[{name:'Гость',from:0,pct:3},{name:'Постоянный клиент',from:15000,pct:5},{name:'Премиум-клиент',from:40000,pct:7}];
   var ADDR='Москва, ул. Профсоюзная, 56, кв. 112';
@@ -247,11 +249,11 @@ function demoApi(){
     var orders=[],history=[];
     if(persona==='regular'){
       orders=[
-        mk('CH-10566',1,'new','Поддерживающая уборка',[['Уборка квартиры до 60 м²',1,4800],['Мытьё окон',3,500]],0,ADDR,'10:00–12:00'),
+        mk('CH-10566',1,'new','Поддерживающая уборка',[['Уборка квартиры',1,4800],['Мытьё окон',3,500]],0,ADDR,'10:00–12:00',53),
         mk('CH-10558',0,'work','Химчистка дивана',[['Химчистка 3-местного дивана',1,3900],['Защитная пропитка',1,900]],0,ADDR,'14:00–16:00'),
-        mk('CH-10431',-21,'done','Генеральная уборка',[['Генеральная уборка до 60 м²',1,8800],['Мытьё окон',2,500]],300,ADDR,'09:00–11:00'),
+        mk('CH-10431',-21,'done','Генеральная уборка',[['Генеральная уборка',1,8800],['Мытьё окон',2,500]],300,ADDR,'09:00–11:00',53),
         mk('CH-10317',-58,'done','Химчистка матраса',[['Химчистка матраса 160×200',1,4200]],0,ADDR,'16:00–18:00'),
-        mk('CH-10204',-97,'done','Уборка после ремонта',[['Уборка после ремонта до 60 м²',1,13000],['Вывоз строительного мусора',1,1500]],0,ADDR,'10:00–14:00'),
+        mk('CH-10204',-97,'done','Уборка после ремонта',[['Уборка после ремонта',1,13000],['Вывоз строительного мусора',1,1500]],0,ADDR,'10:00–14:00',53),
         mk('CH-10188',-110,'cancel','Мытьё окон',[['Мытьё окон',4,500]],0,ADDR,'12:00–14:00')
       ];
       history.push({date:day(-130),title:'Бонусы за регистрацию',delta:C.welcomeBonus});
@@ -467,7 +469,7 @@ function orderBody(o){
     steps='<div class="k-steps">'+['Принят','В работе','Выполнен'].map(function(t,n){return'<div class="'+(n<=i?'on':'')+'">'+t+'</div>'}).join('')+'</div>';
   }
   var earn=o.status==='cancel'?'':'<div><dt>Бонусы</dt><dd class="k-plus">+'+bonus(o.bonusEarned)+(o.status==='done'?'':' после выполнения')+'</dd></div>';
-  return'<div class="k-obody">'+steps+'<dl class="k-meta"><div><dt>Адрес</dt><dd>'+esc(o.address)+'</dd></div><div><dt>Время</dt><dd>'+dFmt(o.date)+', '+esc(o.slot)+'</dd></div>'+earn+'</dl>'+
+  return'<div class="k-obody">'+steps+'<dl class="k-meta"><div><dt>Адрес</dt><dd>'+esc(o.address)+'</dd></div><div><dt>Время</dt><dd>'+dFmt(o.date)+', '+esc(o.slot)+'</dd></div>'+(o.area?'<div><dt>Площадь</dt><dd>'+o.area+'\u00A0м²</dd></div>':'')+earn+'</dl>'+
     '<table class="k-items"><tbody>'+rows+'</tbody></table>'+
     '<div class="k-row" style="margin-top:14px"><a class="k-btn k-sm" href="'+esc(C.orderUrl)+(C.orderUrl.indexOf('?')<0?'?':'&')+'repeat='+encodeURIComponent(o.id)+'">'+ic('repeat',16)+' Повторить заказ</a>'+
     '<a class="k-btn k-ghost k-sm" href="'+esc(C.supportUrl)+'" target="_blank" rel="noopener">Вопрос по заказу</a></div></div>';
