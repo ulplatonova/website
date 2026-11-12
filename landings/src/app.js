@@ -98,10 +98,12 @@
     var html = '', i = result.i;
     C.extras.forEach(function (x) {
       var q = state.x[x.id] || 0, inc = includedQty(state.tariff, x.id, i), on = q > 0;
-      var priceLbl = x.quote ? '' : (x.from ? 'от ' : '') + money(x.price) + (x.unitShort ? '/' + x.unitShort : '');
-      var incLbl = inc ? '<i>' + (inc > 99 ? 'входит в тариф' : 'в тарифе: ' + inc) + '</i> · ' : '';
+      var priceLbl = (x.quote || x.hidePrice) ? '' : (x.from ? 'от\u00a0' : '') + money(x.price) + (x.unitShort ? '/' + x.unitShort : '');  // у «по фото» и скрытых цен подписи нет
+      var forms = x.unitForms || [x.unit || 'шт.', x.unit || 'шт.', x.unit || 'шт.'];
+      var incLbl = inc ? '<i>' + (inc > 99 ? 'входит в тариф' : 'в тарифе: ' + inc + '\u00a0' + plural(inc, forms)) + '</i>' : '';
+      var parts = [incLbl, priceLbl, x.desc ? esc(x.desc) : ''].filter(Boolean).join(' · ');
       html += '<div class="x' + (on ? ' on' : '') + '"><div class="xt">' + esc(x.title) + '</div>' +
-        '<div class="xd">' + incLbl + priceLbl + (x.desc ? (priceLbl ? ' · ' : '') + esc(x.desc) : '') + '</div><div class="xc">' +
+        '<div class="xd">' + parts + '</div><div class="xc">' +
         (x.toggle
           ? '<button type="button" class="sw" data-act="toggle" data-id="' + x.id + '" aria-pressed="' + on + '">' + (on ? 'Добавлено' : 'Добавить') + '</button>'
           : '<button type="button" class="qb" data-act="dec" data-id="' + x.id + '" aria-label="Меньше">−</button><span class="qn">' + q + '</span>' +
