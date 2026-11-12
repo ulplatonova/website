@@ -126,7 +126,7 @@
         (l.x.quote ? 'по фото' : !l.paid ? 'в тарифе' : (l.x.from ? 'от ' : '') + money(l.cost)) + '</span></div>';
     });
     html += '</div>';
-    html += '<a class="btn btn-p" href="' + esc(C.popupHook) + '" data-lead="calc">Зафиксировать цену и заказать</a>';
+    html += '<a class="btn btn-p" href="' + esc(C.popupHook) + '" data-lead="calc">Зафиксировать цену</a>';
     html += '<div class="alt-row"><a href="' + esc(waLink(summaryText(r, { name: 'whatsapp' }))) + '" target="_blank" rel="noopener" data-msg="wa">WhatsApp</a>' +
       '<a href="https://t.me/' + esc(C.tg) + '" target="_blank" rel="noopener" data-msg="tg">Telegram</a></div>';
     html += '<div class="note">' + esc(C.note) + '</div>';

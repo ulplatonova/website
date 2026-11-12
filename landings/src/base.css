@@ -145,7 +145,7 @@
 #chl .sum .lines div{display:flex;justify-content:space-between;gap:12px}
 #chl .sum .lines span:last-child{color:#fff;font-weight:600;white-space:nowrap}
 #chl .sum .note{font-size:13px;color:#a9c4b4;margin-top:12px;line-height:1.4}
-#chl .sum .btn{width:100%}
+#chl .sum .btn{width:100%;white-space:nowrap}
 #chl .sum .alt-row{display:flex;gap:8px;margin-top:10px}
 #chl .sum .alt-row a{flex:1;min-height:46px;border-radius:12px;border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:14px}
 #chl .sum .alt-row a:hover{background:rgba(255,255,255,.08)}
