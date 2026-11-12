@@ -332,7 +332,7 @@ def page_general():
             {'id': 'oven', 'title': 'Чистка духовки', 'desc': 'внутри и снаружи', 'price': 1000, 'from': True, 'unit': 'шт.', 'max': 3},
             {'id': 'fridge', 'title': 'Мойка холодильника', 'desc': 'полки, ящики, дверцы', 'price': 1500, 'from': True, 'unit': 'шт.', 'max': 3},
             {'id': 'microwave', 'title': 'Мойка СВЧ', 'desc': 'внутри и снаружи', 'price': 500, 'from': True, 'unit': 'шт.', 'max': 3},
-            {'id': 'windows', 'title': 'Мойка окон', 'desc': 'створки, рамы, подоконники', 'price': 550, 'unit': 'створок', 'unitForms': ['створка', 'створки', 'створок'], 'unitShort': 'створка', 'max': 40},
+            {'id': 'windows', 'title': 'Мойка окон', 'desc': 'створки, рамы, подоконники', 'price': 550, 'unit': 'створок', 'unitForms': ['створка', 'створки', 'створок'], 'unitShort': 'створку', 'max': 40},
             {'id': 'wardrobe', 'title': 'Мойка пустых шкафов', 'desc': 'внутри и снаружи', 'price': 2000, 'from': True, 'unit': 'шт.', 'max': 20},
             {'id': 'chandelier', 'title': 'Сложные люстры', 'desc': 'плафоны, подвески, хрусталь', 'price': 1000, 'from': True, 'unit': 'шт.', 'max': 10},
             {'id': 'balcony', 'title': 'Уборка балкона', 'desc': 'пыль, мойка пола', 'price': 1000, 'from': True, 'unit': 'шт.', 'max': 5},
@@ -454,7 +454,7 @@ def page_reno():
                          'premium': {'wardrobe': 999, 'windows': [4, 6, 8, 10, 12]}},
         },
         'extras': [
-            {'id': 'windows', 'title': 'Мойка окон после ремонта', 'desc': 'пыль, краска, клей, плёнка', 'price': 750, 'unit': 'створок', 'unitForms': ['створка', 'створки', 'створок'], 'hidePrice': True, 'max': 40},
+            {'id': 'windows', 'title': 'Мойка окон после ремонта', 'desc': 'пыль, краска, клей, плёнка', 'price': 750, 'unit': 'створок', 'unitForms': ['створка', 'створки', 'створок'], 'unitShort': 'створку', 'max': 40},
             {'id': 'wardrobe', 'title': 'Мойка пустых шкафов', 'desc': 'внутри и снаружи', 'price': 2000, 'from': True, 'unit': 'шт.', 'max': 20},
             {'id': 'bathroom', 'title': 'Дополнительный санузел', 'desc': 'если санузлов больше одного', 'price': 2000, 'unit': 'шт.', 'max': 5},
             {'id': 'balcony', 'title': 'Уборка балкона', 'desc': 'строительная пыль, мойка пола', 'price': 2000, 'from': True, 'unit': 'шт.', 'max': 5},
