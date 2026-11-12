@@ -37,6 +37,7 @@
 .k-btn.k-ghost:hover{background:var(--k-tint);color:var(--k-ink)}
 .k-btn.k-tg{background:#229ED9;color:#fff}
 .k-btn.k-tg:hover{background:#1B86B9;color:#fff}
+.k-btn.k-out{padding:10px 12px}
 .k-btn.k-sm{padding:10px 18px;font-size:14px;border-radius:30px}
 .k-btn.k-block{width:100%}
 .k-link{background:none;border:0;padding:0;color:var(--k-acc-t);text-decoration:underline;text-underline-offset:3px;font-size:inherit}
@@ -47,6 +48,24 @@
 .k-num{font-variant-numeric:tabular-nums}
 .k-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr))}
 .k-stack{display:flex;flex-direction:column;gap:16px}
+.k-ord{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:16px;align-items:start}
+.k-sum{position:sticky;top:16px}
+.k-svcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
+.k-svc{text-align:left;border:1.5px solid var(--k-line);background:var(--k-card);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.k-svc b{font-size:14.5px}
+.k-svc[aria-pressed="true"]{border-color:var(--k-acc);background:var(--k-tint);box-shadow:inset 0 0 0 1px var(--k-acc)}
+.k-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.k-extra{display:flex;gap:10px;align-items:center;justify-content:space-between;border:1.5px solid var(--k-line);border-radius:14px;padding:10px 12px;cursor:pointer}
+.k-extra input{width:18px;height:18px;accent-color:var(--k-acc);flex:none}
+.k-extra span:first-of-type{flex:1}
+.k-line{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px}
+.k-line.k-pay{font-size:18px;font-weight:800;border-top:1px solid var(--k-line);margin-top:6px;padding-top:12px}
+.k-bonus{border:1.5px solid var(--k-line);border-radius:16px;padding:12px 14px;margin:12px 0}
+.k-bonus input[type=range]{width:100%;accent-color:var(--k-acc);margin:10px 0 2px}
+.k-earn{background:var(--k-tint);color:var(--k-acc-t);border-radius:12px;padding:9px 12px;font-size:13.5px;font-weight:600;margin-top:10px}
+.k-done{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.k-done .k-okc{width:52px;height:52px;border-radius:50%;background:var(--k-tint);color:var(--k-acc-t);display:grid;place-items:center}
+textarea.k-in{resize:vertical;min-height:84px;font-size:15px}
 .k-sec{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding-top:24px;border-top:2px solid var(--k-line)}
 .chlk .k-sec h3{font-size:22px;margin:0}
 .k-sec h3::before{content:"";display:inline-block;width:8px;height:22px;border-radius:4px;background:var(--k-acc);vertical-align:-3px;margin-right:10px}
@@ -150,6 +169,13 @@
 .k-toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--k-ink);color:var(--k-card);padding:11px 18px;border-radius:12px;font-size:14px;z-index:99999;max-width:calc(100vw - 32px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .k-toast.bad{background:var(--k-bad);color:#fff}
 @container chlkw (max-width:760px){
+  .k-ord{grid-template-columns:minmax(0,1fr)}
+  .k-sum{position:static}
+  .k-two{grid-template-columns:minmax(0,1fr)}
+  .k-svcs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .k-svc span{display:none}
+  .k-svc{padding:11px 12px}
+  .k-svc b{font-size:13px;overflow-wrap:anywhere}
   .k-card{padding:18px}
   .k-shell{padding:12px;border-radius:18px}
   .k-auth{grid-template-columns:minmax(0,1fr)}
@@ -165,8 +191,9 @@
   .k-demo-btns{margin-left:0}
   .k-top>.k-row{display:contents}
   .k-top .k-hello{order:1;flex:1;min-width:0}
-  .k-top .k-btn{order:2;padding:9px 11px;font-size:0;gap:0}
-  .k-top .k-tabs{order:3;flex:1 1 100%}
+  .k-top .k-out{order:2}
+  .k-top .k-new{order:3;flex:1 1 100%}
+  .k-top .k-tabs{order:4;flex:1 1 100%}
   .k-tabs button{flex:1;justify-content:center;padding:10px 4px;font-size:14px}
   .k-tabs button .k-ic{display:none}
   .k-hello h2{font-size:20px}
@@ -189,7 +216,18 @@ var C={
   mode:'demo',                          // 'demo' — тестовые данные; 'live' — работа с вашим сервером
   apiBase:'https://api.cleanhub24.ru/lk', // адрес вашего бэкенда (прокси к Тейке, CRM и Telegram-боту)
   telegramBot:'cleanhub24_bot',         // имя Telegram-бота без @
-  orderUrl:'/#order',                   // страница/форма заказа на сайте
+  // Услуги и цены для оформления заказа в кабинете. Цены демо: в боевом режиме сервер пересчитывает и подтверждает сумму.
+  // unit: 'm2' — считаем по площади, иначе по количеству (qtyLabel — подпись поля).
+  services:[
+    {id:'support',name:'Поддерживающая уборка',unit:'m2',price:90,hint:'Считаем по площади'},
+    {id:'general',name:'Генеральная уборка',unit:'m2',price:165,hint:'Считаем по площади'},
+    {id:'repair',name:'Уборка после ремонта',unit:'m2',price:245,hint:'Считаем по площади'},
+    {id:'windows',name:'Мытьё окон',unit:'pcs',price:500,qtyLabel:'Количество окон',def:4,hint:'Считаем по числу окон'},
+    {id:'sofa',name:'Химчистка дивана',unit:'pcs',price:1300,qtyLabel:'Количество мест',def:3,hint:'Считаем по числу мест'}
+  ],
+  extras:[{id:'fridge',name:'Мытьё холодильника',price:500},{id:'oven',name:'Мытьё духовки',price:800},{id:'balcony',name:'Уборка балкона',price:800}],
+  slots:['09:00–11:00','11:00–13:00','13:00–15:00','15:00–17:00','17:00–19:00'],
+  defaultArea:50,
   supportUrl:'https://t.me/cleanhub24_support',
   privacyUrl:'/privacy',
   welcomeBonus:300,
@@ -228,6 +266,17 @@ var store={
 function wait(v,ms){return new Promise(function(r){setTimeout(function(){r(v)},ms==null?350:ms)})}
 function failP(m){return new Promise(function(_,rej){setTimeout(function(){rej(new Error(m))},350)})}
 
+/* ================= РАСЧЁТ ЗАКАЗА ================= */
+function svcById(id){for(var i=0;i<C.services.length;i++)if(C.services[i].id===id)return C.services[i];return C.services[0]}
+function quoteCore(serviceId,qty,extraIds){
+  var sv=svcById(serviceId),q=Math.max(0,Number(qty)||0),lines=[],total=0;
+  var base=Math.round(sv.price*q);
+  lines.push({name:sv.name+(sv.unit==='m2'?', '+q+'\u00A0м²':' × '+q),sum:base,item:{name:sv.name+(sv.unit==='m2'?', '+q+' м²':''),qty:sv.unit==='m2'?1:q,price:sv.unit==='m2'?base:sv.price}});
+  total+=base;
+  C.extras.forEach(function(x){if(extraIds&&extraIds.indexOf(x.id)>=0){lines.push({name:x.name,sum:x.price,item:{name:x.name,qty:1,price:x.price}});total+=x.price}});
+  return{lines:lines,total:total,svc:sv,qty:q};
+}
+
 /* ================= API: ДЕМО ================= */
 function demoApi(){
   var RATE=.05;
@@ -256,6 +305,7 @@ function demoApi(){
         mk('CH-10204',-97,'done','Уборка после ремонта',[['Уборка после ремонта',1,13000],['Вывоз строительного мусора',1,1500]],0,ADDR,'10:00–14:00',53),
         mk('CH-10188',-110,'cancel','Мытьё окон',[['Мытьё окон',4,500]],0,ADDR,'12:00–14:00')
       ];
+      [['support',53],['sofa',3],['general',53],null,['repair',53],['windows',4]].forEach(function(x,i){if(x){orders[i].svc=x[0];orders[i].qty=x[1]}});
       history.push({date:day(-130),title:'Бонусы за регистрацию',delta:C.welcomeBonus});
       orders.slice().reverse().forEach(function(o){
         if(o.status!=='done')return;
@@ -295,6 +345,19 @@ function demoApi(){
     updateProfile:function(patch){
       for(var k in patch)D.user[k]=patch[k];
       save();return wait({user:D.user},250);
+    },
+    createOrder:function(pl){
+      var q=quoteCore(pl.service,pl.qty,pl.extras),L=loyalty(),li=levelInfo(L);
+      if(!pl.address||!String(pl.address).trim())return failP('Укажите адрес.');
+      if(!pl.date)return failP('Выберите дату.');
+      if(q.total<=0)return failP('Укажите площадь или количество.');
+      var maxB=Math.max(0,Math.min(L.balance,Math.floor(q.total*L.maxPay/100))),b=Math.max(0,Math.min(Math.round(pl.bonusSpend)||0,maxB));
+      var pay=q.total-b,id='CH-'+(10567+D.orders.length);
+      var o={id:id,date:new Date(pl.date+'T12:00:00').toISOString(),status:'new',title:q.svc.name,items:q.lines.map(function(l){return l.item}),
+        bonusSpent:b,total:pay,bonusEarned:Math.round(pay*li.cur.pct/100),address:pl.address,slot:pl.slot,area:q.svc.unit==='m2'?q.qty:0,svc:q.svc.id,qty:q.qty,comment:pl.comment||''};
+      D.orders.unshift(o);
+      if(b)D.history.unshift({date:new Date().toISOString(),title:'Списание в заказе '+id,delta:-b});
+      save();return wait({order:o},600);
     },
     promo:function(code){
       code=String(code||'').trim().toUpperCase();
@@ -341,6 +404,7 @@ function liveApi(){
     me:function(){return req('/me')},
     orders:function(){return req('/orders').then(function(j){return j.orders||j})},
     updateProfile:function(p){return req('/me','PATCH',p)},
+    createOrder:function(pl){return req('/orders','POST',pl).then(function(j){return j.order?j:{order:j}})},
     promo:function(code){return req('/loyalty/promo','POST',{code:code})},
     tgLink:function(){return req('/telegram/link','POST')},
     tgStatus:function(t){return req('/telegram/status?token='+encodeURIComponent(t))},
@@ -354,7 +418,7 @@ var DEMO=C.mode!=='live';
 var API=DEMO?demoApi():liveApi();
 
 /* ================= СОСТОЯНИЕ ================= */
-var S={view:'boot',authTab:'login',step:'form',phone:'',name:'',email:'',agree:true,code:'',err:'',busy:false,
+var S={form:null,done:null,view:'boot',authTab:'login',step:'form',phone:'',name:'',email:'',agree:true,code:'',err:'',busy:false,
   tg:null,tab:'overview',filter:'all',open:{},user:null,loy:null,orders:[],draft:null,newAddr:'',promo:'',focus:null};
 var T={poll:null,resend:null,left:0};
 var STATUS={new:{t:'Принят',c:'blue'},work:{t:'В работе',c:'warn'},done:{t:'Выполнен',c:'ok'},cancel:{t:'Отменён',c:'off'}};
@@ -471,7 +535,7 @@ function orderBody(o){
   var earn=o.status==='cancel'?'':'<div><dt>Бонусы</dt><dd class="k-plus">+'+bonus(o.bonusEarned)+(o.status==='done'?'':' после выполнения')+'</dd></div>';
   return'<div class="k-obody">'+steps+'<dl class="k-meta"><div><dt>Адрес</dt><dd>'+esc(o.address)+'</dd></div><div><dt>Время</dt><dd>'+dFmt(o.date)+', '+esc(o.slot)+'</dd></div>'+(o.area?'<div><dt>Площадь</dt><dd>'+o.area+'\u00A0м²</dd></div>':'')+earn+'</dl>'+
     '<table class="k-items"><tbody>'+rows+'</tbody></table>'+
-    '<div class="k-row" style="margin-top:14px"><a class="k-btn k-sm" href="'+esc(C.orderUrl)+(C.orderUrl.indexOf('?')<0?'?':'&')+'repeat='+encodeURIComponent(o.id)+'">'+ic('repeat',16)+' Повторить заказ</a>'+
+    '<div class="k-row" style="margin-top:14px"><button class="k-btn k-sm" data-act="repeat" data-id="'+esc(o.id)+'">'+ic('repeat',16)+' Повторить заказ</button>'+
     '<a class="k-btn k-ghost k-sm" href="'+esc(C.supportUrl)+'" target="_blank" rel="noopener">Вопрос по заказу</a></div></div>';
 }
 function orderCard(o){return'<div class="k-order'+(S.open[o.id]?' open':'')+'">'+orderHead(o)+orderBody(o)+'</div>'}
@@ -488,11 +552,11 @@ function overviewTab(){
   var act=activeOrders()[0],recent=S.orders.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date)}).slice(0,3);
   var next=act
     ?'<div class="k-card"><h3>Ближайший заказ</h3><p><b>'+esc(act.title)+'</b></p><p class="k-muted k-small">'+dFmt(act.date)+', '+esc(act.slot)+'</p><div class="k-row" style="margin-top:12px"><span class="k-chip '+STATUS[act.status].c+'">'+STATUS[act.status].t+'</span><span class="k-num"><b>'+money(act.total)+'</b></span></div><div style="margin-top:14px"><button class="k-btn k-ghost k-sm" data-act="open-order" data-id="'+esc(act.id)+'">Подробнее</button></div></div>'
-    :'<div class="k-card"><h3>Ближайший заказ</h3><p class="k-muted">Пока нет активных заказов. Закажите уборку или химчистку, бонусы начислятся автоматически.</p><div style="margin-top:14px"><a class="k-btn k-sm" href="'+esc(C.orderUrl)+'">Заказать</a></div></div>';
+    :'<div class="k-card"><h3>Ближайший заказ</h3><p class="k-muted">Пока нет активных заказов. Закажите уборку или химчистку, бонусы начислятся автоматически.</p><div style="margin-top:14px"><button class="k-btn k-sm" data-act="new-order">Заказать</button></div></div>';
   var ref='<div class="k-card"><h3>Пригласите друга</h3><p class="k-muted">Друг получит '+bonus(S.loy.referral.bonus)+' на первый заказ, и вы тоже.</p><div class="k-card-no" style="background:var(--k-bg);color:var(--k-ink);margin-top:14px"><span>'+esc(S.loy.referral.code)+'</span><button data-act="copy" data-v="'+esc(S.loy.referral.code)+'" style="background:var(--k-line);color:var(--k-ink)" aria-label="Скопировать промокод">'+ic('copy',16)+'</button></div></div>';
   var list=recent.length
     ?'<div class="k-orders">'+recent.map(orderCard).join('')+'</div>'
-    :'<div class="k-card k-empty"><b>Заказов пока нет</b><p class="k-muted">Здесь появится история ваших заказов.</p><a class="k-btn k-sm" href="'+esc(C.orderUrl)+'">Сделать первый заказ</a></div>';
+    :'<div class="k-card k-empty"><b>Заказов пока нет</b><p class="k-muted">Здесь появится история ваших заказов.</p><button class="k-btn k-sm" data-act="new-order">Сделать первый заказ</button></div>';
   return'<div class="k-stack">'+loyaltyHero()+'<div class="k-grid">'+next+tgCard()+ref+'</div><div class="k-sec"><h3>Последние заказы</h3>'+(recent.length?'<button class="k-link" data-act="tab" data-v="orders">Все заказы</button>':'')+'</div>'+list+'</div>';
 }
 
@@ -502,7 +566,7 @@ function ordersTab(){
   });
   var chips=[['all','Все'],['active','Активные'],['done','Выполненные']].map(function(x){return'<button data-act="filter" data-v="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+'</button>'}).join('');
   var body=list.length?'<div class="k-orders">'+list.map(orderCard).join('')+'</div>'
-    :'<div class="k-card k-empty"><b>'+(S.orders.length?'В этом списке пусто':'Заказов пока нет')+'</b><p class="k-muted">'+(S.orders.length?'Выберите другой фильтр.':'Оформите первый заказ, и он появится здесь.')+'</p><a class="k-btn k-sm" href="'+esc(C.orderUrl)+'">Заказать</a></div>';
+    :'<div class="k-card k-empty"><b>'+(S.orders.length?'В этом списке пусто':'Заказов пока нет')+'</b><p class="k-muted">'+(S.orders.length?'Выберите другой фильтр.':'Оформите первый заказ, и он появится здесь.')+'</p><button class="k-btn k-sm" data-act="new-order">Заказать</button></div>';
   return'<div class="k-stack"><div class="k-row k-between"><h3 style="font-size:20px">Мои заказы</h3><div class="k-filters">'+chips+'</div></div>'+body+'</div>';
 }
 
@@ -550,13 +614,113 @@ function profileTab(){
     '</div></div>';
 }
 
+function isoDate(d){var m=d.getMonth()+1,dd=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd}
+function formDefaults(from){
+  var u=S.user,area=C.defaultArea;
+  S.orders.forEach(function(o){if(o.area&&area===C.defaultArea)area=o.area});
+  var t=new Date();t.setDate(t.getDate()+1);
+  S.lastArea=area;
+  var f={service:'general',qty:area,extras:{},date:isoDate(t),slot:C.slots[1],comment:'',useBonus:false,bonus:0,
+    addrId:u.addresses.length?u.addresses[0].id:'other',addrText:''};
+  if(from){
+    if(from.svc){f.service=from.svc;f.qty=from.qty||f.qty}
+    if(from.slot&&C.slots.indexOf(from.slot)>=0)f.slot=from.slot;
+    var m=u.addresses.filter(function(a){return a.text===from.address})[0];
+    if(m)f.addrId=m.id;else{f.addrId='other';f.addrText=from.address||''}
+  }
+  return f;
+}
+function formQuote(){
+  var f=S.form,ids=Object.keys(f.extras).filter(function(k){return f.extras[k]});
+  var q=quoteCore(f.service,f.qty,ids),L=S.loy,li=levelInfo(L);
+  q.maxBonus=Math.max(0,Math.min(L.balance,Math.floor(q.total*L.maxPay/100)));
+  q.bonus=f.useBonus?Math.min(Math.max(0,Math.round(f.bonus)||0),q.maxBonus):0;
+  q.pay=q.total-q.bonus;q.pct=li.cur.pct;q.earn=Math.round(q.pay*q.pct/100);q.extraIds=ids;
+  return q;
+}
+function sumLinesHtml(q){return q.lines.map(function(l){return'<div class="k-line"><span>'+esc(l.name)+'</span><span class="k-num">'+money(l.sum)+'</span></div>'}).join('')}
+function sumTotalHtml(q){
+  return(q.bonus?'<div class="k-line"><span>Всего за услуги</span><span class="k-num">'+money(q.total)+'</span></div><div class="k-line"><span>Оплачено бонусами</span><span class="k-num k-plus">−'+money(q.bonus)+'</span></div>':'')+
+    '<div class="k-line k-pay"><span>К оплате</span><span class="k-num">'+money(q.pay)+'</span></div>'+
+    '<div class="k-earn">+'+bonus(q.earn)+' после выполнения · кешбэк '+q.pct+'%</div>';
+}
+function bonusInfoHtml(q){return'Спишем '+bonus(q.bonus)+' из '+bonus(q.maxBonus)+' возможных'}
+function refreshForm(){
+  var q=formQuote(),f=S.form;
+  if(f.useBonus)f.bonus=q.bonus;
+  var a=root.querySelector('[data-sumlines]'),b=root.querySelector('[data-sumtotal]'),r=root.querySelector('[data-bonusrange]'),i=root.querySelector('[data-bonusinfo]'),box=root.querySelector('[data-bonusbox]'),btn=root.querySelector('[data-act=submit-order]');
+  if(a)a.innerHTML=sumLinesHtml(q);
+  if(b)b.innerHTML=sumTotalHtml(q);
+  if(r){r.max=q.maxBonus;r.value=q.bonus}
+  if(i)i.textContent=bonusInfoHtml(q);
+  if(box)box.hidden=!f.useBonus||q.maxBonus<=0;
+  if(btn)btn.disabled=q.total<=0;
+}
+function onFormChange(b){
+  var f=S.form;
+  if(b==='f.useBonus'&&f.useBonus){f.bonus=formQuote().maxBonus}
+  if(b==='f.addrId'){render();return}
+  refreshForm();
+}
+function orderView(){
+  var f=S.form,u=S.user;
+  if(S.done){
+    var o=S.done;
+    return'<div class="k-card k-done"><span class="k-okc">'+ic('check',28)+'</span><h3 style="margin:0;font-size:22px">Заказ № '+esc(o.id)+' принят</h3>'+
+      '<p class="k-muted">'+esc(o.title)+', '+dFmt(o.date)+', '+esc(o.slot)+'<br>'+esc(o.address)+'</p>'+
+      '<p><b>К оплате: '+money(o.total)+'</b>'+(o.bonusSpent?' <span class="k-muted">(списано '+bonus(o.bonusSpent)+')</span>':'')+'</p>'+
+      '<p class="k-plus">+'+bonus(o.bonusEarned)+' начислим после выполнения</p>'+
+      '<p class="k-muted k-small">'+(u.tg&&u.tg.connected?'Статус заказа придёт вам в Telegram.':'Менеджер свяжется с вами для подтверждения. Подключите Telegram в профиле, чтобы следить за статусом в чате.')+'</p>'+
+      '<div class="k-row"><button class="k-btn" data-act="tab" data-v="orders">Мои заказы</button><button class="k-btn k-ghost" data-act="new-order">Заказать ещё</button></div></div>';
+  }
+  var sv=svcById(f.service),q=formQuote();
+  var svcs=C.services.map(function(s){return'<button type="button" class="k-svc" data-act="pick-svc" data-v="'+s.id+'" aria-pressed="'+(f.service===s.id)+'"><b>'+esc(s.name)+'</b><span class="k-muted k-small">'+esc(s.hint||'')+'</span></button>'}).join('');
+  var extras=C.extras.map(function(x){return'<label class="k-extra"><input type="checkbox" data-bind="f.ex.'+x.id+'"'+(f.extras[x.id]?' checked':'')+'><span>'+esc(x.name)+'</span><span class="k-muted k-num">+'+money(x.price)+'</span></label>'}).join('');
+  var slots=C.slots.map(function(t){return'<option'+(t===f.slot?' selected':'')+'>'+t+'</option>'}).join('');
+  var addrSel=u.addresses.length?'<div class="k-field"><label for="chlk-f-addr">Адрес</label><select id="chlk-f-addr" class="k-in" data-bind="f.addrId">'+u.addresses.map(function(a){return'<option value="'+esc(a.id)+'"'+(f.addrId===a.id?' selected':'')+'>'+esc(a.label)+': '+esc(a.text)+'</option>'}).join('')+'<option value="other"'+(f.addrId==='other'?' selected':'')+'>Другой адрес…</option></select></div>':'';
+  var addrIn=(!u.addresses.length||f.addrId==='other')?'<div class="k-field"><label for="chlk-f-addrtext">'+(u.addresses.length?'Новый адрес':'Адрес')+'</label><input id="chlk-f-addrtext" class="k-in" placeholder="Город, улица, дом, квартира" autocomplete="street-address" data-bind="f.addrText" value="'+esc(f.addrText)+'"></div>':'';
+  var form='<div class="k-stack">'+
+    '<div class="k-card k-stack" style="gap:14px"><h3 style="margin:0">Что нужно сделать</h3><div class="k-svcs">'+svcs+'</div>'+
+      '<div class="k-field"><label for="chlk-f-qty">'+(sv.unit==='m2'?'Площадь, м²':esc(sv.qtyLabel))+'</label><input id="chlk-f-qty" class="k-in" type="number" inputmode="numeric" min="1" max="1000" data-bind="f.qty" value="'+esc(f.qty)+'"></div>'+
+      '<div class="k-field"><label>Дополнительно</label><div class="k-stack" style="gap:8px">'+extras+'</div></div></div>'+
+    '<div class="k-card k-stack" style="gap:14px"><h3 style="margin:0">Когда и куда приехать</h3><div class="k-two">'+
+      '<div class="k-field"><label for="chlk-f-date">Дата</label><input id="chlk-f-date" class="k-in" type="date" min="'+isoDate(new Date())+'" data-bind="f.date" value="'+esc(f.date)+'"></div>'+
+      '<div class="k-field"><label for="chlk-f-slot">Время</label><select id="chlk-f-slot" class="k-in" data-bind="f.slot">'+slots+'</select></div></div>'+
+      addrSel+addrIn+
+      '<div class="k-field"><label for="chlk-f-comment">Комментарий (домофон, питомцы, что важно учесть)</label><textarea id="chlk-f-comment" class="k-in" data-bind="f.comment">'+esc(f.comment)+'</textarea></div></div></div>';
+  var sum='<aside class="k-card k-sum"><h3>Ваш заказ</h3><div data-sumlines>'+sumLinesHtml(q)+'</div>'+
+    '<div class="k-bonus"><label class="k-row k-between" style="flex-wrap:nowrap;cursor:pointer"><span><b>Оплатить бонусами</b><br><span class="k-muted k-small">Доступно '+bonus(S.loy.balance)+', до '+S.loy.maxPay+'% заказа</span></span><span class="k-sw"><input type="checkbox" data-bind="f.useBonus"'+(f.useBonus?' checked':'')+(S.loy.balance<=0?' disabled':'')+' aria-label="Оплатить бонусами"><span></span></span></label>'+
+      '<div data-bonusbox'+((f.useBonus&&q.maxBonus>0)?'':' hidden')+'><input type="range" min="0" max="'+q.maxBonus+'" step="1" value="'+q.bonus+'" data-bind="f.bonus" data-bonusrange aria-label="Сколько бонусов списать"><span class="k-small k-muted" data-bonusinfo>'+bonusInfoHtml(q)+'</span></div></div>'+
+    '<div data-sumtotal>'+sumTotalHtml(q)+'</div>'+
+    '<div class="k-err" data-ferr role="alert" hidden style="margin-top:12px"></div>'+
+    '<button class="k-btn k-block" data-act="submit-order" style="margin-top:14px"'+(q.total<=0?' disabled':'')+'>Оформить заказ</button>'+
+    (DEMO?'<p class="k-small k-muted" style="margin-top:10px">Демо-расчёт. Цены заказа в боевом режиме подтверждает сервер.</p>':'')+'</aside>';
+  return'<div class="k-stack"><h3 style="font-size:22px">Новый заказ</h3><div class="k-ord">'+form+sum+'</div></div>';
+}
+function submitOrder(){
+  var f=S.form,q=formQuote(),u=S.user,err=root.querySelector('[data-ferr]');
+  var addr=(!u.addresses.length||f.addrId==='other')?f.addrText.trim():(u.addresses.filter(function(a){return a.id===f.addrId})[0]||{}).text;
+  var msg=!(q.qty>0)?'Укажите '+(q.svc.unit==='m2'?'площадь':'количество')+'.':!f.date?'Выберите дату.':!addr?'Укажите адрес.':'';
+  if(msg){if(err){err.textContent=msg;err.hidden=false}return}
+  if(err)err.hidden=true;
+  var btn=root.querySelector('[data-act=submit-order]');if(btn){btn.disabled=true;btn.textContent='Оформляем…'}
+  API.createOrder({service:f.service,qty:q.qty,extras:q.extraIds,address:addr,date:f.date,slot:f.slot,comment:f.comment.trim(),bonusSpend:q.bonus})
+    .then(function(r){
+      S.done=r.order;S.orders.unshift(r.order);
+      return API.me().then(function(m){S.user=m.user;S.loy=m.loyalty;S.user.notify=S.user.notify||{tgOrders:true,tgPromo:false};S.user.addresses=S.user.addresses||[]});
+    })
+    .then(function(){render();root.scrollIntoView({behavior:'smooth',block:'start'})})
+    .catch(function(e){if(btn){btn.disabled=false;btn.textContent='Оформить заказ'}if(err){err.textContent=(e&&e.message)||'Не удалось оформить заказ. Попробуйте ещё раз.';err.hidden=false}});
+}
+
 function appView(){
   var u=S.user;
   var tabs=[['overview','grid','Обзор'],['orders','bag','Заказы'],['bonuses','star','Бонусы'],['profile','user','Профиль']];
   var nav=tabs.map(function(t){return'<button role="tab" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(S.tab===t[0])+'">'+ic(t[1],18)+t[2]+'</button>'}).join('');
-  var body={overview:overviewTab,orders:ordersTab,bonuses:bonusesTab,profile:profileTab}[S.tab]();
+  if(S.tab==='order'&&!S.form)S.form=formDefaults();
+  var body={overview:overviewTab,orders:ordersTab,bonuses:bonusesTab,profile:profileTab,order:orderView}[S.tab]();
   return'<div class="k-top"><div class="k-hello"><h2>Здравствуйте'+(u.name?', '+esc(u.name):'')+'!</h2><p class="k-muted">'+esc(u.phone)+'</p></div>'+
-    '<div class="k-row"><div class="k-tabs" role="tablist">'+nav+'</div><button class="k-btn k-ghost k-sm" data-act="logout" aria-label="Выйти">'+ic('out',16)+' Выйти</button></div></div>'+body;
+    '<div class="k-row"><div class="k-tabs" role="tablist">'+nav+'</div><button class="k-btn k-new" data-act="new-order">'+ic('plus',18)+' Заказать уборку</button><button class="k-btn k-ghost k-out" data-act="logout" aria-label="Выйти" title="Выйти">'+ic('out',18)+'</button></div></div>'+body;
 }
 
 /* ================= ДЕЙСТВИЯ ================= */
@@ -610,7 +774,7 @@ function startPoll(kind){
     }).catch(function(){});
   },DEMO?1000:3000);
 }
-function logout(){stopTimers();API.logout();store.del('chlk_token');S={view:'auth',authTab:'login',step:'form',phone:'',name:'',email:'',agree:true,code:'',err:'',busy:false,tg:null,tab:'overview',filter:'all',open:{},user:null,loy:null,orders:[],draft:null,newAddr:'',promo:'',focus:null};render()}
+function logout(){stopTimers();API.logout();store.del('chlk_token');S={form:null,done:null,view:'auth',authTab:'login',step:'form',phone:'',name:'',email:'',agree:true,code:'',err:'',busy:false,tg:null,tab:'overview',filter:'all',open:{},user:null,loy:null,orders:[],draft:null,newAddr:'',promo:'',focus:null};render()}
 function copy(v){
   var done=function(){toast('Скопировано')};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,function(){toast('Не удалось скопировать: '+v)});
@@ -636,7 +800,11 @@ root.addEventListener('click',function(e){
     case'tg-unlink':API.tgUnlink().then(function(){S.user.tg={connected:false,username:''};render();toast('Telegram отключён')}).catch(fail);break;
     case'demo-quick':API.quick(v).then(enterApp).catch(fail);break;
     case'demo-reset':stopTimers();API.reset();S.view='auth';S.tg=null;render();break;
-    case'tab':S.tab=v;render();break;
+    case'tab':S.tab=v;if(v!=='order')S.done=null;render();break;
+    case'new-order':S.done=null;S.form=formDefaults();S.tab='order';render();root.scrollIntoView({behavior:'smooth',block:'start'});break;
+    case'repeat':var src=S.orders.filter(function(x){return x.id===id})[0];S.done=null;S.form=formDefaults(src);S.tab='order';render();root.scrollIntoView({behavior:'smooth',block:'start'});toast(src&&src.svc?'Данные прошлого заказа подставлены':'Выберите услугу и проверьте детали');break;
+    case'pick-svc':var pv=svcById(S.form.service),ns=svcById(v);if(pv.id!==ns.id&&(pv.unit!==ns.unit||ns.unit!=='m2'))S.form.qty=ns.unit==='m2'?S.lastArea:(ns.def||1);S.form.service=v;render();break;
+    case'submit-order':submitOrder();break;
     case'filter':S.filter=v;render();break;
     case'toggle-order':S.open[id]=!S.open[id];render();break;
     case'open-order':S.tab='orders';S.open[id]=true;render();break;
@@ -658,10 +826,13 @@ root.addEventListener('click',function(e){
 });
 root.addEventListener('input',function(e){
   var el=e.target,b=el.getAttribute&&el.getAttribute('data-bind');if(!b)return;
-  if(el.type==='checkbox'){S[b]=el.checked;return}
+  if(b.indexOf('f.ex.')===0){S.form.extras[b.slice(5)]=el.checked;refreshForm();return}
+  if(el.type==='checkbox'){if(b.indexOf('f.')===0){S.form[b.slice(2)]=el.checked;onFormChange(b)}else S[b]=el.checked;return}
   var val=el.value;
+  if(b==='f.qty'||b==='f.bonus')val=Number(val)||0;
   if(b==='phone'){val=fmtPhone(val);el.value=val}
   if(b==='code'){val=digits(val).slice(0,4);el.value=val}
+  if(b.indexOf('f.')===0){S.form[b.slice(2)]=val;onFormChange(b);return}
   if(b.indexOf('d.')===0)S.draft[b.slice(2)]=val;else S[b]=val;
   if(b==='code'&&val.length===4&&!S.busy)verify();
 });
