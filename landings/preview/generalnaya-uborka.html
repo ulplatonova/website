@@ -184,8 +184,10 @@
 #chl .offers .fine{font-size:13px;color:var(--ink2);background:var(--bg);border-radius:10px;padding:8px 10px;margin:0 0 12px;line-height:1.4}
 /* до/после */
 #chl .ba-grid{display:grid;gap:24px;align-items:center}
+#chl .ba-grid>*{min-width:0}
 #chl .ba{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:1049/940;background:#ddd;user-select:none;touch-action:pan-y;box-shadow:0 20px 50px rgba(11,37,23,.18)}
 #chl .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#chl .ba.p{aspect-ratio:3/4}
 #chl .ba .after{clip-path:inset(0 0 0 var(--x,50%))}
 #chl .ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;z-index:3;background:none}
 #chl .ba .bar{position:absolute;top:0;bottom:0;left:var(--x,50%);width:3px;margin-left:-1.5px;background:#fff;z-index:2;box-shadow:0 0 12px rgba(0,0,0,.4)}
@@ -347,6 +349,10 @@
   #chl .hero .tag{margin-bottom:14px;font-size:12.5px;padding:6px 12px;gap:6px}
   #chl .hero .cta-row .btn{white-space:nowrap;font-size:15.5px;padding:0 12px}
   /* «Когда пора заказывать…»: квадратики 2 в ряд, 3 ряда */
+  /* фильтры галереи до/после: одна прокручиваемая строка */
+  #chl .gal-chips{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-right:-20px;padding-right:20px;padding-bottom:2px}
+  #chl .gal-chips::-webkit-scrollbar{display:none}
+  #chl .gal-chips .chip{flex:0 0 auto;white-space:nowrap}
   #chl .pain .grid{grid-template-columns:1fr 1fr;gap:10px}
   #chl .pain .card{flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;aspect-ratio:1/1;padding:14px}
   #chl .pain .card .em{font-size:30px}
@@ -403,32 +409,62 @@
 <section class="alt"><div class="w ba-grid">
   <div><h2>Было — стало: реальные результаты</h2><p class="lead" style="margin-bottom:20px">Жир, налёт, пятна и «въевшаяся» грязь уходят за один выезд. Выберите пример и потяните ползунок: слева было, справа стало.</p>
   <a class="btn btn-p" href="#chl-calc" data-goal="ba_calc_click">Хочу так же — рассчитать</a></div>
-  <div class="ba-gal"><div class="chips gal-chips" role="group" aria-label="Выберите пример"><button type="button" class="chip" data-ba="0" aria-pressed="true">Плита</button><button type="button" class="chip" data-ba="1" aria-pressed="false">Кухня</button><button type="button" class="chip" data-ba="2" aria-pressed="false">Мойка</button><button type="button" class="chip" data-ba="3" aria-pressed="false">Микроволновка</button><button type="button" class="chip" data-ba="4" aria-pressed="false">Холодильник</button><button type="button" class="chip" data-ba="5" aria-pressed="false">Диван (химчистка)</button></div><div class="ba-slide" data-i="0"><div class="ba" role="group" aria-label="Сравнение до и после: Плита">
+  <div class="ba-gal"><div class="chips gal-chips" role="group" aria-label="Выберите пример"><button type="button" class="chip" data-ba="0" aria-pressed="true">Кухня</button><button type="button" class="chip" data-ba="1" aria-pressed="false">Комната</button><button type="button" class="chip" data-ba="2" aria-pressed="false">Ванная</button><button type="button" class="chip" data-ba="3" aria-pressed="false">Туалет</button><button type="button" class="chip" data-ba="4" aria-pressed="false">Раковина</button><button type="button" class="chip" data-ba="5" aria-pressed="false">Диван и пол</button><button type="button" class="chip" data-ba="6" aria-pressed="false">Плита</button><button type="button" class="chip" data-ba="7" aria-pressed="false">Кухонный уголок</button><button type="button" class="chip" data-ba="8" aria-pressed="false">Мойка</button><button type="button" class="chip" data-ba="9" aria-pressed="false">Микроволновка</button><button type="button" class="chip" data-ba="10" aria-pressed="false">Холодильник</button><button type="button" class="chip" data-ba="11" aria-pressed="false">Диван (химчистка)</button></div><div class="ba-slide" data-i="0"><div class="ba p" role="group" aria-label="Сравнение до и после: Кухня">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/kuhnya-do.webp" alt="Кухня до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/kuhnya-posle.webp" alt="Кухня после уборки" width="720" height="960" loading="lazy">
+      <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
+      <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
+    </div><p class="ba-cap">Кухня — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="1"><div class="ba p" role="group" aria-label="Сравнение до и после: Комната">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/komnata-do.webp" alt="Комната до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/komnata-posle.webp" alt="Комната после уборки" width="720" height="960" loading="lazy">
+      <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
+      <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
+    </div><p class="ba-cap">Комната — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="2"><div class="ba p" role="group" aria-label="Сравнение до и после: Ванная">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/vannaya-do.webp" alt="Ванная до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/vannaya-posle.webp" alt="Ванная после уборки" width="720" height="960" loading="lazy">
+      <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
+      <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
+    </div><p class="ba-cap">Ванная — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="3"><div class="ba p" role="group" aria-label="Сравнение до и после: Туалет">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/tualet-do.webp" alt="Туалет до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/tualet-posle.webp" alt="Туалет после уборки" width="720" height="960" loading="lazy">
+      <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
+      <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
+    </div><p class="ba-cap">Туалет — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="4"><div class="ba p" role="group" aria-label="Сравнение до и после: Раковина">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/rakovina-do.webp" alt="Раковина до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/rakovina-posle.webp" alt="Раковина после уборки" width="720" height="960" loading="lazy">
+      <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
+      <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
+    </div><p class="ba-cap">Раковина — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="5"><div class="ba p" role="group" aria-label="Сравнение до и после: Диван и пол">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/divan-do.webp" alt="Диван и пол до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@9692e2dfe132176b6bc9873d007ead10d0722728/landings/photos/divan-posle.webp" alt="Диван и пол после уборки" width="720" height="960" loading="lazy">
+      <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
+      <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
+    </div><p class="ba-cap">Диван и пол — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="6"><div class="ba" role="group" aria-label="Сравнение до и после: Плита">
       <img src="https://optim.tildacdn.com/tild3565-3336-4530-a332-356437366433/-/resize/800x/-/format/webp/IMG_3292.PNG.webp" alt="Плита до уборки" width="700" height="627" loading="lazy">
       <img class="after" src="https://optim.tildacdn.com/tild6137-3064-4164-b432-636264623865/-/resize/800x/-/format/webp/IMG_3293.PNG.webp" alt="Плита после уборки" width="700" height="627" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
-    </div><p class="ba-cap">Плита — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="1"><div class="ba" role="group" aria-label="Сравнение до и после: Кухня">
-      <img src="https://optim.tildacdn.com/tild3661-3137-4464-b331-356435363461/-/resize/800x/-/format/webp/IMG_4941.PNG.webp" alt="Кухня до уборки" width="700" height="627" loading="lazy">
-      <img class="after" src="https://optim.tildacdn.com/tild3061-3230-4233-a234-376334353432/-/resize/800x/-/format/webp/IMG_4940.PNG.webp" alt="Кухня после уборки" width="700" height="627" loading="lazy">
+    </div><p class="ba-cap">Плита — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="7"><div class="ba" role="group" aria-label="Сравнение до и после: Кухонный уголок">
+      <img src="https://optim.tildacdn.com/tild3661-3137-4464-b331-356435363461/-/resize/800x/-/format/webp/IMG_4941.PNG.webp" alt="Кухонный уголок до уборки" width="700" height="627" loading="lazy">
+      <img class="after" src="https://optim.tildacdn.com/tild3061-3230-4233-a234-376334353432/-/resize/800x/-/format/webp/IMG_4940.PNG.webp" alt="Кухонный уголок после уборки" width="700" height="627" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
-    </div><p class="ba-cap">Кухня — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="2"><div class="ba" role="group" aria-label="Сравнение до и после: Мойка">
+    </div><p class="ba-cap">Кухонный уголок — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="8"><div class="ba" role="group" aria-label="Сравнение до и после: Мойка">
       <img src="https://optim.tildacdn.com/tild6234-6238-4465-a564-653638623032/-/resize/800x/-/format/webp/IMG_4939.PNG.webp" alt="Мойка до уборки" width="700" height="627" loading="lazy">
       <img class="after" src="https://optim.tildacdn.com/tild3462-3065-4761-b632-623061616663/-/resize/800x/-/format/webp/IMG_4938.PNG.webp" alt="Мойка после уборки" width="700" height="627" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
-    </div><p class="ba-cap">Мойка — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="3"><div class="ba" role="group" aria-label="Сравнение до и после: Микроволновка">
+    </div><p class="ba-cap">Мойка — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="9"><div class="ba" role="group" aria-label="Сравнение до и после: Микроволновка">
       <img src="https://optim.tildacdn.com/tild3033-6535-4036-b865-633163313739/-/resize/800x/-/format/webp/IMG_3284.PNG.webp" alt="Микроволновка до уборки" width="700" height="627" loading="lazy">
       <img class="after" src="https://optim.tildacdn.com/tild3639-3936-4964-b530-376362366235/-/resize/800x/-/format/webp/IMG_3285.PNG.webp" alt="Микроволновка после уборки" width="700" height="627" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
-    </div><p class="ba-cap">Микроволновка — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="4"><div class="ba" role="group" aria-label="Сравнение до и после: Холодильник">
+    </div><p class="ba-cap">Микроволновка — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="10"><div class="ba" role="group" aria-label="Сравнение до и после: Холодильник">
       <img src="https://optim.tildacdn.com/tild3933-3434-4631-b833-666232313137/-/resize/800x/-/format/webp/IMG_5021.PNG.webp" alt="Холодильник до уборки" width="700" height="627" loading="lazy">
       <img class="after" src="https://optim.tildacdn.com/tild3962-3565-4363-b235-383733666334/-/resize/800x/-/format/webp/IMG_5022.PNG.webp" alt="Холодильник после уборки" width="700" height="627" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
-    </div><p class="ba-cap">Холодильник — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="5"><div class="ba" role="group" aria-label="Сравнение до и после: Диван (химчистка)">
+    </div><p class="ba-cap">Холодильник — фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="11"><div class="ba" role="group" aria-label="Сравнение до и после: Диван (химчистка)">
       <img src="https://optim.tildacdn.com/tild3265-3634-4736-a336-613234623436/-/resize/800x/-/format/webp/IMG_3319.PNG.webp" alt="Диван (химчистка) до уборки" width="700" height="627" loading="lazy">
       <img class="after" src="https://optim.tildacdn.com/tild3061-6433-4637-b766-323033613138/-/resize/800x/-/format/webp/IMG_3320.PNG.webp" alt="Диван (химчистка) после уборки" width="700" height="627" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>

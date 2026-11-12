@@ -33,6 +33,9 @@ def embed_images(html):
 
     def one(m):
         url = m.group(0)
+        if 'cdn.jsdelivr.net' in url:   # фото из репозитория: берём локальный файл
+            data = open(os.path.join(os.path.dirname(HERE), 'photos', url.rsplit('/', 1)[1]), 'rb').read()
+            return 'data:image/webp;base64,' + base64.b64encode(data).decode()
         f = os.path.join(CACHE, re.sub(r'[^A-Za-z0-9.]+', '_', url[-90:]))
         if not (os.path.exists(f) and open(f, 'rb').read(4) == b'RIFF'):
             for _ in range(8):  # Тильда отдаёт webp со 2-го запроса (первый — редирект на оригинал); сеть тоже бывает нестабильна
@@ -45,7 +48,7 @@ def embed_images(html):
             raise SystemExit('не удалось получить webp: ' + url)
         return 'data:image/webp;base64,' + base64.b64encode(data).decode()
 
-    return re.sub(r'https://optim\.tildacdn\.com/[^"\')\s]+', one, html)
+    return re.sub(r'https://(?:optim\.tildacdn\.com|cdn\.jsdelivr\.net/gh/ulplatonova)/[^"\')\s]+', one, html)
 
 
 def embed_fonts(css):

@@ -41,6 +41,13 @@ POPUP = '#popup:order'
 IMG = 'https://optim.tildacdn.com/%s/-/resize/%sx/-/format/webp/%s.webp'
 
 
+PHOTO_SHA = '9692e2dfe132176b6bc9873d007ead10d0722728'  # коммит с фото в landings/photos (jsDelivr кэширует по нему)
+
+
+def photo(name):
+    return 'https://cdn.jsdelivr.net/gh/ulplatonova/website@%s/landings/photos/%s.webp' % (PHOTO_SHA, name)
+
+
 def img(tild, name, w):
     return IMG % (tild, w, name)
 
@@ -186,14 +193,17 @@ def before_after(title, lead_txt, pairs):
     """pairs: [(подпись, фото «до», фото «после»)] — галерея со сравнением и переключателем."""
     chips = ''.join('<button type="button" class="chip" data-ba="%d" aria-pressed="%s">%s</button>' % (i, 'true' if i == 0 else 'false', p[0]) for i, p in enumerate(pairs))
     slides = ''
-    for i, (name, before, after) in enumerate(pairs):
-        slides += '''<div class="ba-slide"%s data-i="%d"><div class="ba" role="group" aria-label="Сравнение до и после: %s">
-      <img src="%s" alt="%s до уборки" width="700" height="627" loading="lazy">
-      <img class="after" src="%s" alt="%s после уборки" width="700" height="627" loading="lazy">
+    for i, pair in enumerate(pairs):
+        name, before, after = pair[:3]
+        portrait = len(pair) > 3 and pair[3] == 'p'
+        wh = 'width="720" height="960"' if portrait else 'width="700" height="627"'
+        slides += '''<div class="ba-slide"%s data-i="%d"><div class="ba%s" role="group" aria-label="Сравнение до и после: %s">
+      <img src="%s" alt="%s до уборки" %s loading="lazy">
+      <img class="after" src="%s" alt="%s после уборки" %s loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
     </div><p class="ba-cap">%s — фото реальной уборки CleanHub. Потяните ползунок.</p></div>''' % (
-            '' if i == 0 else ' hidden', i, name, before, name, after, name, name)
+            '' if i == 0 else ' hidden', i, ' p' if portrait else '', name, before, name, wh, after, name, wh, name)
     return '''<section class="alt"><div class="w ba-grid">
   <div><h2>%s</h2><p class="lead" style="margin-bottom:20px">%s</p>
   <a class="btn btn-p" href="#chl-calc" data-goal="ba_calc_click">Хочу так же — рассчитать</a></div>
@@ -363,12 +373,19 @@ def page_general():
                  '<div class="extra-note"><b>Список выше — тариф «Лайт».</b> Что добавляется в других тарифах:<ul><li><b>«Стандарт»</b> = «Лайт» + глубокая чистка кухонной техники внутри и снаружи: <b>микроволновка, духовка, посудомоечная машина</b>.</li><li><b>«Премиум»</b> = «Лайт» + <b>микроволновка, духовка, посудомоечная машина, вытяжка, холодильник (внутри), стиральная машина</b>.</li></ul>Хрустальные люстры и сложные конструкции оплачиваются отдельно. Любую услугу можно добавить и к «Лайт» в калькуляторе.</div>'),
         before_after('Было — стало: реальные результаты',
                      'Жир, налёт, пятна и «въевшаяся» грязь уходят за один выезд. Выберите пример и потяните ползунок: слева было, справа стало.',
-                     [('Плита', img('tild3565-3336-4530-a332-356437366433', 'IMG_3292.PNG', 800), img('tild6137-3064-4164-b432-636264623865', 'IMG_3293.PNG', 800)),
-                      ('Кухня', img('tild3661-3137-4464-b331-356435363461', 'IMG_4941.PNG', 800), img('tild3061-3230-4233-a234-376334353432', 'IMG_4940.PNG', 800)),
+                     [('Кухня', photo('kuhnya-do'), photo('kuhnya-posle'), 'p'),
+                      ('Комната', photo('komnata-do'), photo('komnata-posle'), 'p'),
+                      ('Ванная', photo('vannaya-do'), photo('vannaya-posle'), 'p'),
+                      ('Туалет', photo('tualet-do'), photo('tualet-posle'), 'p'),
+                      ('Раковина', photo('rakovina-do'), photo('rakovina-posle'), 'p'),
+                      ('Диван и пол', photo('divan-do'), photo('divan-posle'), 'p'),
+                      ('Плита', img('tild3565-3336-4530-a332-356437366433', 'IMG_3292.PNG', 800), img('tild6137-3064-4164-b432-636264623865', 'IMG_3293.PNG', 800)),
+                      ('Кухонный уголок', img('tild3661-3137-4464-b331-356435363461', 'IMG_4941.PNG', 800), img('tild3061-3230-4233-a234-376334353432', 'IMG_4940.PNG', 800)),
                       ('Мойка', img('tild6234-6238-4465-a564-653638623032', 'IMG_4939.PNG', 800), img('tild3462-3065-4761-b632-623061616663', 'IMG_4938.PNG', 800)),
                       ('Микроволновка', img('tild3033-6535-4036-b865-633163313739', 'IMG_3284.PNG', 800), img('tild3639-3936-4964-b530-376362366235', 'IMG_3285.PNG', 800)),
                       ('Холодильник', img('tild3933-3434-4631-b833-666232313137', 'IMG_5021.PNG', 800), img('tild3962-3565-4363-b235-383733666334', 'IMG_5022.PNG', 800)),
                       ('Диван (химчистка)', img('tild3265-3634-4736-a336-613234623436', 'IMG_3319.PNG', 800), img('tild3061-6433-4637-b766-323033613138', 'IMG_3320.PNG', 800))]),
+
         tariffs_block('Цены на генеральную уборку',
                       'Фиксированная цена зависит только от площади по документам, тарифа и доп. услуг. Выезд, техника Kärcher, химия и расходники уже включены.',
                       [('Лайт', '8 990 ₽', False, [('Полный чек-лист генеральной уборки', True), ('Санузел и кухня: поверхности и сантехника', True), ('Чистка техники внутри', False)]),

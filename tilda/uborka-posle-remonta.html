@@ -182,8 +182,10 @@
 #chl .offers .fine{font-size:13px;color:var(--ink2);background:var(--bg);border-radius:10px;padding:8px 10px;margin:0 0 12px;line-height:1.4}
 /* до/после */
 #chl .ba-grid{display:grid;gap:24px;align-items:center}
+#chl .ba-grid>*{min-width:0}
 #chl .ba{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:1049/940;background:#ddd;user-select:none;touch-action:pan-y;box-shadow:0 20px 50px rgba(11,37,23,.18)}
 #chl .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#chl .ba.p{aspect-ratio:3/4}
 #chl .ba .after{clip-path:inset(0 0 0 var(--x,50%))}
 #chl .ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;z-index:3;background:none}
 #chl .ba .bar{position:absolute;top:0;bottom:0;left:var(--x,50%);width:3px;margin-left:-1.5px;background:#fff;z-index:2;box-shadow:0 0 12px rgba(0,0,0,.4)}
@@ -345,6 +347,10 @@
   #chl .hero .tag{margin-bottom:14px;font-size:12.5px;padding:6px 12px;gap:6px}
   #chl .hero .cta-row .btn{white-space:nowrap;font-size:15.5px;padding:0 12px}
   /* «Когда пора заказывать…»: квадратики 2 в ряд, 3 ряда */
+  /* фильтры галереи до/после: одна прокручиваемая строка */
+  #chl .gal-chips{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-right:-20px;padding-right:20px;padding-bottom:2px}
+  #chl .gal-chips::-webkit-scrollbar{display:none}
+  #chl .gal-chips .chip{flex:0 0 auto;white-space:nowrap}
   #chl .pain .grid{grid-template-columns:1fr 1fr;gap:10px}
   #chl .pain .card{flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;aspect-ratio:1/1;padding:14px}
   #chl .pain .card .em{font-size:30px}
