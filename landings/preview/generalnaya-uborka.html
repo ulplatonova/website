@@ -32,6 +32,7 @@
 
 /* кнопки */
 #chl .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 26px;border-radius:14px;border:0;font-size:17px;font-weight:700;line-height:1.2;cursor:pointer;text-align:center;transition:transform .15s,box-shadow .15s,background .15s}
+#chl .btn{white-space:nowrap;max-width:100%}
 #chl .btn-p{background:var(--g);color:#04170d;box-shadow:0 8px 22px rgba(0,177,79,.32)}
 #chl .btn-p:hover{background:#00c257;transform:translateY(-1px)}
 #chl .btn-p:active{transform:none}
@@ -164,7 +165,7 @@
 #chl .sum .lines div{display:flex;justify-content:space-between;gap:12px}
 #chl .sum .lines span:last-child{color:#fff;font-weight:600;white-space:nowrap}
 #chl .sum .note{font-size:13px;color:#a9c4b4;margin-top:12px;line-height:1.4}
-#chl .sum .btn{width:100%;white-space:nowrap}
+#chl .sum .btn{width:100%;white-space:nowrap;padding:0 12px;font-size:16px}
 #chl .sum .alt-row{display:flex;gap:8px;margin-top:10px}
 #chl .sum .alt-row a{flex:1;min-height:46px;border-radius:12px;border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:14px}
 #chl .sum .alt-row a:hover{background:rgba(255,255,255,.08)}
@@ -326,8 +327,6 @@
   #chl .grid.c2{grid-template-columns:repeat(2,1fr)}
   #chl .grid.c3{grid-template-columns:repeat(3,1fr)}
   #chl .grid.c4{grid-template-columns:repeat(4,1fr)}
-  #chl .calc-wrap{grid-template-columns:1.25fr .75fr;align-items:start}
-  #chl .sum{position:sticky;top:20px}
   #chl .tariffs{grid-template-columns:repeat(3,1fr)}
   #chl .tar{grid-template-columns:1fr;gap:6px;padding:16px}
   #chl .tar .rd{grid-row:auto;position:absolute;right:14px;top:14px}
@@ -341,6 +340,10 @@
   #chl .final .w{grid-template-columns:1.1fr .9fr;align-items:center;gap:56px}
   #chl .mbar{display:none}
   #chl .foot{padding-bottom:32px}
+}
+@media (min-width:900px){
+  #chl .calc-wrap{grid-template-columns:1.25fr .75fr;align-items:start}
+  #chl .sum{position:sticky;top:20px}
 }
 @media (min-width:1024px){
   #chl .top-time{display:block}

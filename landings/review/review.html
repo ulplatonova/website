@@ -136,6 +136,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* кнопки */
 #chl .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 26px;border-radius:14px;border:0;font-size:17px;font-weight:700;line-height:1.2;cursor:pointer;text-align:center;transition:transform .15s,box-shadow .15s,background .15s}
+#chl .btn{white-space:nowrap;max-width:100%}
 #chl .btn-p{background:var(--g);color:#04170d;box-shadow:0 8px 22px rgba(0,177,79,.32)}
 #chl .btn-p:hover{background:#00c257;transform:translateY(-1px)}
 #chl .btn-p:active{transform:none}
@@ -268,7 +269,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 #chl .sum .lines div{display:flex;justify-content:space-between;gap:12px}
 #chl .sum .lines span:last-child{color:#fff;font-weight:600;white-space:nowrap}
 #chl .sum .note{font-size:13px;color:#a9c4b4;margin-top:12px;line-height:1.4}
-#chl .sum .btn{width:100%;white-space:nowrap}
+#chl .sum .btn{width:100%;white-space:nowrap;padding:0 12px;font-size:16px}
 #chl .sum .alt-row{display:flex;gap:8px;margin-top:10px}
 #chl .sum .alt-row a{flex:1;min-height:46px;border-radius:12px;border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:14px}
 #chl .sum .alt-row a:hover{background:rgba(255,255,255,.08)}
@@ -430,8 +431,6 @@ button{font:inherit;color:inherit;cursor:pointer}
   #chl .grid.c2{grid-template-columns:repeat(2,1fr)}
   #chl .grid.c3{grid-template-columns:repeat(3,1fr)}
   #chl .grid.c4{grid-template-columns:repeat(4,1fr)}
-  #chl .calc-wrap{grid-template-columns:1.25fr .75fr;align-items:start}
-  #chl .sum{position:sticky;top:20px}
   #chl .tariffs{grid-template-columns:repeat(3,1fr)}
   #chl .tar{grid-template-columns:1fr;gap:6px;padding:16px}
   #chl .tar .rd{grid-row:auto;position:absolute;right:14px;top:14px}
@@ -445,6 +444,10 @@ button{font:inherit;color:inherit;cursor:pointer}
   #chl .final .w{grid-template-columns:1.1fr .9fr;align-items:center;gap:56px}
   #chl .mbar{display:none}
   #chl .foot{padding-bottom:32px}
+}
+@container chl (min-width:900px){
+  #chl .calc-wrap{grid-template-columns:1.25fr .75fr;align-items:start}
+  #chl .sum{position:sticky;top:20px}
 }
 @container chl (min-width:1024px){
   #chl .top-time{display:block}
@@ -730,7 +733,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     </div><p class="ba-cap">Окна: фото реальной уборки CleanHub. Потяните ползунок.</p></div></div></div></section>
 <section><div class="w">
   <h2>Цены на уборку после ремонта</h2><p class="lead">Цена зависит от площади, тарифа и сложности загрязнений. В стоимость уже включены работа бригады, профессиональные средства и пылесос. Стремянка и пароочиститель оплачиваются отдельно.</p>
-  <div class="tcards"><div class="card tc hot"><span class="hotl">ХИТ ПРОДАЖ</span><h3>Премиум</h3><div class="pr">от 16 990 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li>Включены доп. услуги: мойка всех шкафов внутри (пустых), мойка окон: от 4 до 12 створок в зависимости от площади</li></ul><a class="btn btn-p" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div><div class="card tc"><h3>Стандарт</h3><div class="pr">от 14 490 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li>Включены доп. услуги: мойка всех шкафов внутри (пустых)</li></ul><a class="btn btn-w" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div><div class="card tc"><h3>Лайт</h3><div class="pr">от 11 990 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li>Мойка сантехники, полов и плинтусов</li><li class="no">Доп. услуги не включены</li></ul><a class="btn btn-w" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div></div>
+  <div class="tcards"><div class="card tc hot"><span class="hotl">ХИТ ПРОДАЖ</span><h3>Премиум</h3><div class="pr">от 16 990 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li>Включены доп. услуги: мойка всех шкафов внутри (пустых), мойка окон: от 4 до 12 створок в зависимости от площади</li></ul><a class="btn btn-p" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div><div class="card tc"><h3>Стандарт</h3><div class="pr">от 14 490 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li>Включены доп. услуги: мойка всех шкафов внутри (пустых)</li></ul><a class="btn btn-w" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div><div class="card tc"><h3>Лайт</h3><div class="pr">от 11 990 ₽ <small>за 40 м²</small></div><ul><li>Полный чек-лист уборки после ремонта</li><li class="no">Доп. услуги не включены</li></ul><a class="btn btn-w" href="#chl-calc" data-goal="tariff_calc_click">Рассчитать с этим тарифом</a></div></div>
   <p style="font-size:13px;color:var(--mute);margin-top:16px">Для площади больше 120 м² расчёт индивидуальный, от 300 ₽ за м². Мойка окон, балкон, дополнительный санузел и другие услуги добавляются в калькуляторе выше.</p></div></section>
 <section class="alt"><div class="w"><h2>От заявки до готовой к жизни квартиры</h2><p class="lead">Всё прозрачно: вы знаете цену заранее, а основную часть платите только за принятый результат.</p>
   <div class="steps"><div class="st"><h3>Заявка или фото</h3><p>Оставьте заявку или пришлите фото в мессенджер, ответим в течение 5 минут.</p></div><div class="st"><h3>Расчёт и фиксация цены</h3><p>Менеджер оценит объём и сложность, назовёт точную цену и закрепит её в договоре. Вы вносите онлайн предоплату 10%.</p></div><div class="st"><h3>Уборка по чек-листу</h3><p>Бригада приезжает в согласованное время с профессиональной химией и пылесосом.</p></div><div class="st"><h3>Контроль качества</h3><p>Менеджер дистанционно проверяет результат по подробному чек-листу.</p></div><div class="st"><h3>Приёмка и оплата</h3><p>Вы принимаете работу. Если что-то не устроит, исправим на месте. Остаток оплачиваете онлайн по ссылке или наличными.</p></div></div>
