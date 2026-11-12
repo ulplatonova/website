@@ -230,6 +230,8 @@
 
 /* команда */
 #chl .team .card{text-align:center}
+#chl .team .ph{aspect-ratio:1/1;border-radius:14px;background:linear-gradient(180deg,#e2f7ea,#c2e9d2);overflow:hidden;margin-bottom:12px}
+#chl .team .ph img{width:100%;height:100%;object-fit:cover;object-position:center top}
 #chl .team .av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--g-d));color:#fff;font-weight:800;font-size:26px;display:grid;place-items:center;margin:0 auto 10px}
 #chl .team .cnt{display:inline-block;margin-top:8px;background:#e8f8ee;color:var(--g-d);border-radius:8px;padding:3px 10px;font-weight:700;font-size:13px}
 
@@ -335,6 +337,11 @@
   #chl .hero .sub{font-size:16px}
   #chl .hero .tag{margin-bottom:14px;font-size:12.5px;padding:6px 12px;gap:6px}
   #chl .hero .cta-row .btn{white-space:nowrap;font-size:15.5px;padding:0 12px}
+  /* команда: фото 2 в ряд */
+  #chl .team .grid{grid-template-columns:1fr 1fr;gap:10px}
+  #chl .team .card{padding:10px 10px 14px}
+  #chl .team .card h3{font-size:16px;margin-bottom:2px}
+  #chl .team .card p{font-size:13px;line-height:1.35}
   /* «Когда пора заказывать…»: квадратики 2 в ряд, 3 ряда */
   /* фильтры галереи до/после: одна прокручиваемая строка */
   #chl .gal-chips{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-right:-20px;padding-right:20px;padding-bottom:2px}
