@@ -132,7 +132,7 @@
 #chl .tar .tl{grid-column:2;font-size:13px;color:var(--ink2);line-height:1.35}
 #chl .tar .flag{position:absolute;top:-10px;left:14px;background:var(--g);color:#04170d;border-radius:6px;font-size:11px;padding:2px 8px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
 #chl .xs{display:grid;gap:10px}
-#chl .x{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff}
+#chl .x{display:grid;grid-template-columns:1fr auto;align-items:center;align-content:center;gap:6px 12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff}
 #chl .x.on{border-color:var(--g);background:#f1fbf5}
 #chl .x .xt{font-weight:700;font-size:15px;line-height:1.25}
 #chl .x .xd{grid-column:1;font-size:13px;color:var(--mute);line-height:1.3}
@@ -803,10 +803,10 @@ window.CHL_CONFIG = {
     var html = '', i = result.i;
     C.extras.forEach(function (x) {
       var q = state.x[x.id] || 0, inc = includedQty(state.tariff, x.id, i), on = q > 0;
-      var priceLbl = x.quote ? 'по фото' : (x.from ? 'от ' : '') + money(x.price) + (x.unitShort ? '/' + x.unitShort : '');
+      var priceLbl = x.quote ? '' : (x.from ? 'от ' : '') + money(x.price) + (x.unitShort ? '/' + x.unitShort : '');
       var incLbl = inc ? '<i>' + (inc > 99 ? 'входит в тариф' : 'в тарифе: ' + inc) + '</i> · ' : '';
       html += '<div class="x' + (on ? ' on' : '') + '"><div class="xt">' + esc(x.title) + '</div>' +
-        '<div class="xd">' + incLbl + priceLbl + (x.desc ? ' · ' + esc(x.desc) : '') + '</div><div class="xc">' +
+        '<div class="xd">' + incLbl + priceLbl + (x.desc ? (priceLbl ? ' · ' : '') + esc(x.desc) : '') + '</div><div class="xc">' +
         (x.toggle
           ? '<button type="button" class="sw" data-act="toggle" data-id="' + x.id + '" aria-pressed="' + on + '">' + (on ? 'Добавлено' : 'Добавить') + '</button>'
           : '<button type="button" class="qb" data-act="dec" data-id="' + x.id + '" aria-label="Меньше">−</button><span class="qn">' + q + '</span>' +

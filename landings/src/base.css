@@ -121,7 +121,7 @@
 #chl .tar .tl{grid-column:2;font-size:13px;color:var(--ink2);line-height:1.35}
 #chl .tar .flag{position:absolute;top:-10px;left:14px;background:var(--g);color:#04170d;border-radius:6px;font-size:11px;padding:2px 8px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
 #chl .xs{display:grid;gap:10px}
-#chl .x{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff}
+#chl .x{display:grid;grid-template-columns:1fr auto;align-items:center;align-content:center;gap:6px 12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff}
 #chl .x.on{border-color:var(--g);background:#f1fbf5}
 #chl .x .xt{font-weight:700;font-size:15px;line-height:1.25}
 #chl .x .xd{grid-column:1;font-size:13px;color:var(--mute);line-height:1.3}
