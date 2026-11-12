@@ -82,7 +82,9 @@
 .k-tabs button[aria-selected="true"]{background:var(--k-tint);color:var(--k-acc-t)}
 .k-loy{background:linear-gradient(135deg,var(--k-hero-a) 10%,var(--k-hero-b));color:#fff;border-radius:24px;padding:26px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
 .k-loy .k-lvl{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600}
-.k-bal{font-size:44px;font-weight:800;line-height:1.05;margin:10px 0 4px;font-variant-numeric:tabular-nums}
+.k-bal{font-size:30px;font-weight:800;line-height:1.1;margin:12px 0 6px;font-variant-numeric:tabular-nums}
+.k-bal small{font-size:15px;font-weight:600;opacity:.85;font-family:var(--t-text-font,'GothamPro',Arial,sans-serif)}
+.k-loy .k-lvl.top{background:linear-gradient(120deg,#F3D98B,#D9AE4B);color:#2B1F05}
 .k-loy .k-sub{opacity:.82;font-size:14px}
 .k-prog{height:10px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden;margin:10px 0 8px}
 .k-prog i{display:block;height:100%;background:var(--k-mint);border-radius:99px}
@@ -149,7 +151,7 @@
   .k-aside h2{font-size:21px}
   .k-form{padding:22px 18px}
   .k-loy{grid-template-columns:minmax(0,1fr);padding:20px}
-  .k-bal{font-size:38px}
+  .k-bal{font-size:28px}
   .k-ohead{grid-template-columns:minmax(0,1fr) 20px;row-gap:6px}
   .k-ohead .k-ototal{grid-column:1;grid-row:2;font-weight:700}
   .k-ohead .k-chip{grid-column:1;grid-row:3;justify-self:start}
@@ -228,7 +230,7 @@ function demoApi(){
       bonusSpent:spent,total:total,bonusEarned:status==='cancel'?0:Math.round(total*RATE),
       address:addr,slot:slot};
   }
-  var LEVELS=[{name:'Старт',from:0,pct:3},{name:'Серебро',from:15000,pct:5},{name:'Золото',from:40000,pct:7}];
+  var LEVELS=[{name:'Гость',from:0,pct:3},{name:'Постоянный клиент',from:15000,pct:5},{name:'Премиум-клиент',from:40000,pct:7}];
   var ADDR='Москва, ул. Профсоюзная, 56, кв. 112';
   function build(persona,phone,name,email){
     var user={id:'u1',name:name||(persona==='regular'?'Анна':''),phone:phone||'+7 (916) 123-45-67',email:email||(persona==='regular'?'anna@example.com':''),birthday:'',
@@ -431,11 +433,11 @@ function levelInfo(L){
 function loyaltyHero(){
   var L=S.loy,li=levelInfo(L);
   var prog=li.next
-    ?'<div class="k-prog" role="progressbar" aria-valuenow="'+li.pct+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+li.pct+'%"></i></div><p class="k-sub">Ещё '+money(li.next.from-L.spent)+' до уровня «'+esc(li.next.name)+'», кешбэк '+li.next.pct+'%</p>'
-    :'<div class="k-prog"><i style="width:100%"></i></div><p class="k-sub">У вас максимальный уровень</p>';
+    ?'<div class="k-prog" role="progressbar" aria-valuenow="'+li.pct+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+li.pct+'%"></i></div><p class="k-sub">Ещё '+money(li.next.from-L.spent)+' до статуса «'+esc(li.next.name)+'», кешбэк '+li.next.pct+'%</p>'
+    :'<div class="k-prog"><i style="width:100%"></i></div><p class="k-sub">У вас высший статус: максимальный кешбэк</p>';
   return'<section class="k-loy" aria-label="Бонусная карта">'+
-    '<div><span class="k-lvl">'+ic('star',14)+' Уровень «'+esc(li.cur.name)+'» · '+li.cur.pct+'%</span>'+
-    '<div class="k-bal">'+bonus(L.balance)+'</div><p class="k-sub">1 бонус = 1 ₽. Можно оплатить до '+L.maxPay+'% заказа.</p>'+
+    '<div><span class="k-lvl'+(li.next?'':' top')+'">'+ic('star',14)+' '+esc(li.cur.name)+' · кешбэк '+li.cur.pct+'%</span>'+
+    '<div class="k-bal">'+Math.round(L.balance).toLocaleString('ru-RU')+' <small>'+plural(L.balance,['бонус','бонуса','бонусов'])+'</small></div><p class="k-sub">1 бонус = 1 ₽. Можно оплатить до '+L.maxPay+'% заказа.</p>'+
     (L.expiring?'<div class="k-burn">Сгорит '+bonus(L.expiring.amount)+' — '+dFmt(L.expiring.date)+'</div>':'')+'</div>'+
     '<div><p class="k-sub">Потрачено на услуги</p><b class="k-num" style="font-size:24px">'+money(L.spent)+'</b>'+prog+
     '<div class="k-card-no"><span>'+esc(L.card)+'</span><button data-act="copy" data-v="'+esc(L.card)+'" aria-label="Скопировать номер карты">'+ic('copy',16)+'</button></div></div></section>';
