@@ -145,6 +145,10 @@
 #chl .x .xg{grid-column:1/-1;display:grid;gap:8px;margin-top:6px;padding-top:12px;border-top:1px dashed var(--line)}
 #chl .x .xr{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:600;font-size:15px}
 #chl .x .xr .xc{grid-row:auto;grid-column:auto}
+#chl .x .xr small{font-weight:500;color:var(--mute);font-size:13px}
+#chl .x .qi{width:56px;height:36px;border:1.5px solid var(--line);border-radius:10px;text-align:center;font:inherit;font-weight:700;color:var(--ink);background:#fff}
+#chl .x .qi:focus-visible{outline:3px solid var(--g-l);outline-offset:1px}
+#chl .x .qu{font-size:13px;color:var(--mute);margin:0 4px 0 2px}
 #chl .x .xnote{font-size:13px;line-height:1.35;color:var(--ink2);margin:4px 0 0}
 #chl .x .xnote a{color:var(--g-d);text-decoration:underline;font-weight:600}
 #chl .qb{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:20px;line-height:1;font-weight:700;cursor:pointer;color:var(--ink)}
@@ -248,11 +252,13 @@
 #chl .gear .em{font-size:28px;line-height:1}
 
 /* команда */
-#chl .team .card{text-align:center}
+#chl .team .card{text-align:center;display:flex;flex-direction:column;align-items:center}
+#chl .team .card .ph{align-self:stretch}
 #chl .team .ph{aspect-ratio:1/1;border-radius:14px;background:linear-gradient(180deg,#e2f7ea,#c2e9d2);overflow:hidden;margin-bottom:12px}
+#chl .team .card p:last-of-type{margin-bottom:10px}
 #chl .team .ph img{width:100%;height:100%;object-fit:cover;object-position:center top}
 #chl .team .av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--g-d));color:#fff;font-weight:800;font-size:26px;display:grid;place-items:center;margin:0 auto 10px}
-#chl .team .cnt{line-height:1.3;display:inline-block;margin-top:8px;background:#e8f8ee;color:var(--g-d);border-radius:8px;padding:3px 10px;font-weight:700;font-size:13px}
+#chl .team .cnt{line-height:1.3;display:inline-block;margin-top:auto;background:#e8f8ee;color:var(--g-d);border-radius:8px;padding:3px 10px;font-weight:700;font-size:13px}
 
 /* отзывы */
 #chl .rev-head{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
@@ -428,13 +434,13 @@
   <div><h2>Было — стало: после ремонта</h2><p class="lead" style="margin-bottom:20px">Плёнка, строительная пыль и следы работ уходят, остаётся чистая квартира, готовая к жизни. Выберите пример и потяните ползунок: слева было, справа стало.</p>
   <a class="btn btn-p" href="#chl-calc" data-goal="ba_calc_click">Рассчитать для моей квартиры</a></div>
   <div class="ba-gal"><div class="chips gal-chips" role="group" aria-label="Выберите пример"><button type="button" class="chip" data-ba="0" aria-pressed="true">Лестница</button><button type="button" class="chip" data-ba="1" aria-pressed="false">Кухня с островом</button><button type="button" class="chip" data-ba="2" aria-pressed="false">Кухня</button><button type="button" class="chip" data-ba="3" aria-pressed="false">Окна</button><button type="button" class="chip" data-ba="4" aria-pressed="false">Рама окна</button><button type="button" class="chip" data-ba="5" aria-pressed="false">Гаражные ворота</button><button type="button" class="chip" data-ba="6" aria-pressed="false">Бойлерная</button><button type="button" class="chip" data-ba="7" aria-pressed="false">Плитка</button></div><div class="ba-slide" data-i="0"><div class="ba p" role="group" aria-label="Сравнение до и после: Лестница">
-      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-lestnitsa-do.webp" alt="Лестница до уборки" width="720" height="960" loading="lazy">
-      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-lestnitsa-posle.webp" alt="Лестница после уборки" width="720" height="960" loading="lazy">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-lestnitsa-do.webp" alt="Лестница до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-lestnitsa-posle.webp" alt="Лестница после уборки" width="720" height="960" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
     </div><p class="ba-cap">Лестница: фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="1"><div class="ba p" role="group" aria-label="Сравнение до и после: Кухня с островом">
-      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-ostrov-do.webp" alt="Кухня с островом до уборки" width="720" height="960" loading="lazy">
-      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-ostrov-posle.webp" alt="Кухня с островом после уборки" width="720" height="960" loading="lazy">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-ostrov-do.webp" alt="Кухня с островом до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-ostrov-posle.webp" alt="Кухня с островом после уборки" width="720" height="960" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
     </div><p class="ba-cap">Кухня с островом: фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="2"><div class="ba" role="group" aria-label="Сравнение до и после: Кухня">
@@ -448,23 +454,23 @@
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
     </div><p class="ba-cap">Окна: фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="4"><div class="ba p" role="group" aria-label="Сравнение до и после: Рама окна">
-      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-okno-do.webp" alt="Рама окна до уборки" width="720" height="960" loading="lazy">
-      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-okno-posle.webp" alt="Рама окна после уборки" width="720" height="960" loading="lazy">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-okno-do.webp" alt="Рама окна до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-okno-posle.webp" alt="Рама окна после уборки" width="720" height="960" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
     </div><p class="ba-cap">Рама окна: фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="5"><div class="ba p" role="group" aria-label="Сравнение до и после: Гаражные ворота">
-      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-vorota-do.webp" alt="Гаражные ворота до уборки" width="720" height="960" loading="lazy">
-      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-vorota-posle.webp" alt="Гаражные ворота после уборки" width="720" height="960" loading="lazy">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-vorota-do.webp" alt="Гаражные ворота до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-vorota-posle.webp" alt="Гаражные ворота после уборки" width="720" height="960" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
     </div><p class="ba-cap">Гаражные ворота: фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="6"><div class="ba p" role="group" aria-label="Сравнение до и после: Бойлерная">
-      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-bak-do.webp" alt="Бойлерная до уборки" width="720" height="960" loading="lazy">
-      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-bak-posle.webp" alt="Бойлерная после уборки" width="720" height="960" loading="lazy">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-bak-do.webp" alt="Бойлерная до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-bak-posle.webp" alt="Бойлерная после уборки" width="720" height="960" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
     </div><p class="ba-cap">Бойлерная: фото реальной уборки CleanHub. Потяните ползунок.</p></div><div class="ba-slide" hidden data-i="7"><div class="ba p" role="group" aria-label="Сравнение до и после: Плитка">
-      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-plitka-do.webp" alt="Плитка до уборки" width="720" height="960" loading="lazy">
-      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/remont-plitka-posle.webp" alt="Плитка после уборки" width="720" height="960" loading="lazy">
+      <img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-plitka-do.webp" alt="Плитка до уборки" width="720" height="960" loading="lazy">
+      <img class="after" src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/remont-plitka-posle.webp" alt="Плитка после уборки" width="720" height="960" loading="lazy">
       <span class="cap l">До</span><span class="cap r">После</span><span class="bar"></span>
       <input type="range" min="2" max="98" value="50" aria-label="Двигайте, чтобы сравнить до и после">
     </div><p class="ba-cap">Плитка: фото реальной уборки CleanHub. Потяните ползунок.</p></div></div></div></section>
@@ -475,12 +481,12 @@
 <section class="alt"><div class="w"><h2>От заявки до готовой к жизни квартиры</h2><p class="lead">Всё прозрачно: вы знаете цену заранее, а основную часть платите только за принятый результат.</p>
   <div class="steps"><div class="st"><h3>Заявка или фото</h3><p>Оставьте заявку или пришлите фото в мессенджер, ответим в течение 5 минут.</p></div><div class="st"><h3>Расчёт и фиксация цены</h3><p>Менеджер оценит объём и сложность, назовёт точную цену и закрепит её в договоре. Вы вносите онлайн предоплату 10%.</p></div><div class="st"><h3>Уборка по чек-листу</h3><p>Бригада приезжает в согласованное время с профессиональной химией и пылесосом.</p></div><div class="st"><h3>Контроль качества</h3><p>Менеджер дистанционно проверяет результат по подробному чек-листу.</p></div><div class="st"><h3>Приёмка и оплата</h3><p>Вы принимаете работу. Если что-то не устроит, исправим на месте. Остаток оплачиваете онлайн по ссылке или наличными.</p></div></div>
   <div class="center" style="margin-top:28px"><a class="btn btn-p" href="#popup:order" data-lead="steps">Оставить заявку</a></div></div></section>
-<section class="guar"><div class="w"><h2>Почему нам доверяют уборку после ремонта</h2><p class="lead">Мы специализируемся на жилой недвижимости, поэтому знаем, как бережно обращаться с паркетом, дизайнерской сантехникой и деликатными поверхностями.</p>
+<section class="guar"><div class="w"><h2>Почему нам доверяют уборку после ремонта</h2><p class="lead">Убираем квартиры, дома и коммерческие помещения: офисы, магазины, рестораны и склады. Поэтому знаем, как бережно обращаться с паркетом, дизайнерской сантехникой и деликатными поверхностями.</p>
   <div class="grid c3"><div class="card"><span class="em">💰</span><h3>Цена фиксируется до начала</h3><p>Менеджер называет итоговую сумму и закрепляет её в договоре. На месте никаких доплат.</p></div><div class="card"><span class="em">✅</span><h3>Основная оплата после приёмки</h3><p>Предоплата всего 10%. Остальное вы оплачиваете онлайн по ссылке или наличными только после того, как вместе с клинером проверите результат по чек-листу.</p></div><div class="card"><span class="em">↩️</span><h3>Вернём деньги</h3><p>Если результат не устроит, переделаем бесплатно или вернём деньги.</p></div><div class="card"><span class="em">🛡️</span><h3>Отвечаем за имущество</h3><p>Несём полную материальную ответственность за сохранность вашего имущества.</p></div><div class="card"><span class="em">🪪</span><h3>Проверенный персонал</h3><p>Все сотрудники проходят проверку службой безопасности и имеют опыт от 3 лет.</p></div><div class="card"><span class="em">🌿</span><h3>Безопасно для детей и животных</h3><p>Экологичные сертифицированные средства подбираем под каждую поверхность.</p></div></div></div></section>
 <section><div class="w gear"><h2>Как мы убираем строительную пыль</h2><p class="lead">Правильный алгоритм важнее силы: профессиональная техника вытягивает пыль, а не разносит её по квартире. Пылесос входит в стоимость, а стремянка и пароочиститель подключаются по запросу как дополнительная услуга: сообщите об этом менеджеру.</p>
   <div class="grid c3"><div class="card"><span class="em">🌀</span><div><h3>Промышленные пылесосы Kärcher</h3><p>Вытягивают пыль из радиаторов и щелей, не выбрасывая её обратно в воздух. Собирают строительную пыль, опилки и небольшое количество жидкости.</p></div></div><div class="card"><span class="em">♨️</span><div><h3>Пароочиститель Kärcher</h3><p>Очищает и дезинфицирует твёрдые поверхности без химии: плитку, стекло, сантехнику.</p></div></div><div class="card"><span class="em">🧴</span><div><h3>Химия Buzil и Pro-Brite</h3><p>Для удаления цемента и краски. Эффективна, но безопасна для детей и аллергиков.</p></div></div></div></div></section>
 <section class="alt team"><div class="w center"><h2>Команда, которой можно доверить новую квартиру</h2><p class="lead">Все сотрудники проходят обучение и проверку службой безопасности. Вот несколько наших мастеров.</p>
-  <div class="grid c4" style="text-align:center"><div class="card"><div class="ph"><img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/team-alexey.webp" alt="Алексей, клинер CleanHub" width="270" height="270" loading="lazy"></div><h3>Алексей</h3><p><b>Тяжёлая артиллерия</b></p><p style="margin-top:6px">Профи с мощной техникой. Справляется со сложными пятнами после ремонта и химчисткой мебели.</p><span class="cnt">678 химчисток</span></div><div class="card"><div class="ph"><img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/team-elena.webp" alt="Елена, клинер CleanHub" width="270" height="270" loading="lazy"></div><h3>Елена</h3><p><b>Перфекционист</b></p><p style="margin-top:6px">Видит пыль там, где её не видят другие. Мастер детальной уборки и зеркального блеска.</p><span class="cnt">2505 уборок</span></div><div class="card"><div class="ph"><img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/team-olga.webp" alt="Ольга, клинер CleanHub" width="270" height="270" loading="lazy"></div><h3>Ольга</h3><p><b>Мастер порядка</b></p><p style="margin-top:6px">После её визита вещи лежат так удобно, что в доме воцаряется гармония.</p><span class="cnt">1149 уборок</span></div><div class="card"><div class="ph"><img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@a56209b376ce38ab62dfaa1b39b099bd39e00027/landings/photos/team-lyudmila.webp" alt="Людмила, клинер CleanHub" width="270" height="270" loading="lazy"></div><h3>Людмила</h3><p><b>Экозабота</b></p><p style="margin-top:6px">Использует только гипоаллергенные средства, безопасные для детей и питомцев.</p><span class="cnt">2103 уборки</span></div></div></div></section>
+  <div class="grid c4" style="text-align:center"><div class="card"><div class="ph"><img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/team-alexey.webp" alt="Алексей, клинер CleanHub" width="270" height="270" loading="lazy"></div><h3>Алексей</h3><p><b>Тяжёлая артиллерия</b></p><p style="margin-top:6px">Профи с мощной техникой. Справляется со сложными пятнами после ремонта и химчисткой мебели.</p><span class="cnt">678 химчисток</span></div><div class="card"><div class="ph"><img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/team-elena.webp" alt="Елена, клинер CleanHub" width="270" height="270" loading="lazy"></div><h3>Елена</h3><p><b>Перфекционист</b></p><p style="margin-top:6px">Видит пыль там, где её не видят другие. Мастер детальной уборки и зеркального блеска.</p><span class="cnt">2505 уборок</span></div><div class="card"><div class="ph"><img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/team-olga.webp" alt="Ольга, клинер CleanHub" width="270" height="270" loading="lazy"></div><h3>Ольга</h3><p><b>Мастер порядка</b></p><p style="margin-top:6px">После её визита вещи лежат так удобно, что в доме воцаряется гармония.</p><span class="cnt">1149 уборок</span></div><div class="card"><div class="ph"><img src="https://cdn.jsdelivr.net/gh/ulplatonova/website@7e2e107fd8050c5c96879953fb84703b9e11150e/landings/photos/team-lyudmila.webp" alt="Людмила, клинер CleanHub" width="270" height="270" loading="lazy"></div><h3>Людмила</h3><p><b>Экозабота</b></p><p style="margin-top:6px">Использует только гипоаллергенные средства, безопасные для детей и питомцев.</p><span class="cnt">2103 уборки</span></div></div></div></section>
 <section><div class="w"><h2>Что говорят клиенты CleanHub</h2>
   <div class="rev-head"><span class="rev-score">5,0</span><div><span class="stars" style="font-size:18px">★★★★★</span><br><span style="color:var(--mute);font-size:14px">157 оценок клиентов CleanHub</span></div></div>
   <div class="revs"><div class="rev"><span class="stars">★★★★★</span><p>«Очень довольны уборкой! Заказывали генеральную уборку при покупки вторичной квартиры, все прошло замечательно, даже тяжелые загрязнения устранили, сами бы мы никогда так не убрались. Буду советовать знакомым)»</p><div class="who"><b>Юлия Тетерева</b><span>16 июля 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Заказала генеральную уборку в квартире, которая простояла без людей целых три года, — состояние, честно говоря, было далеко от идеала. Но Зарина и Александр взялись за дело с настоящим профессионализмом: вымыли, отскребли, привели в порядок каждый уголок. Я была искренне поражена, когда увидела, что некоторые поверхности, которые я считала серыми, на самом деле белоснежные!»</p><div class="who"><b>Тюрина С.</b><span>8 сентября 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Квартира, которую сняли, оказалась очень грязной и своими силами поняли что не справимся. Быстро договорились, все обсудили, буквально через пару дней уже приехали. Я в полном восторге! Все поверхности помыты, пыль везде вытерта, в квартире стало легче дышать, туалет/ванна/плитка, плинтуса, розетки и выключатели вообще все-все не оставили без внимания!»</p><div class="who"><b>Марина Расулова</b><span>20 июня 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Нужно было убрать квартиру после проживания двух котов. У человека аллергия, перед заездом нужно было полностью избавиться от шерсти и запаха. Сотрудники справились на ура! В итоге от шерсти и запаха не осталось и следа. Проверкой стало отсутствие каких-либо признаков аллергии после уборки.»</p><div class="who"><b>Полина В.</b><span>21 апреля 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Обратилась в компанию потому что после переезда вся квартира была очень грязной. Работали спокойно, без лишних вопросов что мне даже понравилось. Ближе к концу заметила, что даже трудные места привели в порядок, которые я никогда не могла убрать самостоятельно. Честно, была очень приятно удивлена такой хорошей работой.»</p><div class="who"><b>Александра</b><span>14 апреля 2026</span></div></div><div class="rev"><span class="stars">★★★★★</span><p>«Брала тариф «Премиум», потому что мне было важно помыть холодильник и стиральную машинку, и отдельно мойку окон. Всё чистенько. Окно сияет, как никогда не сияло. Даже сетку сняла и помыла. Переживала в первый раз заказывать клининг, но всё прошло отлично.»</p><div class="who"><b>Аделина Ш.</b><span>30 июля 2026</span></div></div></div>
@@ -688,7 +694,8 @@ window.CHL_CONFIG = {
         },
         {
           "id": "curtains",
-          "title": "Шторы"
+          "title": "Шторы",
+          "unit": "м²"
         },
         {
           "id": "sofa",
@@ -700,7 +707,8 @@ window.CHL_CONFIG = {
         },
         {
           "id": "carpet",
-          "title": "Ковёр"
+          "title": "Ковёр",
+          "unit": "м²"
         }
       ]
     }
@@ -755,7 +763,7 @@ window.CHL_CONFIG = {
           var gq = state.x[x.id + ':' + g.id] || 0;
           if (!gq) return;
           quote = true;
-          lines.push({ x: { title: x.shortTitle + ': ' + g.title.toLowerCase(), quote: true, unit: 'шт.' }, qty: gq, inc: 0, paid: gq, cost: 0 });
+          lines.push({ x: { title: x.shortTitle + ': ' + g.title.toLowerCase(), quote: true, unit: g.unit || 'шт.' }, qty: gq, inc: 0, paid: gq, cost: 0 });
         });
         return;
       }
@@ -822,8 +830,10 @@ window.CHL_CONFIG = {
       h += '<div class="xg">';
       x.group.forEach(function (g) {
         var q = state.x[x.id + ':' + g.id] || 0, gid = x.id + ':' + g.id;
+        var m2 = g.unit === 'м²';
         h += '<div class="xr"><span>' + esc(g.title) + '</span><span class="xc">' +
-          '<button type="button" class="qb" data-act="dec" data-id="' + gid + '" aria-label="Меньше: ' + esc(g.title) + '">−</button><span class="qn">' + q + '</span>' +
+          '<button type="button" class="qb" data-act="dec" data-id="' + gid + '" aria-label="Меньше: ' + esc(g.title) + '">−</button>' +
+          (m2 ? '<input class="qi" type="text" inputmode="numeric" maxlength="3" data-qi="' + gid + '" value="' + q + '" aria-label="' + esc(g.title) + ', м²"><span class="qu">м²</span>' : '<span class="qn">' + q + '</span>') +
           '<button type="button" class="qb" data-act="inc" data-id="' + gid + '" aria-label="Больше: ' + esc(g.title) + '">+</button></span></div>';
       });
       h += '<p class="xnote">Стоимость зависит от материала и загрязнения, поэтому оценим её по фото. Пришлите фото менеджеру: ' +
@@ -865,7 +875,7 @@ window.CHL_CONFIG = {
       '<div><span>' + esc(S.title) + (r.big ? '' : ', «' + esc(t.title) + '»') + '</span><span>' + money(r.base) + '</span></div>' +
       '<div><span>Площадь</span><span>' + state.area + ' м²' + (r.big ? ' (индивид.)' : '') + '</span></div>';
     r.lines.forEach(function (l) {
-      html += '<div><span>' + esc(l.x.title) + (l.x.toggle ? '' : ' × ' + l.qty) + '</span><span>' +
+      html += '<div><span>' + esc(l.x.title) + (l.x.toggle ? '' : ' × ' + l.qty + (l.x.unit === 'м²' ? '\u00a0м²' : '')) + '</span><span>' +
         (l.x.quote ? 'по фото' : !l.paid ? 'в тарифе' : (l.x.from ? 'от ' : '') + money(l.cost)) + '</span></div>';
     });
     html += '</div>';
@@ -908,7 +918,7 @@ window.CHL_CONFIG = {
   function setX(id, v) {
     var x = C.extras.filter(function (e) { return e.id === id; })[0];
     if (!x && id.indexOf(':') < 0) return;          // позиции химчистки имеют id вида «dryclean:sofa»
-    v = Math.max(0, Math.min(x ? (x.toggle ? 1 : (x.max || 30)) : 30, v));
+    v = Math.max(0, Math.min(x ? (x.toggle ? 1 : (x.max || 30)) : (/^dryclean:(curtains|carpet)$/.test(id) ? 200 : 30), v));
     state.x[id] = v; touch(); render();
   }
 
@@ -959,6 +969,11 @@ window.CHL_CONFIG = {
     }
   });
   // Кнопки вне корня не бывают, но попап Тильды может открыться по якорю — подстрахуем заполнение формы
+  root.addEventListener('change', function (e) {
+    var t = e.target.closest ? e.target.closest('[data-qi]') : null;
+    if (!t) return;
+    setX(t.getAttribute('data-qi'), parseInt(t.value.replace(/\D+/g, ''), 10) || 0);
+  });
   refs.areaInput.addEventListener('input', function () {
     var v = refs.areaInput.value.replace(/\D+/g, '');
     if (v !== refs.areaInput.value) refs.areaInput.value = v;

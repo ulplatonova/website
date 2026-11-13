@@ -45,7 +45,7 @@
           var gq = state.x[x.id + ':' + g.id] || 0;
           if (!gq) return;
           quote = true;
-          lines.push({ x: { title: x.shortTitle + ': ' + g.title.toLowerCase(), quote: true, unit: 'шт.' }, qty: gq, inc: 0, paid: gq, cost: 0 });
+          lines.push({ x: { title: x.shortTitle + ': ' + g.title.toLowerCase(), quote: true, unit: g.unit || 'шт.' }, qty: gq, inc: 0, paid: gq, cost: 0 });
         });
         return;
       }
@@ -112,8 +112,10 @@
       h += '<div class="xg">';
       x.group.forEach(function (g) {
         var q = state.x[x.id + ':' + g.id] || 0, gid = x.id + ':' + g.id;
+        var m2 = g.unit === 'м²';
         h += '<div class="xr"><span>' + esc(g.title) + '</span><span class="xc">' +
-          '<button type="button" class="qb" data-act="dec" data-id="' + gid + '" aria-label="Меньше: ' + esc(g.title) + '">−</button><span class="qn">' + q + '</span>' +
+          '<button type="button" class="qb" data-act="dec" data-id="' + gid + '" aria-label="Меньше: ' + esc(g.title) + '">−</button>' +
+          (m2 ? '<input class="qi" type="text" inputmode="numeric" maxlength="3" data-qi="' + gid + '" value="' + q + '" aria-label="' + esc(g.title) + ', м²"><span class="qu">м²</span>' : '<span class="qn">' + q + '</span>') +
           '<button type="button" class="qb" data-act="inc" data-id="' + gid + '" aria-label="Больше: ' + esc(g.title) + '">+</button></span></div>';
       });
       h += '<p class="xnote">Стоимость зависит от материала и загрязнения, поэтому оценим её по фото. Пришлите фото менеджеру: ' +
@@ -155,7 +157,7 @@
       '<div><span>' + esc(S.title) + (r.big ? '' : ', «' + esc(t.title) + '»') + '</span><span>' + money(r.base) + '</span></div>' +
       '<div><span>Площадь</span><span>' + state.area + ' м²' + (r.big ? ' (индивид.)' : '') + '</span></div>';
     r.lines.forEach(function (l) {
-      html += '<div><span>' + esc(l.x.title) + (l.x.toggle ? '' : ' × ' + l.qty) + '</span><span>' +
+      html += '<div><span>' + esc(l.x.title) + (l.x.toggle ? '' : ' × ' + l.qty + (l.x.unit === 'м²' ? '\u00a0м²' : '')) + '</span><span>' +
         (l.x.quote ? 'по фото' : !l.paid ? 'в тарифе' : (l.x.from ? 'от ' : '') + money(l.cost)) + '</span></div>';
     });
     html += '</div>';
@@ -198,7 +200,7 @@
   function setX(id, v) {
     var x = C.extras.filter(function (e) { return e.id === id; })[0];
     if (!x && id.indexOf(':') < 0) return;          // позиции химчистки имеют id вида «dryclean:sofa»
-    v = Math.max(0, Math.min(x ? (x.toggle ? 1 : (x.max || 30)) : 30, v));
+    v = Math.max(0, Math.min(x ? (x.toggle ? 1 : (x.max || 30)) : (/^dryclean:(curtains|carpet)$/.test(id) ? 200 : 30), v));
     state.x[id] = v; touch(); render();
   }
 
@@ -249,6 +251,11 @@
     }
   });
   // Кнопки вне корня не бывают, но попап Тильды может открыться по якорю — подстрахуем заполнение формы
+  root.addEventListener('change', function (e) {
+    var t = e.target.closest ? e.target.closest('[data-qi]') : null;
+    if (!t) return;
+    setX(t.getAttribute('data-qi'), parseInt(t.value.replace(/\D+/g, ''), 10) || 0);
+  });
   refs.areaInput.addEventListener('input', function () {
     var v = refs.areaInput.value.replace(/\D+/g, '');
     if (v !== refs.areaInput.value) refs.areaInput.value = v;

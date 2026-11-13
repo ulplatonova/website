@@ -134,6 +134,10 @@
 #chl .x .xg{grid-column:1/-1;display:grid;gap:8px;margin-top:6px;padding-top:12px;border-top:1px dashed var(--line)}
 #chl .x .xr{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:600;font-size:15px}
 #chl .x .xr .xc{grid-row:auto;grid-column:auto}
+#chl .x .xr small{font-weight:500;color:var(--mute);font-size:13px}
+#chl .x .qi{width:56px;height:36px;border:1.5px solid var(--line);border-radius:10px;text-align:center;font:inherit;font-weight:700;color:var(--ink);background:#fff}
+#chl .x .qi:focus-visible{outline:3px solid var(--g-l);outline-offset:1px}
+#chl .x .qu{font-size:13px;color:var(--mute);margin:0 4px 0 2px}
 #chl .x .xnote{font-size:13px;line-height:1.35;color:var(--ink2);margin:4px 0 0}
 #chl .x .xnote a{color:var(--g-d);text-decoration:underline;font-weight:600}
 #chl .qb{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:20px;line-height:1;font-weight:700;cursor:pointer;color:var(--ink)}
@@ -237,11 +241,13 @@
 #chl .gear .em{font-size:28px;line-height:1}
 
 /* команда */
-#chl .team .card{text-align:center}
+#chl .team .card{text-align:center;display:flex;flex-direction:column;align-items:center}
+#chl .team .card .ph{align-self:stretch}
 #chl .team .ph{aspect-ratio:1/1;border-radius:14px;background:linear-gradient(180deg,#e2f7ea,#c2e9d2);overflow:hidden;margin-bottom:12px}
+#chl .team .card p:last-of-type{margin-bottom:10px}
 #chl .team .ph img{width:100%;height:100%;object-fit:cover;object-position:center top}
 #chl .team .av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--g-d));color:#fff;font-weight:800;font-size:26px;display:grid;place-items:center;margin:0 auto 10px}
-#chl .team .cnt{line-height:1.3;display:inline-block;margin-top:8px;background:#e8f8ee;color:var(--g-d);border-radius:8px;padding:3px 10px;font-weight:700;font-size:13px}
+#chl .team .cnt{line-height:1.3;display:inline-block;margin-top:auto;background:#e8f8ee;color:var(--g-d);border-radius:8px;padding:3px 10px;font-weight:700;font-size:13px}
 
 /* отзывы */
 #chl .rev-head{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
