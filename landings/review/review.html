@@ -928,9 +928,11 @@ window.__chlInit = function () {
         var q = state.x[x.id + ':' + g.id] || 0, gid = x.id + ':' + g.id;
         var m2 = g.unit === 'м²';
         h += '<div class="xr"><span>' + esc(g.title) + '</span><span class="xc">' +
-          '<button type="button" class="qb" data-act="dec" data-id="' + gid + '" aria-label="Меньше: ' + esc(g.title) + '">−</button>' +
-          (m2 ? '<input class="qi" type="text" inputmode="numeric" maxlength="3" data-qi="' + gid + '" value="' + q + '" aria-label="' + esc(g.title) + ', м²"><span class="qu">м²</span>' : '<span class="qn">' + q + '</span>') +
-          '<button type="button" class="qb" data-act="inc" data-id="' + gid + '" aria-label="Больше: ' + esc(g.title) + '">+</button></span></div>';
+          (m2
+            ? '<input class="qi" type="text" inputmode="numeric" maxlength="3" data-qi="' + gid + '" value="' + (q || '') + '" placeholder="0" aria-label="' + esc(g.title) + ', м²"><span class="qu">м²</span>'
+            : '<button type="button" class="qb" data-act="dec" data-id="' + gid + '" aria-label="Меньше: ' + esc(g.title) + '">−</button><span class="qn">' + q + '</span>' +
+              '<button type="button" class="qb" data-act="inc" data-id="' + gid + '" aria-label="Больше: ' + esc(g.title) + '">+</button>') +
+          '</span></div>';
       });
       h += '<p class="xnote">Стоимость зависит от материала и загрязнения, поэтому оценим её по фото. Пришлите фото менеджеру: ' +
         '<a href="' + esc(waLink('Здравствуйте! Хочу рассчитать химчистку по фото.')) + '" target="_blank" rel="noopener">WhatsApp</a> или ' +
