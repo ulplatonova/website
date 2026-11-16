@@ -130,7 +130,7 @@ def topbar():
     return '''<header class="top"><div class="w">
   <a class="logo" href="#chl-top" aria-label="CleanHub: наверх">%s</a>
   <div class="top-meta">
-    <div class="top-time">Москва и область<br>ежедневно 09:00–21:00</div>
+    <div class="top-time">Москва и Санкт-Петербург<br>ежедневно 09:00–21:00</div>
     <a class="top-phone" href="tel:%s">%s</a>
     <a class="btn btn-p btn-s" href="#chl-calc">Рассчитать цену</a>
   </div></div></header>''' % (LOGO_SVG, PHONE, PHONE_TXT)
@@ -298,7 +298,7 @@ def final(title, lead_txt, wa_text):
 def footer():
     links = ''.join('<a href="%s" target="_blank" rel="noopener">%s</a>' % (u, t) for t, u in FOOT_LINKS)
     return '''<footer class="foot"><div class="w">
-  <div>CleanHub, клининговая компания в Москве и Московской области. Основной сайт: <a href="https://cleanhub24.ru" target="_blank" rel="noopener">cleanhub24.ru</a></div>
+  <div>CleanHub, клининговая компания в Москве, Московской области и Санкт-Петербурге. Основной сайт: <a href="https://cleanhub24.ru" target="_blank" rel="noopener">cleanhub24.ru</a></div>
   <div>%s</div>
   <div>Адреса офисов:<ul class="addr"><li>Московская область, Одинцовский г.о., Новоивановское рп, Можайское ш., вл165</li><li>Московская область, г. Красногорск, Ильинское ш., 1А</li></ul></div>
   <div class="links">%s</div></div></footer>''' % (REQUISITES, links)
@@ -354,7 +354,7 @@ def page_general():
               '<b>Выезд в день обращения</b>, бригада работает 4–6 часов',
               '<b>Не устроит результат?</b> Переделаем бесплатно или вернём деньги'],
              img('tild3030-6337-4333-b266-366132653834', 'DSCF0238_batcheditor.jpg', 900),
-             'Бригада CleanHub делает генеральную уборку на кухне', '4–6 часов', 'Москва и МО · выезд в день обращения',
+             'Бригада CleanHub делает генеральную уборку на кухне', '4–6 часов', 'Москва, МО и Санкт-Петербург',
              PHONE_TXT),
         facts(),
         pain('Когда пора заказывать генеральную уборку',
@@ -477,7 +477,7 @@ def page_reno():
               '<b>Выезд в день обращения</b>, обычно 5–7 часов работы бригады',
               '<b>Безопасная химия</b> для детей, аллергиков и дорогих покрытий'],
              img('tild6433-6564-4162-b532-656362323334', 'IMG_3303.PNG', 900),
-             'Кухня после уборки после ремонта от CleanHub', '5–7 часов', 'Москва и МО · выезд в день обращения',
+             'Кухня после уборки после ремонта от CleanHub', '5–7 часов', 'Москва, МО и Санкт-Петербург',
              PHONE_TXT),
         facts(),
         pain('Знакомая картина после ремонта?',
