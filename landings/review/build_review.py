@@ -116,7 +116,7 @@ HTML = '''<title>Правки лендингов CleanHub</title>
     <small>Менеджер получит вместе с заявкой ваш расчёт:</small>
     <pre id="mock-view"></pre>
     <input type="hidden" name="Расчёт" id="mock-calc"><input type="hidden" name="Сумма" id="mock-sum">
-    <small>Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных и договором оферты.</small>
+    <small>Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.</small>
     <div class="row"><button class="btn" id="mock-close" type="button">Закрыть</button><button class="btn pri" type="submit">Отправить заявку</button></div>
     <div class="ok" id="mock-ok" hidden>В примере заявка никуда не уходит. В Тильде здесь откроется страница «Спасибо».</div>
   </form>
