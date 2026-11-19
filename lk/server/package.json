@@ -1,0 +1,17 @@
+{
+  "name": "cleanhub-lk-server",
+  "version": "1.0.0",
+  "description": "Бэкенд личного кабинета CleanHub (Битрикс24, SMS, Telegram). Без внешних зависимостей.",
+  "private": true,
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test",
+    "setup:bitrix": "node scripts/bitrix-setup.js",
+    "materialize": "node scripts/materialize.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}
