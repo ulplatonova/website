@@ -3,7 +3,8 @@
   Вставка: Tilda → Блок «T123 — HTML-код» → вставить весь этот файл целиком.
   Настройка: поменять значения в CHLK_CONFIG ниже (или задать window.CHLK_CONFIG до этого блока).
   Пока mode = 'demo', кабинет работает на тестовых данных без сервера.
-  Для боевого режима см. lk/INTEGRATION.md (нужен свой бэкенд-прокси: Тейка и Telegram-бот).
+  Для боевого режима нужен сервер из lk/server (Битрикс24, SMS, Telegram): см. lk/INTEGRATION.md и lk/server/README.md.
+  Цены берутся из движка калькулятора (lk/pricing.js, встроен ниже между маркерами PRICING:BEGIN/END).
 -->
 <div id="chlk" class="chlk"></div>
 
@@ -66,6 +67,38 @@
 .k-done{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
 .k-done .k-okc{width:52px;height:52px;border-radius:50%;background:var(--k-tint);color:var(--k-acc-t);display:grid;place-items:center}
 textarea.k-in{resize:vertical;min-height:84px;font-size:15px}
+.k-seg button[aria-pressed="true"]{background:var(--k-card);color:var(--k-ink);box-shadow:0 1px 3px rgba(16,36,58,.14)}
+.k-seg3 button{padding:9px 6px}
+.k-grp{border:1.5px solid var(--k-line);border-radius:18px;overflow:hidden;background:var(--k-card)}
+.k-grp>button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:none;border:0;padding:13px 16px;font-weight:700;font-size:15px;text-align:left}
+.k-grp .k-chev{transition:transform .2s;color:var(--k-muted)}
+.k-grp.open .k-chev{transform:rotate(90deg)}
+.k-grp-body{display:none;padding:0 16px 6px;border-top:1px dashed var(--k-line)}
+.k-grp.open .k-grp-body{display:block}
+.k-xrow{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--k-line)}
+.k-xrow:last-child{border:0}
+.k-xt{min-width:0;flex:1}
+.k-xt b{display:block;font-size:14.5px}
+.k-step{display:flex;align-items:center;gap:4px;flex:none}
+.k-step button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--k-line);background:var(--k-card);font-size:18px;line-height:1;display:grid;place-items:center;padding:0}
+.k-step b{min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
+.k-tars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.k-tar{text-align:left;border:1.5px solid var(--k-line);background:var(--k-card);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.k-tar b{font-size:14.5px}
+.k-tp{font-weight:800;font-size:17px}
+.k-tar[aria-pressed="true"]{border-color:var(--k-acc);background:var(--k-tint);box-shadow:inset 0 0 0 1px var(--k-acc)}
+.k-dates{display:flex;flex-wrap:wrap;gap:6px}
+.k-intro{background:var(--k-tint);border-color:transparent}
+.k-intro p{margin-top:4px}
+.k-btn.k-danger{background:var(--k-bad)}
+.k-btn.k-danger:hover{background:#962c25}
+.k-ref{padding:22px}
+.k-refgrid{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px}
+.k-refcode{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border:2px dashed var(--k-acc);background:var(--k-tint);border-radius:20px;padding:12px 14px 12px 18px;font-weight:800;font-size:24px;letter-spacing:.08em}
+.k-share{display:flex;gap:8px;flex-wrap:wrap}
+.k-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.k-stat{background:var(--k-bg);border-radius:16px;padding:12px 14px}
+.k-stat b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
 .k-sec{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding-top:24px;border-top:2px solid var(--k-line)}
 .chlk .k-sec h3{font-size:22px;margin:0}
 .k-sec h3::before{content:"";display:inline-block;width:8px;height:22px;border-radius:4px;background:var(--k-acc);vertical-align:-3px;margin-right:10px}
@@ -172,6 +205,7 @@ textarea.k-in{resize:vertical;min-height:84px;font-size:15px}
   .k-ord{grid-template-columns:minmax(0,1fr)}
   .k-sum{position:static}
   .k-two{grid-template-columns:minmax(0,1fr)}
+  .k-tars{grid-template-columns:minmax(0,1fr)}
   .k-svcs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .k-svc span{display:none}
   .k-svc{padding:11px 12px}
@@ -194,7 +228,7 @@ textarea.k-in{resize:vertical;min-height:84px;font-size:15px}
   .k-top .k-out{order:2}
   .k-top .k-new{order:3;flex:1 1 100%}
   .k-top .k-tabs{order:4;flex:1 1 100%}
-  .k-tabs button{flex:1;justify-content:center;padding:10px 4px;font-size:14px}
+  .k-tabs button{flex:1;justify-content:center;padding:10px 2px;font-size:13px}
   .k-tabs button .k-ic{display:none}
   .k-hello h2{font-size:20px}
 }
@@ -202,6 +236,372 @@ textarea.k-in{resize:vertical;min-height:84px;font-size:15px}
 .chlk .k-card h3{font-size:17px}
 @media (prefers-reduced-motion:reduce){.chlk *{animation:none!important;transition:none!important}}
 </style>
+
+<script>/*PRICING:BEGIN*/
+/*
+ * CleanHub: движок расчёта стоимости.
+ * Скопирован из калькулятора на cleanhub24.ru (блок «cleanhub-calc») без изменения логики.
+ * Единый источник цен для кабинета (браузер) и для сервера (Node): при изменении прайса правьте только этот файл,
+ * затем запустите `node lk/sync-pricing.js`, чтобы обновить встроенную копию в lk/cleanhub-lk.html.
+ */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.CleanHubPricing = factory();
+}(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  var CONFIG = {
+    defaults: { service: 'general', area: 50, tariff: 'premium', freq: 0, months: 6 },
+    areaMax: 5000,
+    firstOrder: null
+  };
+
+  var TARIFFS = [
+    { id: 'lite', title: 'Лайт' },
+    { id: 'standard', title: 'Стандарт' },
+    { id: 'premium', title: 'Премиум' }
+  ];
+
+  var SERVICES = {
+    general: {
+      title: 'Генеральная',
+      full: 'Генеральная уборка',
+      hint: 'Глубокая уборка всех помещений и труднодоступных мест: от потолка до пола. В среднем 4–6 часов.',
+      tiers: [40, 60, 80, 100, 120],
+      prices: {
+        lite:     [8990, 13990, 18490, 23490, 27990],
+        standard: [10990, 15990, 20490, 25490, 29990],
+        premium:  [12990, 17990, 22490, 27490, 31990]
+      },
+      perM2: 265,
+      perks: {
+        lite: [],
+        standard: ['СВЧ', 'духовка', 'посудомойка'],
+        premium: ['СВЧ', 'духовка', 'посудомойка', 'вытяжка', 'холодильник', 'стиральная машина']
+      },
+      includes: {
+        standard: { microwave: 1, oven: 1, dishwasher: 1 },
+        premium: { microwave: 1, oven: 1, dishwasher: 1, fridge: 1, washer: 1 }
+      }
+    },
+    support: {
+      title: 'Поддерживающая',
+      full: 'Поддерживающая уборка',
+      hint: 'Регулярная уборка, чтобы дома всегда было чисто. От 2 часов.',
+      tiers: [25, 40, 60, 80, 100, 120],
+      prices: {
+        lite:     [4990, 5490, 6990, 9490, 11490, 13490],
+        standard: [5990, 6490, 7990, 10490, 12490, 14490],
+        premium:  [7990, 8490, 9990, 12490, 14490, 16490]
+      },
+      perM2: 120,
+      perks: {
+        lite: [],
+        standard: ['1 час глажки'],
+        premium: ['1 час глажки', 'СВЧ', 'духовка', 'смена постельного белья']
+      },
+      includes: {
+        standard: { hourly: 1 },
+        premium: { hourly: 1, microwave: 1, oven: 1 }
+      }
+    },
+    renovation: {
+      title: 'После ремонта',
+      full: 'Уборка после ремонта',
+      hint: 'Удалим строительную пыль и следы ремонта со всех поверхностей, отмоем сантехнику, полы и плинтусы.',
+      tiers: [40, 60, 80, 100, 120],
+      prices: {
+        lite:     [11990, 16490, 20990, 25490, 29990],
+        standard: [14490, 18990, 23490, 27990, 32490],
+        premium:  [16990, 21490, 25990, 30490, 34990]
+      },
+      perM2: 300,
+      perks: {
+        lite: [],
+        standard: ['мойка всех шкафов внутри (пустых)'],
+        premium: ['мойка всех шкафов внутри (пустых)', 'окна до {windows} створок']
+      },
+      includes: {
+        standard: { wardrobe: Infinity },
+        premium: { wardrobe: Infinity, windows: [4, 6, 8, 10, 12] }
+      }
+    }
+  };
+
+  /* Абонемент на поддерживающую уборку: скидка с каждой уборки по сроку, ₽.
+     Сейчас абонементы не продаём (enabled: false) — в калькуляторе их нет.
+     Чтобы вернуть: enabled: true и проверить скидки ниже. */
+  var SUBSCRIPTION = {
+    enabled: true,
+    service: 'support',
+    frequencies: [2, 4],
+    discounts: { 3: 500, 6: 700, 12: 1000 }
+  };
+
+  /* ================================================================
+     ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ (из презентации «Дополнительные услуги»)
+     price: null — стоимость по фото; from: true — цена «от»;
+     toggle: true — услуга без количества.
+     ================================================================ */
+  var EXTRA_GROUPS = [
+    { id: 'kitchen', title: 'Кухня и техника' },
+    { id: 'windows', title: 'Окна и текстиль' },
+    { id: 'home', title: 'Дом и особые задачи' }
+  ];
+
+  var UNITS = {
+    pcs: { short: 'шт.', forms: ['шт.', 'шт.', 'шт.'] },
+    sash: { short: 'створка', forms: ['створка', 'створки', 'створок'] },
+    hour: { short: 'час', forms: ['час', 'часа', 'часов'] },
+    m2: { short: 'м²', forms: ['м²', 'м²', 'м²'] }
+  };
+
+  var EXTRAS = [
+    { id: 'oven', group: 'kitchen', title: 'Чистка духовки', short: 'духовка', desc: 'Внутри и снаружи', price: 1000, from: true, unit: 'pcs', max: 5 },
+    { id: 'microwave', group: 'kitchen', title: 'Мойка СВЧ', short: 'СВЧ', desc: 'Внутри и снаружи', price: 500, from: true, unit: 'pcs', max: 5 },
+    { id: 'dishwasher', group: 'kitchen', title: 'Посудомоечная машина', short: 'посудомойка', desc: 'Чистка внутри и снаружи', price: 1000, from: true, unit: 'pcs', max: 5 },
+    { id: 'washer', group: 'kitchen', title: 'Стиральная машина', short: 'стиральная машина', desc: 'Уплотнитель, лоток, барабан', price: 1000, from: true, unit: 'pcs', max: 5 },
+    { id: 'fridge', group: 'kitchen', title: 'Мойка холодильника', short: 'холодильник', desc: 'Полки, ящики, дверцы. Разморозка — до нашего приезда', price: 1500, from: true, unit: 'pcs', max: 5 },
+    { id: 'wardrobe', group: 'kitchen', title: 'Шкафы пустые', short: 'пустые шкафы', desc: 'Мытьё внутри и снаружи: кухонные, купе, гардеробная', price: 2000, from: true, unit: 'pcs', max: 20 },
+    { id: 'wardrobeFull', group: 'kitchen', title: 'Шкафы заполненные', short: 'заполненные шкафы', desc: 'Шкафы с вещами: мытьё внутри и снаружи', price: 4000, from: true, unit: 'pcs', max: 20 },
+
+    // priceBy / titleBy / descBy — другое значение для вида уборки (ключ — id из SERVICES)
+    { id: 'windows', group: 'windows', title: 'Мытьё окон', short: 'окна', desc: 'Створки изнутри и снаружи, рамы, подоконники', price: 550, from: false, unit: 'sash', max: 60,
+      priceBy: { renovation: 750 },
+      titleBy: { renovation: 'Мытьё окон после ремонта' },
+      descBy: { renovation: 'Строительная пыль, краска, клей, плёнка' } },
+    { id: 'blinds', group: 'windows', title: 'Мытьё жалюзи', short: 'жалюзи', desc: 'Вертикальные и горизонтальные', price: 300, from: true, unit: 'pcs', max: 30 },
+    { id: 'screens', group: 'windows', title: 'Мытьё москитных сеток', short: 'москитные сетки', desc: 'Снимем, вымоем, установим обратно', price: 300, from: true, unit: 'pcs', max: 30 },
+    { id: 'curtains', group: 'windows', title: 'Шторы и тюль', short: 'шторы', desc: 'Снятие, стирка, навеска, химчистка', price: 700, from: true, unit: 'pcs', max: 30 },
+
+    { id: 'bathroom', group: 'home', title: 'Дополнительный санузел', short: 'доп. санузел', desc: 'Если санузлов больше одного: ванная, туалет, раковина или отдельный туалет', price: 1500, from: false, unit: 'pcs', max: 5,
+      priceBy: { support: 1000, renovation: 2000 } },
+    { id: 'hourly', group: 'home', title: 'Почасовая задача', short: 'час глажки', desc: 'Глажка, посуда, разбор вещей', price: 1250, from: true, unit: 'hour', max: 10 },
+    { id: 'chandelier', group: 'home', title: 'Сложные люстры', short: 'люстры', desc: 'Плафоны, подвески, хрусталь', price: 1000, from: true, unit: 'pcs', max: 10 },
+    { id: 'balcony', group: 'home', title: 'Уборка балкона', short: 'балкон', desc: 'Пыль с поверхностей, мытьё пола', price: 1000, from: true, unit: 'pcs', max: 5,
+      priceBy: { renovation: 2000 },
+      titleBy: { renovation: 'Уборка балкона после ремонта' },
+      descBy: { renovation: 'Строительная пыль с поверхностей, мытьё пола' } },
+    { id: 'grout', group: 'home', title: 'Чистка межплиточных швов', short: 'швы', desc: 'Стандартные швы плитки', price: 500, from: true, unit: 'm2', max: 100 },
+    { id: 'steam', group: 'home', title: 'Пароочиститель', short: 'пароочиститель', desc: 'До 99% бактерий и грибков. Цена — за доставку и использование', price: 1500, from: false, toggle: true },
+    { id: 'upholstery', group: 'home', title: 'Химчистка мебели', short: 'химчистка', desc: 'Диваны, кресла, матрасы, ковры; запахи, кровь, моча, сложные пятна. Расчёт по фото', price: null, toggle: true }
+  ];
+
+  /* ================================================================
+     РАСЧЁТ
+     ================================================================ */
+  var TARIFF_IDS = TARIFFS.map(function (t) { return t.id; });
+  var EXTRA_BY_ID = {};
+  EXTRAS.forEach(function (x) { EXTRA_BY_ID[x.id] = x; });
+
+  function plural(n, forms) {
+    var a = Math.abs(n) % 100, b = a % 10;
+    if (a > 10 && a < 20) return forms[2];
+    if (b > 1 && b < 5) return forms[1];
+    if (b === 1) return forms[0];
+    return forms[2];
+  }
+
+  function money(n) {
+    return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+  }
+
+  function tariffTitle(id) {
+    for (var i = 0; i < TARIFFS.length; i++) if (TARIFFS[i].id === id) return TARIFFS[i].title;
+    return id;
+  }
+
+  function tierIndexFor(svc, area) {
+    for (var i = 0; i < svc.tiers.length; i++) if (area <= svc.tiers[i]) return i;
+    return -1;
+  }
+
+  function tierLabelFor(svc, i) {
+    if (i < 0) return 'больше ' + svc.tiers[svc.tiers.length - 1] + ' м²';
+    if (i === 0) return 'до ' + svc.tiers[0] + ' м²';
+    return (svc.tiers[i - 1] + 1) + '–' + svc.tiers[i] + ' м²';
+  }
+
+  function includedFor(svc, tariff, i) {
+    var map = (svc.includes && svc.includes[tariff]) || {}, out = {};
+    Object.keys(map).forEach(function (id) {
+      out[id] = Array.isArray(map[id]) ? map[id][i] : map[id];
+    });
+    return out;
+  }
+
+  function perksFor(svc, tariff, included) {
+    return (svc.perks[tariff] || []).map(function (p) {
+      return p.replace('{windows}', included.windows);
+    });
+  }
+
+  function pick(map, svcId, fallback) {
+    return map && map[svcId] != null ? map[svcId] : fallback;
+  }
+  function priceOf(x, svcId) { return pick(x.priceBy, svcId, x.price); }
+  function titleOf(x, svcId) { return pick(x.titleBy, svcId, x.title); }
+  function descOf(x, svcId) { return pick(x.descBy, svcId, x.desc); }
+
+  function clampQty(x, v) {
+    var max = x.toggle ? 1 : (x.max || 99);
+    var n = Math.floor(Number(v));
+    if (!isFinite(n) || n < 0) return 0;
+    return Math.min(n, max);
+  }
+
+  function normalize(state) {
+    state = state || {};
+    var d = CONFIG.defaults, s = {};
+    s.service = SERVICES[state.service] ? state.service : d.service;
+    var area = Math.round(Number(state.area));
+    s.area = isFinite(area) && area >= 1 ? Math.min(area, CONFIG.areaMax) : d.area;
+    s.tariff = TARIFF_IDS.indexOf(state.tariff) >= 0 ? state.tariff : d.tariff;
+    var freq = Number(state.freq);
+    s.freq = SUBSCRIPTION.enabled && s.service === SUBSCRIPTION.service && SUBSCRIPTION.frequencies.indexOf(freq) >= 0 ? freq : 0;
+    s.months = SUBSCRIPTION.discounts[state.months] != null ? Number(state.months) : d.months;
+    s.extras = {};
+    var src = state.extras || {};
+    EXTRAS.forEach(function (x) {
+      var q = clampQty(x, src[x.id]);
+      if (q) s.extras[x.id] = q;
+    });
+    s.firstOrder = !!state.firstOrder;
+    return s;
+  }
+
+  function firstOrderApplies(s) {
+    var fo = CONFIG.firstOrder;
+    return !!(fo && fo.percent && fo.services.indexOf(s.service) >= 0 && !s.freq);
+  }
+
+  /* Разовая стоимость при выбранном тарифе */
+  function quote(s, tariff) {
+    var svc = SERVICES[s.service];
+    var i = tierIndexFor(svc, s.area);
+    var individual = i < 0;
+    var base = individual ? s.area * svc.perM2 : svc.prices[tariff][i];
+    var included = individual ? {} : includedFor(svc, tariff, i);
+    var lines = [], extrasTotal = 0, approx = individual, hasQuote = false;
+
+    EXTRAS.forEach(function (x) {
+      var qty = s.extras[x.id] || 0;
+      if (!qty) return;
+      var inc = Math.min(qty, included[x.id] || 0);
+      var paid = qty - inc;
+      var price = priceOf(x, s.service);
+      var cost = price == null ? 0 : paid * price;
+      if (price == null) hasQuote = true;
+      if (x.from && paid > 0) approx = true;
+      extrasTotal += cost;
+      lines.push({ id: x.id, title: titleOf(x, s.service), qty: qty, included: inc, paid: paid, cost: cost, from: !!x.from && paid > 0, quote: price == null, toggle: !!x.toggle, unit: x.unit });
+    });
+
+    var discount = 0;
+    if (s.firstOrder && firstOrderApplies(s)) {
+      discount = Math.round(base * CONFIG.firstOrder.percent / 100);
+      if (CONFIG.firstOrder.max) discount = Math.min(discount, CONFIG.firstOrder.max);
+    }
+
+    return {
+      svc: svc, tierIndex: i, individual: individual, base: base, included: included,
+      lines: lines, extrasTotal: extrasTotal, approx: approx, hasQuote: hasQuote,
+      discount: discount, oneTime: base - discount + extrasTotal
+    };
+  }
+
+  function compute(state) {
+    var s = normalize(state);
+    var q = quote(s, s.tariff);
+    var svc = q.svc;
+    var r = {
+      state: s,
+      service: s.service,
+      serviceTitle: svc.full,
+      area: s.area,
+      tierIndex: q.tierIndex,
+      tierLabel: tierLabelFor(svc, q.tierIndex),
+      individual: q.individual,
+      tariff: q.individual ? null : s.tariff,
+      tariffTitle: q.individual ? 'Индивидуальный расчёт' : tariffTitle(s.tariff),
+      perM2: svc.perM2,
+      base: q.base,
+      included: q.included,
+      perks: q.individual ? [] : perksFor(svc, s.tariff, q.included),
+      lines: q.lines,
+      extrasTotal: q.extrasTotal,
+      hasQuote: q.hasQuote,
+      approx: q.approx,
+      discount: q.discount ? { percent: CONFIG.firstOrder.percent, amount: q.discount } : null,
+      firstOrderAvailable: firstOrderApplies(s),
+      subscription: null,
+      upsell: null,
+      tariffPrices: {}
+    };
+
+    TARIFFS.forEach(function (t) {
+      r.tariffPrices[t.id] = q.individual ? null : svc.prices[t.id][q.tierIndex];
+    });
+
+    if (s.freq) {
+      var sub = { freq: s.freq, months: s.months, individual: q.individual };
+      if (!q.individual) {
+        var d = SUBSCRIPTION.discounts[s.months];
+        sub.discountPerCleaning = d;
+        sub.perCleaning = q.base - d;
+        sub.perMonth = sub.perCleaning * s.freq;
+        sub.savingMonth = d * s.freq;
+        sub.periodTotal = sub.perMonth * s.months;
+        sub.periodSaving = sub.savingMonth * s.months;
+      }
+      r.subscription = sub;
+    }
+
+    // Итог: за разовую уборку или за месяц абонемента (доп. услуги — отдельно, к уборке)
+    r.total = r.subscription && !r.subscription.individual ? r.subscription.perMonth : q.oneTime;
+    // «от» у итога: цена за м² или «от»-цены доп. услуг (в абонементе доп. услуги показаны отдельно)
+    r.totalApprox = r.subscription && !r.subscription.individual ? false : q.approx;
+
+    // Подсказка: более высокий тариф выходит не дороже, потому что включает выбранные услуги
+    if (!q.individual) {
+      var cur = TARIFF_IDS.indexOf(s.tariff), best = null;
+      for (var k = cur + 1; k < TARIFF_IDS.length; k++) {
+        var alt = quote(s, TARIFF_IDS[k]);
+        if (alt.oneTime <= q.oneTime && (!best || alt.oneTime <= best.q.oneTime)) best = { id: TARIFF_IDS[k], q: alt };
+      }
+      if (best) {
+        var covered = [];
+        q.lines.forEach(function (l) {
+          if ((best.q.included[l.id] || 0) > (q.included[l.id] || 0)) covered.push(EXTRA_BY_ID[l.id].short);
+        });
+        r.upsell = { tariff: best.id, title: tariffTitle(best.id), saving: q.oneTime - best.q.oneTime, covered: covered };
+      }
+    }
+    return r;
+  }
+
+  function unitLabel(unit, n) {
+    var u = UNITS[unit] || UNITS.pcs;
+    return n + ' ' + plural(n, u.forms);
+  }
+
+
+  return {
+    compute: compute,
+    config: CONFIG,
+    services: SERVICES,
+    tariffs: TARIFFS,
+    subscription: SUBSCRIPTION,
+    extras: EXTRAS,
+    extraGroups: EXTRA_GROUPS,
+    units: UNITS,
+    plural: plural,
+    money: money,
+    unitLabel: unitLabel,
+    normalize: normalize
+  };
+}));
+/*PRICING:END*/</script>
 
 <script>
 (function(){
@@ -213,26 +613,15 @@ root.setAttribute('data-ready','1');
 /* ================= НАСТРОЙКИ ================= */
 var CHLK_CONFIG=window.CHLK_CONFIG||{};
 var C={
-  mode:'demo',                          // 'demo' — тестовые данные; 'live' — работа с вашим сервером
-  apiBase:'https://api.cleanhub24.ru/lk', // адрес вашего бэкенда (прокси к Тейке, CRM и Telegram-боту)
+  mode:'demo',                          // 'demo' — тестовые данные; 'live' — работа с вашим сервером (lk/server)
+  apiBase:'https://api.cleanhub24.ru/lk', // адрес сервера кабинета
   telegramBot:'cleanhub24_bot',         // имя Telegram-бота без @
-  // Услуги и цены для оформления заказа в кабинете. Цены демо: в боевом режиме сервер пересчитывает и подтверждает сумму.
-  // unit: 'm2' — считаем по площади, иначе по количеству (qtyLabel — подпись поля).
-  services:[
-    {id:'support',name:'Поддерживающая уборка',unit:'m2',price:90,hint:'Считаем по площади'},
-    {id:'general',name:'Генеральная уборка',unit:'m2',price:165,hint:'Считаем по площади'},
-    {id:'repair',name:'Уборка после ремонта',unit:'m2',price:245,hint:'Считаем по площади'},
-    {id:'windows',name:'Мытьё окон',unit:'pcs',price:500,qtyLabel:'Количество окон',def:4,hint:'Считаем по числу окон'},
-    {id:'sofa',name:'Химчистка дивана',unit:'pcs',price:1300,qtyLabel:'Количество мест',def:3,hint:'Считаем по числу мест'}
-  ],
-  extras:[{id:'fridge',name:'Мытьё холодильника',price:500},{id:'oven',name:'Мытьё духовки',price:800},{id:'balcony',name:'Уборка балкона',price:800}],
+  siteUrl:'https://cleanhub24.ru',
   slots:['09:00–11:00','11:00–13:00','13:00–15:00','15:00–17:00','17:00–19:00'],
-  defaultArea:50,
   supportUrl:'https://t.me/cleanhub24_support',
   privacyUrl:'/privacy',
-  welcomeBonus:300,
-  referralBonus:500,
-  telegramBonus:100,
+  referralOwnerBonus:500,               // только для демо: в боевом режиме суммы приходят с сервера
+  referralFriendBonus:500,
   maxPayPercent:30,
   showDemoBar:true
 };
@@ -266,57 +655,80 @@ var store={
 function wait(v,ms){return new Promise(function(r){setTimeout(function(){r(v)},ms==null?350:ms)})}
 function failP(m){return new Promise(function(_,rej){setTimeout(function(){rej(new Error(m))},350)})}
 
-/* ================= РАСЧЁТ ЗАКАЗА ================= */
-function svcById(id){for(var i=0;i<C.services.length;i++)if(C.services[i].id===id)return C.services[i];return C.services[0]}
-function quoteCore(serviceId,qty,extraIds){
-  var sv=svcById(serviceId),q=Math.max(0,Number(qty)||0),lines=[],total=0;
-  var base=Math.round(sv.price*q);
-  lines.push({name:sv.name+(sv.unit==='m2'?', '+q+'\u00A0м²':' × '+q),sum:base,item:{name:sv.name+(sv.unit==='m2'?', '+q+' м²':''),qty:sv.unit==='m2'?1:q,price:sv.unit==='m2'?base:sv.price}});
-  total+=base;
-  C.extras.forEach(function(x){if(extraIds&&extraIds.indexOf(x.id)>=0){lines.push({name:x.name,sum:x.price,item:{name:x.name,qty:1,price:x.price}});total+=x.price}});
-  return{lines:lines,total:total,svc:sv,qty:q};
+/* ================= ЦЕНЫ: тот же движок, что в калькуляторе на сайте (lk/pricing.js) ================= */
+var PR=window.CleanHubPricing;
+function extraPrice(x,svc){return x.priceBy&&x.priceBy[svc]!=null?x.priceBy[svc]:x.price}
+function extraTitle(x,svc){return(x.titleBy&&x.titleBy[svc])||x.title}
+function tariffId(t){for(var i=0;i<PR.tariffs.length;i++)if(PR.tariffs[i].title===t||PR.tariffs[i].id===t)return PR.tariffs[i].id;return PR.config.defaults.tariff}
+function isoDate(d){var m=d.getMonth()+1,dd=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd}
+function fromISO(s){var p=String(s).slice(0,10).split('-');return new Date(+p[0],+p[1]-1,+p[2],12)}
+function wd(d){return((d.getDay()+6)%7)+1}               // 1 = понедельник … 7 = воскресенье
+function visitDates(startISO,weekday,freq,months,limit){  // даты уборок по подписке
+  var d=fromISO(startISO),end=fromISO(startISO),out=[],step=freq===4?7:14;
+  while(wd(d)!==weekday)d.setDate(d.getDate()+1);
+  end.setMonth(end.getMonth()+months);
+  while(d<end&&out.length<(limit||200)){out.push(isoDate(d));d.setDate(d.getDate()+step)}
+  return out;
 }
+var WEEKDAYS=['понедельникам','вторникам','средам','четвергам','пятницам','субботам','воскресеньям'];
+var WDAY_NAMES=['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
 
 /* ================= API: ДЕМО ================= */
 function demoApi(){
   var RATE=.05;
-  function day(n){var d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+n);return d.toISOString()}
-  function mk(id,off,status,title,items,spent,addr,slot,area){
-    var sum=0;items.forEach(function(i){sum+=i[1]*i[2]});
-    var total=sum-spent;
-    return{id:id,date:day(off),status:status,title:title,
-      items:items.map(function(i){return{name:i[0],qty:i[1],price:i[2]}}),
-      bonusSpent:spent,total:total,bonusEarned:status==='cancel'?0:Math.round(total*RATE),
-      address:addr,slot:slot,area:area||0};
-  }
   var LEVELS=[{name:'Гость',from:0,pct:3},{name:'Постоянный клиент',from:15000,pct:5},{name:'Премиум-клиент',from:40000,pct:7}];
   var ADDR='Москва, ул. Профсоюзная, 56, кв. 112';
+  function day(n){var d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+n);return d.toISOString()}
+  function orderFromCalc(id,off,status,state,spent,slot,subId){
+    var r=PR.compute(state),items=[{name:r.serviceTitle+(r.individual?'':', тариф «'+r.tariffTitle+'»')+', '+r.area+' м²',qty:1,price:r.base}];
+    r.lines.forEach(function(l){
+      if(l.quote)items.push({name:l.title+' (оценим по фото)',qty:1,price:0});
+      else if(l.paid>0)items.push({name:l.title+(l.included?' ('+l.included+' в тарифе)':''),qty:l.paid,price:Math.round(l.cost/l.paid)});
+    });
+    var total=(subId&&r.subscription?r.subscription.perCleaning:r.total)-spent;
+    return{id:id,date:day(off),status:status,title:r.serviceTitle,tariff:r.individual?'':r.tariffTitle,area:r.area,svc:state.service,extras:state.extras||{},
+      items:items,total:total,bonusSpent:spent,bonusEarned:status==='cancel'?0:Math.round(total*RATE),address:ADDR,slot:slot,comment:'',sub:subId||null};
+  }
+  function decorate(s){
+    var t=isoDate(new Date());
+    s.endDate=(function(){var e=fromISO(s.startDate);e.setMonth(e.getMonth()+s.months);return isoDate(e)})();
+    s.nextVisits=s.status==='cancelled'||s.status==='finished'?[]:visitDates(s.startDate,s.weekday,s.freq,s.months).filter(function(d){return d>=t}).slice(0,4);
+    return s;
+  }
+  function mkSub(st,weekday,slot,address,startISO,status,comment){
+    var r=PR.compute({service:'support',area:st.area,tariff:st.tariff,freq:st.freq,months:st.months}),q=r.subscription;
+    return decorate({id:'s_'+Math.random().toString(36).slice(2,8),status:status,service:'support',area:r.area,tariff:st.tariff,freq:st.freq,months:st.months,
+      weekday:weekday,slot:slot,address:address,startDate:startISO,base:r.base,discountPerCleaning:q.discountPerCleaning,perCleaning:q.perCleaning,
+      perMonth:q.perMonth,periodTotal:q.periodTotal,nextVisits:[],paymentUrl:null,comment:comment||'',createdAt:new Date().toISOString()});
+  }
   function build(persona,phone,name,email){
     var user={id:'u1',name:name||(persona==='regular'?'Анна':''),phone:phone||'+7 (916) 123-45-67',email:email||(persona==='regular'?'anna@example.com':''),birthday:'',
       tg:{connected:false,username:''},notify:{tgOrders:true,tgPromo:false},
       addresses:persona==='regular'?[{id:'a1',label:'Дом',text:ADDR},{id:'a2',label:'Дача',text:'Московская обл., Подольск, ул. Лесная, 12'}]:[]};
-    var orders=[],history=[];
+    var orders=[],history=[],subs=[],invited=[];
     if(persona==='regular'){
+      var st=new Date();st.setDate(st.getDate()-28);var startISO=isoDate(st);
+      subs=[mkSub({area:53,tariff:'standard',freq:2,months:6},wd(st),'11:00–13:00',ADDR,startISO,'active')];
+      var nv=subs[0].nextVisits[0];
       orders=[
-        mk('CH-10566',1,'new','Поддерживающая уборка',[['Уборка квартиры',1,4800],['Мытьё окон',3,500]],0,ADDR,'10:00–12:00',53),
-        mk('CH-10558',0,'work','Химчистка дивана',[['Химчистка 3-местного дивана',1,3900],['Защитная пропитка',1,900]],0,ADDR,'14:00–16:00'),
-        mk('CH-10431',-21,'done','Генеральная уборка',[['Генеральная уборка',1,8800],['Мытьё окон',2,500]],300,ADDR,'09:00–11:00',53),
-        mk('CH-10317',-58,'done','Химчистка матраса',[['Химчистка матраса 160×200',1,4200]],0,ADDR,'16:00–18:00'),
-        mk('CH-10204',-97,'done','Уборка после ремонта',[['Уборка после ремонта',1,13000],['Вывоз строительного мусора',1,1500]],0,ADDR,'10:00–14:00',53),
-        mk('CH-10188',-110,'cancel','Мытьё окон',[['Мытьё окон',4,500]],0,ADDR,'12:00–14:00')
+        orderFromCalc('CH-10570',Math.round((fromISO(nv)-new Date())/864e5),'new',{service:'support',area:53,tariff:'standard'},0,'11:00–13:00',subs[0].id),
+        orderFromCalc('CH-10566',1,'new',{service:'general',area:53,tariff:'standard',extras:{windows:3}},0,'10:00–12:00'),
+        orderFromCalc('CH-10558',0,'work',{service:'support',area:53,tariff:'premium',extras:{fridge:1}},0,'14:00–16:00'),
+        orderFromCalc('CH-10431',-21,'done',{service:'general',area:53,tariff:'lite'},300,'09:00–11:00'),
+        orderFromCalc('CH-10317',-58,'done',{service:'support',area:53,tariff:'lite',extras:{balcony:1}},0,'16:00–18:00'),
+        orderFromCalc('CH-10204',-97,'done',{service:'support',area:53,tariff:'standard',extras:{oven:1}},0,'10:00–14:00'),
+        orderFromCalc('CH-10188',-110,'cancel',{service:'support',area:53,tariff:'lite'},0,'12:00–14:00')
       ];
-      [['support',53],['sofa',3],['general',53],null,['repair',53],['windows',4]].forEach(function(x,i){if(x){orders[i].svc=x[0];orders[i].qty=x[1]}});
-      history.push({date:day(-130),title:'Бонусы за регистрацию',delta:C.welcomeBonus});
       orders.slice().reverse().forEach(function(o){
         if(o.status!=='done')return;
         history.push({date:o.date,title:'Начисление за заказ '+o.id,delta:o.bonusEarned});
         if(o.bonusSpent)history.push({date:o.date,title:'Списание в заказе '+o.id,delta:-o.bonusSpent});
       });
-    }else{
-      history.push({date:day(0),title:'Бонусы за регистрацию',delta:C.welcomeBonus});
+      history.push({date:day(-40),title:'Бонус за друга: Мария К. сделала первый заказ',delta:C.referralOwnerBonus});
+      invited=[{name:'Мария К.',status:'rewarded',date:day(-52),reward:C.referralOwnerBonus},{name:'Игорь П.',status:'ordered',date:day(-9),reward:0},{name:'Олег С.',status:'registered',date:day(-3),reward:0}];
     }
     history.sort(function(a,b){return new Date(b.date)-new Date(a.date)});
-    return{persona:persona,user:user,orders:orders,history:history,promos:{}};
+    return{persona:persona,user:user,orders:orders,history:history,subs:subs,invited:invited,promos:{},referredBy:''};
   }
   var D=null;
   try{D=JSON.parse(store.get('chlk_demo')||'null')}catch(e){}
@@ -325,11 +737,14 @@ function demoApi(){
     var spent=0,bal=0;
     D.orders.forEach(function(o){if(o.status==='done')spent+=o.total});
     D.history.forEach(function(h){bal+=h.delta});
-    var tail=D.persona==='regular'?{amount:150,date:day(24)}:null;
-    return{card:'CH 0042 '+(D.persona==='regular'?'7781':'9104'),balance:bal,spent:spent,levels:LEVELS,expiring:tail,
-      history:D.history,maxPay:C.maxPayPercent,referral:{code:'CH-'+(D.user.name||'FRIEND').toUpperCase().slice(0,5)+'7',bonus:C.referralBonus}};
+    return{clientNo:'CH-'+(D.persona==='regular'?'000123':'000481'),balance:bal,spent:spent,levels:LEVELS,expiring:null,history:D.history,maxPay:C.maxPayPercent};
   }
-  function login(persona,phone,name,email){D=build(persona,phone,name,email);save();store.set('chlk_token','demo')}
+  function referral(){
+    var code='CH-'+(D.persona==='regular'?'K7M2Q':'R4T9X'),earned=0,rewarded=0;
+    D.invited.forEach(function(i){if(i.status==='rewarded'){rewarded++;earned+=i.reward}});
+    return{code:code,link:C.siteUrl+'/?ref='+code,ownerBonus:C.referralOwnerBonus,friendBonus:C.referralFriendBonus,invited:D.invited,totals:{invited:D.invited.length,rewarded:rewarded,earned:earned}};
+  }
+  function login(persona,phone,name,email,ref){D=build(persona,phone,name,email);if(ref)D.referredBy=ref;save();store.set('chlk_token','demo')}
   var tgFlag={};
   return{
     quick:function(p){login(p);return wait(null,0)},
@@ -337,42 +752,61 @@ function demoApi(){
     sendCode:function(){return wait({ok:true})},
     verify:function(phone,code,reg){
       if(code!=='1234')return failP('Неверный код. В демо-режиме подходит код 1234.');
-      if(reg)login('new',phone,reg.name,reg.email);else login('regular',phone);
-      return wait({token:'demo'});
+      var ref=reg&&/^CH-[A-Z0-9]{5}$/.test(reg.refCode||'')?reg.refCode:'';
+      if(reg)login('new',phone,reg.name,reg.email,ref);else login('regular',phone);
+      return wait({token:'demo',referralApplied:!!ref});
     },
-    me:function(){return D?wait({user:D.user,loyalty:loyalty()}):failP('Сессия истекла')},
+    me:function(){return D?wait({user:D.user,loyalty:loyalty(),referral:referral()}):failP('Сессия истекла')},
     orders:function(){return wait(D?D.orders:[])},
+    subs:function(){return wait(D?D.subs.map(decorate):[])},
     updateProfile:function(patch){
       for(var k in patch)D.user[k]=patch[k];
       save();return wait({user:D.user},250);
     },
     createOrder:function(pl){
-      var q=quoteCore(pl.service,pl.qty,pl.extras),L=loyalty(),li=levelInfo(L);
+      var st=pl.state,r=PR.compute(st),L=loyalty(),li=levelInfo(L);
       if(!pl.address||!String(pl.address).trim())return failP('Укажите адрес.');
       if(!pl.date)return failP('Выберите дату.');
-      if(q.total<=0)return failP('Укажите площадь или количество.');
-      var maxB=Math.max(0,Math.min(L.balance,Math.floor(q.total*L.maxPay/100))),b=Math.max(0,Math.min(Math.round(pl.bonusSpend)||0,maxB));
-      var pay=q.total-b,id='CH-'+(10567+D.orders.length);
-      var o={id:id,date:new Date(pl.date+'T12:00:00').toISOString(),status:'new',title:q.svc.name,items:q.lines.map(function(l){return l.item}),
-        bonusSpent:b,total:pay,bonusEarned:Math.round(pay*li.cur.pct/100),address:pl.address,slot:pl.slot,area:q.svc.unit==='m2'?q.qty:0,svc:q.svc.id,qty:q.qty,comment:pl.comment||''};
+      if(!(st.area>=1))return failP('Укажите площадь.');
+      var maxB=Math.max(0,Math.min(L.balance,Math.floor(r.total*L.maxPay/100))),b=Math.max(0,Math.min(Math.round(pl.bonusSpend)||0,maxB));
+      var id='CH-'+(10571+D.orders.length);
+      var o=orderFromCalc(id,0,'new',st,b,pl.slot);
+      o.date=new Date(pl.date+'T12:00:00').toISOString();o.address=pl.address;o.comment=pl.comment||'';
+      o.bonusEarned=Math.round(o.total*li.cur.pct/100);
       D.orders.unshift(o);
       if(b)D.history.unshift({date:new Date().toISOString(),title:'Списание в заказе '+id,delta:-b});
       save();return wait({order:o},600);
     },
+    createSub:function(pl){
+      var st=pl.state,r=PR.compute({service:'support',area:st.area,tariff:st.tariff,freq:st.freq,months:st.months});
+      if(!pl.address||!String(pl.address).trim())return failP('Укажите адрес.');
+      if(r.individual||!r.subscription)return failP('Для такой площади стоимость подписки считаем индивидуально. Напишите нам в поддержку.');
+      var s=mkSub(st,pl.weekday,pl.slot,pl.address,pl.startDate,'active',pl.comment);
+      D.subs.unshift(s);save();return wait({subscription:s,paymentUrl:null},700);
+    },
+    subAction:function(id,action){
+      var s=D.subs.filter(function(x){return x.id===id})[0];
+      if(!s)return failP('Подписка не найдена.');
+      var map={pause:['active','paused'],resume:['paused','active'],cancel:['active','cancelled']};
+      if(action==='cancel'&&(s.status==='paused'||s.status==='pending_payment'))s.status='cancelled';
+      else if(map[action]&&s.status===map[action][0])s.status=map[action][1];
+      else return failP('Это действие сейчас недоступно.');
+      save();return wait({subscription:decorate(s)},400);
+    },
     promo:function(code){
       code=String(code||'').trim().toUpperCase();
-      if(code!=='WELCOME200')return failP('Промокод не найден. В демо подходит WELCOME200.');
       if(D.promos[code])return failP('Этот промокод уже использован.');
-      D.promos[code]=1;D.history.unshift({date:day(0),title:'Промокод '+code,delta:200});save();
-      return wait({ok:true});
+      if(code==='WELCOME200'){D.promos[code]=1;D.history.unshift({date:day(0),title:'Промокод '+code,delta:200});save();return wait({ok:true})}
+      if(/^CH-[A-Z0-9]{5}$/.test(code)&&code!==referral().code){
+        if(D.referredBy)return failP('Промокод друга уже применён.');
+        if(D.orders.some(function(o){return o.status==='done'}))return failP('Промокод друга действует только до первой уборки.');
+        D.referredBy=code;D.promos[code]=1;save();return wait({ok:true});
+      }
+      return failP('Промокод не найден. В демо подходят WELCOME200 и коды друзей вида CH-XXXXX.');
     },
     tgLink:function(){tgFlag.link=false;return wait({url:'https://t.me/'+C.telegramBot+'?start=demo-link',token:'demo-link'})},
     tgStatus:function(){
-      if(tgFlag.link){
-        D.user.tg={connected:true,username:'anna_k'};
-        D.history.unshift({date:day(0),title:'Бонусы за подключение Telegram',delta:C.telegramBonus});save();
-        return wait({connected:true,username:'anna_k'},150);
-      }
+      if(tgFlag.link){D.user.tg={connected:true,username:'anna_k'};save();return wait({connected:true,username:'anna_k'},150)}
       return wait({connected:false},150);
     },
     tgUnlink:function(){D.user.tg={connected:false,username:''};save();return wait({ok:true},250)},
@@ -405,6 +839,9 @@ function liveApi(){
     orders:function(){return req('/orders').then(function(j){return j.orders||j})},
     updateProfile:function(p){return req('/me','PATCH',p)},
     createOrder:function(pl){return req('/orders','POST',pl).then(function(j){return j.order?j:{order:j}})},
+    subs:function(){return req('/subscriptions').then(function(j){return j.subscriptions||[]})},
+    createSub:function(pl){return req('/subscriptions','POST',pl)},
+    subAction:function(id,a){return req('/subscriptions/'+encodeURIComponent(id),'PATCH',{action:a})},
     promo:function(code){return req('/loyalty/promo','POST',{code:code})},
     tgLink:function(){return req('/telegram/link','POST')},
     tgStatus:function(t){return req('/telegram/status?token='+encodeURIComponent(t))},
@@ -418,8 +855,14 @@ var DEMO=C.mode!=='live';
 var API=DEMO?demoApi():liveApi();
 
 /* ================= СОСТОЯНИЕ ================= */
-var S={form:null,done:null,view:'boot',authTab:'login',step:'form',phone:'',name:'',email:'',agree:true,code:'',err:'',busy:false,
-  tg:null,tab:'overview',filter:'all',open:{},user:null,loy:null,orders:[],draft:null,newAddr:'',promo:'',focus:null};
+function freshState(){
+  return{form:null,done:null,view:'boot',authTab:'login',step:'form',phone:'',name:'',email:'',refCode:store.get('chlk_ref')||'',agree:true,code:'',err:'',busy:false,
+    tg:null,tab:'overview',filter:'all',open:{},user:null,loy:null,ref:null,orders:[],subs:[],sform:null,subNew:false,subDone:null,confirm:null,grpOpen:{kitchen:true},
+    draft:null,newAddr:'',promo:'',focus:null};
+}
+try{var rp=new URLSearchParams(location.search).get('ref');if(rp&&/^[A-Za-z0-9-]{4,12}$/.test(rp))store.set('chlk_ref',rp.toUpperCase())}catch(e){}
+var S=freshState();
+if(store.get('chlk_ref'))S.authTab='reg';
 var T={poll:null,resend:null,left:0};
 var STATUS={new:{t:'Принят',c:'blue'},work:{t:'В работе',c:'warn'},done:{t:'Выполнен',c:'ok'},cancel:{t:'Отменён',c:'off'}};
 
@@ -461,12 +904,12 @@ function render(){
 
 function benefits(){
   var li=function(t){return'<li><span class="k-dot">'+ic('check',16)+'</span><span>'+t+'</span></li>'};
-  return li('Бонусы за каждый заказ, до '+C.maxPayPercent+'% можно оплатить ими')+li('История заказов и повтор в один клик')+li('Статус заказа в Telegram без звонков')+li('Адреса сохраняются, заказ оформляется быстрее');
+  return li('Бонусы за каждую уборку, до '+C.maxPayPercent+'% заказа можно оплатить ими')+li('Подписка на регулярную уборку со скидкой')+li('Приводите друзей и получайте бонусы')+li('История заказов и статусы в Telegram');
 }
 
 function authView(){
   var reg=S.authTab==='reg';
-  var aside='<div class="k-aside"><h2>'+(reg?'Зарегистрируйтесь и получите '+bonus(C.welcomeBonus):'Ваш личный кабинет CleanHub24')+'</h2><ul>'+benefits()+'</ul></div>';
+  var aside='<div class="k-aside"><h2>'+(reg?'Зарегистрируйтесь и копите бонусы':'Ваш личный кабинет CleanHub24')+'</h2><ul>'+benefits()+'</ul></div>';
   var body;
   if(S.tg&&S.tg.kind==='auth'){
     body='<div class="k-wait"><h3 style="font-size:20px">Войти через Telegram</h3>'+
@@ -489,6 +932,7 @@ function authView(){
       (reg?'<div class="k-field"><label for="chlk-name">Как к вам обращаться</label><input id="chlk-name" class="k-in" autocomplete="given-name" placeholder="Анна" data-bind="name" value="'+esc(S.name)+'"></div>':'')+
       '<div class="k-field"><label for="chlk-phone">Телефон</label><input id="chlk-phone" class="k-in" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" data-bind="phone" value="'+esc(S.phone)+'"></div>'+
       (reg?'<div class="k-field"><label for="chlk-email">Email (необязательно)</label><input id="chlk-email" class="k-in" type="email" autocomplete="email" placeholder="you@mail.ru" data-bind="email" value="'+esc(S.email)+'"></div>'+
+        '<div class="k-field"><label for="chlk-ref">Промокод друга (необязательно)</label><input id="chlk-ref" class="k-in" placeholder="CH-XXXXX" autocomplete="off" data-bind="refCode" value="'+esc(S.refCode)+'"></div>'+
         '<label class="k-check"><input type="checkbox" data-bind="agree"'+(S.agree?' checked':'')+'><span>Согласен на обработку персональных данных и принимаю <a href="'+esc(C.privacyUrl)+'" target="_blank" rel="noopener">политику конфиденциальности</a></span></label>':'')+
       '<button class="k-btn k-block" data-act="send-code"'+(S.busy?' disabled':'')+'>'+(S.busy?'Отправляем…':'Получить код по SMS')+'</button>'+
       '<div class="k-or">или</div>'+
@@ -514,17 +958,17 @@ function loyaltyHero(){
     '<div class="k-bal">'+Math.round(L.balance).toLocaleString('ru-RU')+' <small>'+plural(L.balance,['бонус','бонуса','бонусов'])+'</small></div><p class="k-sub">1 бонус = 1 ₽. Можно оплатить до '+L.maxPay+'% заказа.</p>'+
     (L.expiring?'<div class="k-burn">Сгорит '+bonus(L.expiring.amount)+' — '+dFmt(L.expiring.date)+'</div>':'')+'</div>'+
     '<div><p class="k-sub">Потрачено на услуги</p><b class="k-num" style="font-size:24px">'+money(L.spent)+'</b>'+prog+
-    '<div class="k-card-no"><span>'+esc(L.card)+'</span><button data-act="copy" data-v="'+esc(L.card)+'" aria-label="Скопировать номер карты">'+ic('copy',16)+'</button></div></div></section>';
+    '<div class="k-card-no"><span><span style="opacity:.75;font-weight:500;letter-spacing:0">№ клиента </span>'+esc(L.clientNo)+'</span><button data-act="copy" data-v="'+esc(L.clientNo)+'" aria-label="Скопировать номер клиента">'+ic('copy',16)+'</button></div></div></section>';
 }
 
 function orderHead(o){
   var st=STATUS[o.status]||STATUS.new;
   return'<button class="k-ohead" data-act="toggle-order" data-id="'+esc(o.id)+'" aria-expanded="'+!!S.open[o.id]+'">'+
-    '<span><b>'+esc(o.title)+'</b><span class="k-muted k-small">№ '+esc(o.id)+' · '+dFmt(o.date)+'</span></span>'+
+    '<span><b>'+esc(o.title)+'</b><span class="k-muted k-small">№ '+esc(o.id)+' · '+dFmt(o.date)+(o.sub?' · по подписке':'')+'</span></span>'+
     '<span class="k-ototal k-num">'+money(o.total)+'</span><span class="k-chip '+st.c+'">'+st.t+'</span><span class="k-chev">'+ic('chev',18)+'</span></button>';
 }
 function orderBody(o){
-  var rows=o.items.map(function(i){return'<tr><td>'+esc(i.name)+(i.qty>1?' × '+i.qty:'')+'</td><td class="k-num">'+money(i.qty*i.price)+'</td></tr>'}).join('');
+  var rows=o.items.map(function(i){return'<tr><td>'+esc(i.name)+(i.qty>1?' × '+i.qty:'')+'</td><td class="k-num">'+(i.price?money(i.qty*i.price):'по фото')+'</td></tr>'}).join('');
   if(o.bonusSpent)rows+='<tr><td>Оплачено бонусами</td><td class="k-num">−'+money(o.bonusSpent)+'</td></tr>';
   rows+='<tr class="k-sum"><td>Итого</td><td class="k-num">'+money(o.total)+'</td></tr>';
   var steps='';
@@ -533,9 +977,9 @@ function orderBody(o){
     steps='<div class="k-steps">'+['Принят','В работе','Выполнен'].map(function(t,n){return'<div class="'+(n<=i?'on':'')+'">'+t+'</div>'}).join('')+'</div>';
   }
   var earn=o.status==='cancel'?'':'<div><dt>Бонусы</dt><dd class="k-plus">+'+bonus(o.bonusEarned)+(o.status==='done'?'':' после выполнения')+'</dd></div>';
-  return'<div class="k-obody">'+steps+'<dl class="k-meta"><div><dt>Адрес</dt><dd>'+esc(o.address)+'</dd></div><div><dt>Время</dt><dd>'+dFmt(o.date)+', '+esc(o.slot)+'</dd></div>'+(o.area?'<div><dt>Площадь</dt><dd>'+o.area+'\u00A0м²</dd></div>':'')+earn+'</dl>'+
+  return'<div class="k-obody">'+steps+'<dl class="k-meta"><div><dt>Адрес</dt><dd>'+esc(o.address)+'</dd></div><div><dt>Время</dt><dd>'+dFmt(o.date)+', '+esc(o.slot)+'</dd></div>'+(o.area?'<div><dt>Площадь</dt><dd>'+o.area+'\u00A0м²</dd></div>':'')+(o.tariff?'<div><dt>Тариф</dt><dd>'+esc(o.tariff)+'</dd></div>':'')+earn+'</dl>'+
     '<table class="k-items"><tbody>'+rows+'</tbody></table>'+
-    '<div class="k-row" style="margin-top:14px"><button class="k-btn k-sm" data-act="repeat" data-id="'+esc(o.id)+'">'+ic('repeat',16)+' Повторить заказ</button>'+
+    '<div class="k-row" style="margin-top:14px">'+(o.sub?'':'<button class="k-btn k-sm" data-act="repeat" data-id="'+esc(o.id)+'">'+ic('repeat',16)+' Повторить заказ</button>')+
     '<a class="k-btn k-ghost k-sm" href="'+esc(C.supportUrl)+'" target="_blank" rel="noopener">Вопрос по заказу</a></div></div>';
 }
 function orderCard(o){return'<div class="k-order'+(S.open[o.id]?' open':'')+'">'+orderHead(o)+orderBody(o)+'</div>'}
@@ -544,20 +988,24 @@ function activeOrders(){return S.orders.filter(function(o){return o.status==='ne
 
 function tgCard(){
   var u=S.user;
-  if(u.tg&&u.tg.connected)return'<div class="k-card"><h3>Telegram</h3><p class="k-row" style="gap:8px"><span class="k-chip ok">Подключён</span><b>@'+esc(u.tg.username)+'</b></p><p class="k-muted k-small" style="margin-top:10px">Статусы заказов и бонусы приходят в чат. Настройки — в разделе «Профиль».</p></div>';
-  return'<div class="k-card"><h3>Telegram</h3><p class="k-muted">Статус заказа и бонусы в чат, без звонков и SMS. Подключите и получите '+bonus(C.telegramBonus)+'.</p><div style="margin-top:14px"><button class="k-btn k-tg k-sm" data-act="tab" data-v="profile">'+ic('tg',16)+' Подключить</button></div></div>';
+  if(u.tg&&u.tg.connected)return'<div class="k-card"><h3>Telegram</h3><p class="k-row" style="gap:8px"><span class="k-chip ok">Подключён</span><b>@'+esc(u.tg.username)+'</b></p><p class="k-muted k-small" style="margin-top:10px">Статусы заказов приходят в чат. Настройки: в разделе «Профиль».</p></div>';
+  return'<div class="k-card"><h3>Telegram</h3><p class="k-muted">Статус заказа в чат, без звонков и SMS.</p><div style="margin-top:14px"><button class="k-btn k-tg k-sm" data-act="tab" data-v="profile">'+ic('tg',16)+' Подключить</button></div></div>';
 }
 
 function overviewTab(){
   var act=activeOrders()[0],recent=S.orders.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date)}).slice(0,3);
   var next=act
-    ?'<div class="k-card"><h3>Ближайший заказ</h3><p><b>'+esc(act.title)+'</b></p><p class="k-muted k-small">'+dFmt(act.date)+', '+esc(act.slot)+'</p><div class="k-row" style="margin-top:12px"><span class="k-chip '+STATUS[act.status].c+'">'+STATUS[act.status].t+'</span><span class="k-num"><b>'+money(act.total)+'</b></span></div><div style="margin-top:14px"><button class="k-btn k-ghost k-sm" data-act="open-order" data-id="'+esc(act.id)+'">Подробнее</button></div></div>'
-    :'<div class="k-card"><h3>Ближайший заказ</h3><p class="k-muted">Пока нет активных заказов. Закажите уборку или химчистку, бонусы начислятся автоматически.</p><div style="margin-top:14px"><button class="k-btn k-sm" data-act="new-order">Заказать</button></div></div>';
-  var ref='<div class="k-card"><h3>Пригласите друга</h3><p class="k-muted">Друг получит '+bonus(S.loy.referral.bonus)+' на первый заказ, и вы тоже.</p><div class="k-card-no" style="background:var(--k-bg);color:var(--k-ink);margin-top:14px"><span>'+esc(S.loy.referral.code)+'</span><button data-act="copy" data-v="'+esc(S.loy.referral.code)+'" style="background:var(--k-line);color:var(--k-ink)" aria-label="Скопировать промокод">'+ic('copy',16)+'</button></div></div>';
+    ?'<div class="k-card"><h3>Ближайший заказ</h3><p><b>'+esc(act.title)+'</b></p><p class="k-muted k-small">'+dFmt(act.date)+', '+esc(act.slot)+(act.sub?' · по подписке':'')+'</p><div class="k-row" style="margin-top:12px"><span class="k-chip '+STATUS[act.status].c+'">'+STATUS[act.status].t+'</span><span class="k-num"><b>'+money(act.total)+'</b></span></div><div style="margin-top:14px"><button class="k-btn k-ghost k-sm" data-act="open-order" data-id="'+esc(act.id)+'">Подробнее</button></div></div>'
+    :'<div class="k-card"><h3>Ближайший заказ</h3><p class="k-muted">Пока нет активных заказов. Закажите уборку, бонусы начислятся после выполнения.</p><div style="margin-top:14px"><button class="k-btn k-sm" data-act="new-order">Заказать</button></div></div>';
+  var sa=S.subs.filter(function(x){return x.status==='active'||x.status==='paused'||x.status==='pending_payment'})[0];
+  var subC=sa
+    ?'<div class="k-card"><h3>Подписка</h3><p><b>'+esc(freqName(sa.freq))+'</b> по '+WEEKDAYS[sa.weekday-1]+'</p><p class="k-muted k-small">'+(sa.nextVisits&&sa.nextVisits[0]?'Ближайшая уборка: '+dFmt(sa.nextVisits[0])+', '+esc(sa.slot):'Ближайших уборок нет')+'</p><div class="k-row" style="margin-top:12px"><span class="k-chip '+SUBST[sa.status][1]+'">'+SUBST[sa.status][0]+'</span><span class="k-num"><b>'+money(sa.perMonth)+'</b> / мес.</span></div><div style="margin-top:14px"><button class="k-btn k-ghost k-sm" data-act="tab" data-v="subs">Управлять</button></div></div>'
+    :'<div class="k-card"><h3>Подписка</h3><p class="k-muted">Регулярная уборка со скидкой до '+money(PR.subscription.discounts[12])+' с каждой уборки. Пауза и отмена в любой момент.</p><div style="margin-top:14px"><button class="k-btn k-sm" data-act="tab" data-v="subs">Оформить подписку</button></div></div>';
+  var ref='<div class="k-card"><h3>Пригласите друга</h3><p class="k-muted">Вам и другу по '+bonus(S.ref.ownerBonus)+' после его первой уборки.</p><div class="k-card-no" style="background:var(--k-bg);color:var(--k-ink);margin-top:14px"><span>'+esc(S.ref.code)+'</span><button data-act="copy" data-v="'+esc(S.ref.code)+'" style="background:var(--k-line);color:var(--k-ink)" aria-label="Скопировать промокод">'+ic('copy',16)+'</button></div><div style="margin-top:12px"><button class="k-link" data-act="goto-friends">Поделиться и статистика</button></div></div>';
   var list=recent.length
     ?'<div class="k-orders">'+recent.map(orderCard).join('')+'</div>'
     :'<div class="k-card k-empty"><b>Заказов пока нет</b><p class="k-muted">Здесь появится история ваших заказов.</p><button class="k-btn k-sm" data-act="new-order">Сделать первый заказ</button></div>';
-  return'<div class="k-stack">'+loyaltyHero()+'<div class="k-grid">'+next+tgCard()+ref+'</div><div class="k-sec"><h3>Последние заказы</h3>'+(recent.length?'<button class="k-link" data-act="tab" data-v="orders">Все заказы</button>':'')+'</div>'+list+'</div>';
+  return'<div class="k-stack">'+loyaltyHero()+'<div class="k-grid">'+next+subC+ref+((S.user.tg&&S.user.tg.connected)?'':tgCard())+'</div><div class="k-sec"><h3>Последние заказы</h3>'+(recent.length?'<button class="k-link" data-act="tab" data-v="orders">Все заказы</button>':'')+'</div>'+list+'</div>';
 }
 
 function ordersTab(){
@@ -574,9 +1022,9 @@ function bonusesTab(){
   var L=S.loy,li=levelInfo(L);
   var lv=L.levels.map(function(l){return'<div class="k-lv'+(l===li.cur?' cur':'')+'"><b>'+esc(l.name)+'</b><span class="k-muted">от '+money(l.from)+'</span><b>'+l.pct+'%</b></div>'}).join('');
   var hist=L.history.length?'<ul class="k-hist">'+L.history.map(function(h){return'<li><span>'+esc(h.title)+'<br><span class="k-muted k-small">'+dFmt(h.date,true)+'</span></span><span class="k-num '+(h.delta>0?'k-plus':'k-minus')+'">'+(h.delta>0?'+':'−')+Math.abs(h.delta).toLocaleString('ru-RU')+'</span></li>'}).join('')+'</ul>':'<p class="k-muted">Операций пока нет.</p>';
-  return'<div class="k-stack">'+loyaltyHero()+'<div class="k-grid"><div class="k-card"><h3>Уровни программы</h3><div class="k-lvls">'+lv+'</div><p class="k-muted k-small" style="margin-top:12px">Уровень растёт от суммы выполненных заказов. Процент — кешбэк бонусами.</p></div>'+
-    '<div class="k-card"><h3>Промокод</h3><div class="k-field"><label for="chlk-promo">Введите промокод</label><input id="chlk-promo" class="k-in" placeholder="WELCOME200" data-bind="promo" value="'+esc(S.promo)+'"></div><div style="margin-top:12px"><button class="k-btn k-sm" data-act="promo"'+(S.busy?' disabled':'')+'>Применить</button></div>'+
-    '<p class="k-muted k-small" style="margin-top:14px">Бонусы действуют 12 месяцев с момента начисления.</p></div></div>'+
+  return'<div class="k-stack">'+loyaltyHero()+referralCard()+'<div class="k-grid"><div class="k-card"><h3>Уровни программы</h3><div class="k-lvls">'+lv+'</div><p class="k-muted k-small" style="margin-top:12px">Уровень растёт от суммы выполненных заказов. Процент — кешбэк бонусами.</p></div>'+
+    '<div class="k-card"><h3>Промокод</h3><div class="k-field"><label for="chlk-promo">Промокод друга или акционный</label><input id="chlk-promo" class="k-in" placeholder="Например, CH-K7M2Q" data-bind="promo" value="'+esc(S.promo)+'"></div><div style="margin-top:12px"><button class="k-btn k-sm" data-act="promo"'+(S.busy?' disabled':'')+'>Применить</button></div>'+
+    '<p class="k-muted k-small" style="margin-top:14px">Промокод друга можно применить до первой выполненной уборки.</p></div></div>'+
     '<div class="k-card"><h3>История бонусов</h3>'+hist+'</div></div>';
 }
 
@@ -587,7 +1035,7 @@ function tgBlock(){
     '<div class="k-row k-muted k-small"><i class="k-pulse"></i> Ждём подтверждения…</div>'+
     (DEMO?'<button class="k-btn k-ghost k-sm" data-act="tg-sim" data-v="link">Демо: имитировать Start в боте</button>':'')+
     '<button class="k-link k-small" data-act="tg-cancel">Отмена</button></div>';
-  if(!tg.connected)return'<p class="k-muted">Получайте статус заказа и бонусы в Telegram. За подключение начислим '+bonus(C.telegramBonus)+'.</p><div style="margin-top:14px"><button class="k-btn k-tg k-sm" data-act="tg-connect"'+(S.busy?' disabled':'')+'>'+ic('tg',16)+' Подключить Telegram</button></div>';
+  if(!tg.connected)return'<p class="k-muted">Получайте статус заказа и напоминания об уборке в Telegram.</p><div style="margin-top:14px"><button class="k-btn k-tg k-sm" data-act="tg-connect"'+(S.busy?' disabled':'')+'>'+ic('tg',16)+' Подключить Telegram</button></div>';
   return'<div class="k-row k-between"><span class="k-row" style="gap:8px"><span class="k-chip ok">Подключён</span><b>@'+esc(tg.username)+'</b></span><button class="k-link k-small" data-act="tg-unlink">Отключить</button></div>';
 }
 function sw(key,label,sub,on,dis){
@@ -614,16 +1062,53 @@ function profileTab(){
     '</div></div>';
 }
 
-function isoDate(d){var m=d.getMonth()+1,dd=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd}
+/* ---------- общие поля адреса для заказа (p='f') и подписки (p='s') ---------- */
+function addrFields(p,f){
+  var u=S.user;
+  var sel=u.addresses.length?'<div class="k-field"><label for="chlk-'+p+'-addr">Адрес</label><select id="chlk-'+p+'-addr" class="k-in" data-bind="'+p+'.addrId">'+u.addresses.map(function(a){return'<option value="'+esc(a.id)+'"'+(f.addrId===a.id?' selected':'')+'>'+esc(a.label)+': '+esc(a.text)+'</option>'}).join('')+'<option value="other"'+(f.addrId==='other'?' selected':'')+'>Другой адрес…</option></select></div>':'';
+  var inp=(!u.addresses.length||f.addrId==='other')?'<div class="k-field"><label for="chlk-'+p+'-addrtext">'+(u.addresses.length?'Новый адрес':'Адрес')+'</label><input id="chlk-'+p+'-addrtext" class="k-in" placeholder="Город, улица, дом, квартира" autocomplete="street-address" data-bind="'+p+'.addrText" value="'+esc(f.addrText)+'"></div>':'';
+  return sel+inp;
+}
+function resolveAddr(f){var u=S.user;return(!u.addresses.length||f.addrId==='other')?f.addrText.trim():((u.addresses.filter(function(a){return a.id===f.addrId})[0]||{}).text||'')}
+function slotOptions(cur){return C.slots.map(function(t){return'<option'+(t===cur?' selected':'')+'>'+t+'</option>'}).join('')}
+function tomorrow(){var t=new Date();t.setDate(t.getDate()+1);return t}
+function lastArea(){var a=PR.config.defaults.area;for(var i=0;i<S.orders.length;i++){if(S.orders[i].area){a=S.orders[i].area;break}}return a}
+
+/* ---------- тарифы и допуслуги: те же, что в калькуляторе ---------- */
+function tariffsHtml(st,r){
+  if(r.individual)return'<p class="k-muted k-small">Для такой площади считаем индивидуально: от '+r.perM2+' ₽ за м². Менеджер уточнит точную цену перед выездом.</p>';
+  var svc=PR.services[st.service];
+  return'<div class="k-tars">'+PR.tariffs.map(function(t){
+    var inc=(svc.includes&&svc.includes[t.id])||{},perks=(svc.perks[t.id]||[]).map(function(p){
+      var w=inc.windows;return p.replace('{windows}',Array.isArray(w)?w[r.tierIndex]:w);
+    });
+    return'<button type="button" class="k-tar" data-act="pick-tariff" data-v="'+t.id+'" aria-pressed="'+(st.tariff===t.id)+'"><b>'+esc(t.title)+'</b><span class="k-tp k-num">'+money(r.tariffPrices[t.id])+'</span><span class="k-muted k-small">'+esc(perks.length?'Входит: '+perks.join(', '):'Базовая уборка')+'</span></button>';
+  }).join('')+'</div>';
+}
+function extrasHtml(f){
+  return PR.extraGroups.map(function(g){
+    var list=PR.extras.filter(function(x){return x.group===g.id});
+    var n=list.filter(function(x){return f.extras[x.id]}).length,open=!!S.grpOpen[g.id];
+    var rows=list.map(function(x){
+      var p=extraPrice(x,f.service),qty=f.extras[x.id]||0;
+      var price=p==null?'по фото':(x.from?'от ':'')+money(p)+(x.unit&&!x.toggle?' / '+PR.units[x.unit].short:'');
+      var ctl=x.toggle
+        ?'<label class="k-sw"><input type="checkbox" data-bind="f.ex.'+x.id+'"'+(qty?' checked':'')+' aria-label="'+esc(extraTitle(x,f.service))+'"><span></span></label>'
+        :'<div class="k-step"><button type="button" data-act="qty" data-id="'+x.id+'" data-d="-1" aria-label="Меньше">−</button><b data-qty="'+x.id+'">'+qty+'</b><button type="button" data-act="qty" data-id="'+x.id+'" data-d="1" aria-label="Больше">+</button></div>';
+      return'<div class="k-xrow"><div class="k-xt"><b>'+esc(extraTitle(x,f.service))+'</b><span class="k-muted k-small">'+esc(x.desc)+' · '+price+'</span></div>'+ctl+'</div>';
+    }).join('');
+    return'<div class="k-grp'+(open?' open':'')+'"><button type="button" data-act="grp" data-id="'+g.id+'" aria-expanded="'+open+'"><span>'+esc(g.title)+'<span class="k-muted" data-gcount="'+g.id+'">'+(n?' · выбрано '+n:'')+'</span></span><span class="k-chev">'+ic('chev',18)+'</span></button><div class="k-grp-body">'+rows+'</div></div>';
+  }).join('');
+}
+
+/* ---------- заказ ---------- */
 function formDefaults(from){
-  var u=S.user,area=C.defaultArea;
-  S.orders.forEach(function(o){if(o.area&&area===C.defaultArea)area=o.area});
-  var t=new Date();t.setDate(t.getDate()+1);
+  var u=S.user,area=lastArea();
   S.lastArea=area;
-  var f={service:'general',qty:area,extras:{},date:isoDate(t),slot:C.slots[1],comment:'',useBonus:false,bonus:0,
+  var f={service:'general',tariff:PR.config.defaults.tariff,area:area,extras:{},date:isoDate(tomorrow()),slot:C.slots[1],comment:'',useBonus:false,bonus:0,
     addrId:u.addresses.length?u.addresses[0].id:'other',addrText:''};
   if(from){
-    if(from.svc){f.service=from.svc;f.qty=from.qty||f.qty}
+    if(from.svc&&PR.services[from.svc]){f.service=from.svc;f.area=from.area||f.area;f.tariff=tariffId(from.tariff);f.extras=JSON.parse(JSON.stringify(from.extras||{}))}
     if(from.slot&&C.slots.indexOf(from.slot)>=0)f.slot=from.slot;
     var m=u.addresses.filter(function(a){return a.text===from.address})[0];
     if(m)f.addrId=m.id;else{f.addrId='other';f.addrText=from.address||''}
@@ -631,34 +1116,46 @@ function formDefaults(from){
   return f;
 }
 function formQuote(){
-  var f=S.form,ids=Object.keys(f.extras).filter(function(k){return f.extras[k]});
-  var q=quoteCore(f.service,f.qty,ids),L=S.loy,li=levelInfo(L);
+  var f=S.form,r=PR.compute({service:f.service,area:f.area,tariff:f.tariff,extras:f.extras}),L=S.loy,li=levelInfo(L);
+  var q={r:r,valid:f.area>=1,total:r.total};
   q.maxBonus=Math.max(0,Math.min(L.balance,Math.floor(q.total*L.maxPay/100)));
   q.bonus=f.useBonus?Math.min(Math.max(0,Math.round(f.bonus)||0),q.maxBonus):0;
-  q.pay=q.total-q.bonus;q.pct=li.cur.pct;q.earn=Math.round(q.pay*q.pct/100);q.extraIds=ids;
+  q.pay=q.total-q.bonus;q.pct=li.cur.pct;q.earn=Math.round(q.pay*q.pct/100);
   return q;
 }
-function sumLinesHtml(q){return q.lines.map(function(l){return'<div class="k-line"><span>'+esc(l.name)+'</span><span class="k-num">'+money(l.sum)+'</span></div>'}).join('')}
+function sumLinesHtml(q){
+  if(!q.valid)return'';
+  var r=q.r,h='<div class="k-line"><span>'+esc(r.serviceTitle)+(r.individual?'':', тариф «'+esc(r.tariffTitle)+'»')+', '+r.area+' м²</span><span class="k-num">'+(r.individual?'от ':'')+money(r.base)+'</span></div>';
+  if(r.perks.length)h+='<div class="k-small k-muted" style="padding-bottom:6px">Входит: '+esc(r.perks.join(', '))+'</div>';
+  r.lines.forEach(function(l){
+    h+='<div class="k-line"><span>'+esc(l.title+(l.toggle?'':', '+PR.unitLabel(l.unit,l.qty))+(l.included&&l.paid?' ('+l.included+' в тарифе)':''))+'</span><span class="k-num">'+(l.quote?'по фото':!l.paid?'в тарифе':(l.from?'от ':'')+money(l.cost))+'</span></div>';
+  });
+  return h;
+}
 function sumTotalHtml(q){
-  return(q.bonus?'<div class="k-line"><span>Всего за услуги</span><span class="k-num">'+money(q.total)+'</span></div><div class="k-line"><span>Оплачено бонусами</span><span class="k-num k-plus">−'+money(q.bonus)+'</span></div>':'')+
-    '<div class="k-line k-pay"><span>К оплате</span><span class="k-num">'+money(q.pay)+'</span></div>'+
-    '<div class="k-earn">+'+bonus(q.earn)+' после выполнения · кешбэк '+q.pct+'%</div>';
+  if(!q.valid)return'<p class="k-muted k-small">Укажите площадь, чтобы увидеть стоимость.</p>';
+  var r=q.r,pre=r.totalApprox?'от ':'';
+  return(q.bonus?'<div class="k-line"><span>Всего за услуги</span><span class="k-num">'+pre+money(q.total)+'</span></div><div class="k-line"><span>Оплачено бонусами</span><span class="k-num k-plus">−'+money(q.bonus)+'</span></div>':'')+
+    '<div class="k-line k-pay"><span>К оплате</span><span class="k-num">'+pre+money(q.pay)+'</span></div>'+
+    '<div class="k-earn">+'+bonus(q.earn)+' после выполнения · кешбэк '+q.pct+'%</div>'+
+    (r.totalApprox||r.hasQuote?'<p class="k-small k-muted" style="margin-top:10px">Цена ориентировочная. Менеджер подтвердит точную сумму до выезда'+(r.hasQuote?', а стоимость химчистки оценит по фото':'')+'.</p>':'');
 }
 function bonusInfoHtml(q){return'Спишем '+bonus(q.bonus)+' из '+bonus(q.maxBonus)+' возможных'}
 function refreshForm(){
-  var q=formQuote(),f=S.form;
+  var q=formQuote(),f=S.form,Q=function(s){return root.querySelector(s)};
   if(f.useBonus)f.bonus=q.bonus;
-  var a=root.querySelector('[data-sumlines]'),b=root.querySelector('[data-sumtotal]'),r=root.querySelector('[data-bonusrange]'),i=root.querySelector('[data-bonusinfo]'),box=root.querySelector('[data-bonusbox]'),btn=root.querySelector('[data-act=submit-order]');
-  if(a)a.innerHTML=sumLinesHtml(q);
-  if(b)b.innerHTML=sumTotalHtml(q);
-  if(r){r.max=q.maxBonus;r.value=q.bonus}
-  if(i)i.textContent=bonusInfoHtml(q);
-  if(box)box.hidden=!f.useBonus||q.maxBonus<=0;
-  if(btn)btn.disabled=q.total<=0;
+  var t=Q('[data-tariffs]');if(t)t.innerHTML=tariffsHtml(f,q.r);
+  if(Q('[data-sumlines]'))Q('[data-sumlines]').innerHTML=sumLinesHtml(q);
+  if(Q('[data-sumtotal]'))Q('[data-sumtotal]').innerHTML=sumTotalHtml(q);
+  var r=Q('[data-bonusrange]');if(r){r.max=q.maxBonus;r.value=q.bonus}
+  if(Q('[data-bonusinfo]'))Q('[data-bonusinfo]').textContent=bonusInfoHtml(q);
+  if(Q('[data-bonusbox]'))Q('[data-bonusbox]').hidden=!f.useBonus||q.maxBonus<=0;
+  if(Q('[data-act=submit-order]'))Q('[data-act=submit-order]').disabled=!q.valid;
+  PR.extraGroups.forEach(function(g){var n=PR.extras.filter(function(x){return x.group===g.id&&f.extras[x.id]}).length,e=Q('[data-gcount="'+g.id+'"]');if(e)e.textContent=n?' · выбрано '+n:''});
 }
 function onFormChange(b){
   var f=S.form;
-  if(b==='f.useBonus'&&f.useBonus){f.bonus=formQuote().maxBonus}
+  if(b==='f.useBonus'&&f.useBonus)f.bonus=formQuote().maxBonus;
   if(b==='f.addrId'){render();return}
   refreshForm();
 }
@@ -670,55 +1167,163 @@ function orderView(){
       '<p class="k-muted">'+esc(o.title)+', '+dFmt(o.date)+', '+esc(o.slot)+'<br>'+esc(o.address)+'</p>'+
       '<p><b>К оплате: '+money(o.total)+'</b>'+(o.bonusSpent?' <span class="k-muted">(списано '+bonus(o.bonusSpent)+')</span>':'')+'</p>'+
       '<p class="k-plus">+'+bonus(o.bonusEarned)+' начислим после выполнения</p>'+
-      '<p class="k-muted k-small">'+(u.tg&&u.tg.connected?'Статус заказа придёт вам в Telegram.':'Менеджер свяжется с вами для подтверждения. Подключите Telegram в профиле, чтобы следить за статусом в чате.')+'</p>'+
+      '<p class="k-muted k-small">Менеджер подтвердит заказ и точную стоимость. '+(u.tg&&u.tg.connected?'Статус заказа придёт вам в Telegram.':'Подключите Telegram в профиле, чтобы следить за статусом в чате.')+'</p>'+
       '<div class="k-row"><button class="k-btn" data-act="tab" data-v="orders">Мои заказы</button><button class="k-btn k-ghost" data-act="new-order">Заказать ещё</button></div></div>';
   }
-  var sv=svcById(f.service),q=formQuote();
-  var svcs=C.services.map(function(s){return'<button type="button" class="k-svc" data-act="pick-svc" data-v="'+s.id+'" aria-pressed="'+(f.service===s.id)+'"><b>'+esc(s.name)+'</b><span class="k-muted k-small">'+esc(s.hint||'')+'</span></button>'}).join('');
-  var extras=C.extras.map(function(x){return'<label class="k-extra"><input type="checkbox" data-bind="f.ex.'+x.id+'"'+(f.extras[x.id]?' checked':'')+'><span>'+esc(x.name)+'</span><span class="k-muted k-num">+'+money(x.price)+'</span></label>'}).join('');
-  var slots=C.slots.map(function(t){return'<option'+(t===f.slot?' selected':'')+'>'+t+'</option>'}).join('');
-  var addrSel=u.addresses.length?'<div class="k-field"><label for="chlk-f-addr">Адрес</label><select id="chlk-f-addr" class="k-in" data-bind="f.addrId">'+u.addresses.map(function(a){return'<option value="'+esc(a.id)+'"'+(f.addrId===a.id?' selected':'')+'>'+esc(a.label)+': '+esc(a.text)+'</option>'}).join('')+'<option value="other"'+(f.addrId==='other'?' selected':'')+'>Другой адрес…</option></select></div>':'';
-  var addrIn=(!u.addresses.length||f.addrId==='other')?'<div class="k-field"><label for="chlk-f-addrtext">'+(u.addresses.length?'Новый адрес':'Адрес')+'</label><input id="chlk-f-addrtext" class="k-in" placeholder="Город, улица, дом, квартира" autocomplete="street-address" data-bind="f.addrText" value="'+esc(f.addrText)+'"></div>':'';
+  var q=formQuote();
+  var svcs=Object.keys(PR.services).map(function(id){var s=PR.services[id];return'<button type="button" class="k-svc" data-act="pick-svc" data-v="'+id+'" aria-pressed="'+(f.service===id)+'"><b>'+esc(s.title)+'</b><span class="k-muted k-small">'+esc(s.hint)+'</span></button>'}).join('');
   var form='<div class="k-stack">'+
-    '<div class="k-card k-stack" style="gap:14px"><h3 style="margin:0">Что нужно сделать</h3><div class="k-svcs">'+svcs+'</div>'+
-      '<div class="k-field"><label for="chlk-f-qty">'+(sv.unit==='m2'?'Площадь, м²':esc(sv.qtyLabel))+'</label><input id="chlk-f-qty" class="k-in" type="number" inputmode="numeric" min="1" max="1000" data-bind="f.qty" value="'+esc(f.qty)+'"></div>'+
-      '<div class="k-field"><label>Дополнительно</label><div class="k-stack" style="gap:8px">'+extras+'</div></div></div>'+
+    '<div class="k-card k-stack" style="gap:14px"><h3 style="margin:0">Что убираем</h3><div class="k-svcs">'+svcs+'</div>'+
+      '<div class="k-field"><label for="chlk-f-area">Площадь, м²</label><input id="chlk-f-area" class="k-in" type="number" inputmode="numeric" min="1" max="'+PR.config.areaMax+'" data-bind="f.area" value="'+esc(f.area)+'"></div>'+
+      '<div class="k-field"><label>Тариф</label><div data-tariffs>'+tariffsHtml(f,q.r)+'</div></div></div>'+
+    '<div class="k-card k-stack" style="gap:12px"><h3 style="margin:0">Дополнительные услуги</h3><div class="k-stack" style="gap:10px">'+extrasHtml(f)+'</div></div>'+
     '<div class="k-card k-stack" style="gap:14px"><h3 style="margin:0">Когда и куда приехать</h3><div class="k-two">'+
       '<div class="k-field"><label for="chlk-f-date">Дата</label><input id="chlk-f-date" class="k-in" type="date" min="'+isoDate(new Date())+'" data-bind="f.date" value="'+esc(f.date)+'"></div>'+
-      '<div class="k-field"><label for="chlk-f-slot">Время</label><select id="chlk-f-slot" class="k-in" data-bind="f.slot">'+slots+'</select></div></div>'+
-      addrSel+addrIn+
+      '<div class="k-field"><label for="chlk-f-slot">Время</label><select id="chlk-f-slot" class="k-in" data-bind="f.slot">'+slotOptions(f.slot)+'</select></div></div>'+
+      addrFields('f',f)+
       '<div class="k-field"><label for="chlk-f-comment">Комментарий (домофон, питомцы, что важно учесть)</label><textarea id="chlk-f-comment" class="k-in" data-bind="f.comment">'+esc(f.comment)+'</textarea></div></div></div>';
   var sum='<aside class="k-card k-sum"><h3>Ваш заказ</h3><div data-sumlines>'+sumLinesHtml(q)+'</div>'+
     '<div class="k-bonus"><label class="k-row k-between" style="flex-wrap:nowrap;cursor:pointer"><span><b>Оплатить бонусами</b><br><span class="k-muted k-small">Доступно '+bonus(S.loy.balance)+', до '+S.loy.maxPay+'% заказа</span></span><span class="k-sw"><input type="checkbox" data-bind="f.useBonus"'+(f.useBonus?' checked':'')+(S.loy.balance<=0?' disabled':'')+' aria-label="Оплатить бонусами"><span></span></span></label>'+
       '<div data-bonusbox'+((f.useBonus&&q.maxBonus>0)?'':' hidden')+'><input type="range" min="0" max="'+q.maxBonus+'" step="1" value="'+q.bonus+'" data-bind="f.bonus" data-bonusrange aria-label="Сколько бонусов списать"><span class="k-small k-muted" data-bonusinfo>'+bonusInfoHtml(q)+'</span></div></div>'+
     '<div data-sumtotal>'+sumTotalHtml(q)+'</div>'+
     '<div class="k-err" data-ferr role="alert" hidden style="margin-top:12px"></div>'+
-    '<button class="k-btn k-block" data-act="submit-order" style="margin-top:14px"'+(q.total<=0?' disabled':'')+'>Оформить заказ</button>'+
-    (DEMO?'<p class="k-small k-muted" style="margin-top:10px">Демо-расчёт. Цены заказа в боевом режиме подтверждает сервер.</p>':'')+'</aside>';
+    '<button class="k-btn k-block" data-act="submit-order" style="margin-top:14px"'+(q.valid?'':' disabled')+'>Оформить заказ</button>'+
+    '<p class="k-small k-muted" style="margin-top:10px">Оплата после уборки, как договоримся с менеджером. Онлайн-оплата появится позже.</p></aside>';
   return'<div class="k-stack"><h3 style="font-size:22px">Новый заказ</h3><div class="k-ord">'+form+sum+'</div></div>';
 }
 function submitOrder(){
-  var f=S.form,q=formQuote(),u=S.user,err=root.querySelector('[data-ferr]');
-  var addr=(!u.addresses.length||f.addrId==='other')?f.addrText.trim():(u.addresses.filter(function(a){return a.id===f.addrId})[0]||{}).text;
-  var msg=!(q.qty>0)?'Укажите '+(q.svc.unit==='m2'?'площадь':'количество')+'.':!f.date?'Выберите дату.':!addr?'Укажите адрес.':'';
+  var f=S.form,q=formQuote(),err=root.querySelector('[data-ferr]'),addr=resolveAddr(f);
+  var msg=!q.valid?'Укажите площадь.':!f.date?'Выберите дату.':!addr?'Укажите адрес.':'';
   if(msg){if(err){err.textContent=msg;err.hidden=false}return}
   if(err)err.hidden=true;
   var btn=root.querySelector('[data-act=submit-order]');if(btn){btn.disabled=true;btn.textContent='Оформляем…'}
-  API.createOrder({service:f.service,qty:q.qty,extras:q.extraIds,address:addr,date:f.date,slot:f.slot,comment:f.comment.trim(),bonusSpend:q.bonus})
+  API.createOrder({state:{service:f.service,area:f.area,tariff:f.tariff,extras:f.extras},address:addr,date:f.date,slot:f.slot,comment:f.comment.trim(),bonusSpend:q.bonus})
     .then(function(r){
       S.done=r.order;S.orders.unshift(r.order);
-      return API.me().then(function(m){S.user=m.user;S.loy=m.loyalty;S.user.notify=S.user.notify||{tgOrders:true,tgPromo:false};S.user.addresses=S.user.addresses||[]});
+      return API.me().then(applyMe);
     })
     .then(function(){render();root.scrollIntoView({behavior:'smooth',block:'start'})})
     .catch(function(e){if(btn){btn.disabled=false;btn.textContent='Оформить заказ'}if(err){err.textContent=(e&&e.message)||'Не удалось оформить заказ. Попробуйте ещё раз.';err.hidden=false}});
 }
 
+/* ---------- подписка ---------- */
+var SUBST={active:['Активна','ok'],paused:['На паузе','warn'],pending_payment:['Ожидает оплаты','blue'],cancelled:['Отменена','off'],finished:['Завершена','off']};
+function freqName(f){return f===4?'Каждую неделю':'Раз в две недели'}
+function sformDefaults(){
+  var u=S.user,d=new Date();d.setDate(d.getDate()+3);
+  return{area:lastArea(),tariff:PR.config.defaults.tariff,freq:2,months:6,weekday:wd(d),slot:C.slots[1],comment:'',addrId:u.addresses.length?u.addresses[0].id:'other',addrText:''};
+}
+function subQuote(){
+  var s=S.sform,r=PR.compute({service:PR.subscription.service,area:s.area,tariff:s.tariff,freq:s.freq,months:s.months});
+  return{r:r,valid:s.area>=1,ok:s.area>=1&&!r.individual&&!!r.subscription,sub:r.subscription};
+}
+function subSumHtml(q){
+  if(!q.valid)return'<p class="k-muted k-small">Укажите площадь, чтобы увидеть стоимость.</p>';
+  if(!q.ok)return'<p class="k-muted">Для такой площади стоимость подписки считаем индивидуально. <a href="'+esc(C.supportUrl)+'" target="_blank" rel="noopener">Напишите нам</a>, и менеджер рассчитает.</p>';
+  var r=q.r,u=q.sub,s=S.sform,dates=visitDates(isoDate(tomorrow()),s.weekday,s.freq,s.months,4);
+  return'<div class="k-line"><span>'+esc(r.serviceTitle)+', тариф «'+esc(r.tariffTitle)+'», '+r.area+' м²</span><span class="k-num">'+money(r.base)+'</span></div>'+
+    '<div class="k-line"><span>Скидка по подписке</span><span class="k-num k-plus">−'+money(u.discountPerCleaning)+'</span></div>'+
+    '<div class="k-line"><span>Одна уборка</span><span class="k-num"><b>'+money(u.perCleaning)+'</b></span></div>'+
+    '<div class="k-line k-pay"><span>В месяц ('+s.freq+' '+plural(s.freq,['уборка','уборки','уборок'])+')</span><span class="k-num">'+money(u.perMonth)+'</span></div>'+
+    '<div class="k-earn">За '+s.months+' мес. '+money(u.periodTotal)+', экономия '+money(u.periodSaving)+'</div>'+
+    '<p class="k-small k-muted" style="margin:12px 0 6px">Ближайшие уборки</p><div class="k-dates">'+dates.map(function(d){return'<span class="k-chip ok">'+esc(fromISO(d).toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'short'}))+'</span>'}).join('')+'</div>';
+}
+function refreshSub(){
+  var q=subQuote(),Q=function(s){return root.querySelector(s)};
+  var t=Q('[data-stariffs]');if(t)t.innerHTML=tariffsHtml({service:PR.subscription.service,tariff:S.sform.tariff},q.r);
+  if(Q('[data-ssum]'))Q('[data-ssum]').innerHTML=subSumHtml(q);
+  if(Q('[data-act=submit-sub]'))Q('[data-act=submit-sub]').disabled=!q.ok;
+}
+function subForm(){
+  var s=S.sform,q=subQuote(),D=PR.subscription.discounts;
+  var seg=function(act,cur,items){return'<div class="k-seg k-seg3" role="group">'+items.map(function(i){return'<button type="button" data-act="'+act+'" data-v="'+i[0]+'" aria-pressed="'+(cur===i[0])+'">'+i[1]+'</button>'}).join('')+'</div>'};
+  var wdays=WDAY_NAMES.map(function(n,i){return'<option value="'+(i+1)+'"'+(s.weekday===i+1?' selected':'')+'>'+n+'</option>'}).join('');
+  return'<div class="k-ord"><div class="k-stack">'+
+    '<div class="k-card k-stack" style="gap:14px"><h3 style="margin:0">Параметры уборки</h3>'+
+      '<div class="k-field"><label for="chlk-s-area">Площадь, м²</label><input id="chlk-s-area" class="k-in" type="number" inputmode="numeric" min="1" max="'+PR.config.areaMax+'" data-bind="s.area" value="'+esc(s.area)+'"></div>'+
+      '<div class="k-field"><label>Тариф</label><div data-stariffs>'+tariffsHtml({service:PR.subscription.service,tariff:s.tariff},q.r)+'</div></div>'+
+      '<p class="k-small k-muted">В подписку входит поддерживающая уборка. Дополнительные услуги можно заказать к любой уборке отдельно.</p></div>'+
+    '<div class="k-card k-stack" style="gap:14px"><h3 style="margin:0">Как часто и на какой срок</h3>'+
+      '<div class="k-field"><label>Частота</label>'+seg('pick-freq',s.freq,[[2,'Раз в две недели'],[4,'Каждую неделю']])+'</div>'+
+      '<div class="k-field"><label>Срок подписки</label>'+seg('pick-term',s.months,[[3,'3 мес.'],[6,'6 мес.'],[12,'12 мес.']])+'<span class="k-small k-muted">Чем дольше срок, тем выше скидка: от '+money(D[3])+' до '+money(D[12])+' с каждой уборки.</span></div>'+
+      '<div class="k-two"><div class="k-field"><label for="chlk-s-wd">День недели</label><select id="chlk-s-wd" class="k-in" data-bind="s.weekday">'+wdays+'</select></div>'+
+      '<div class="k-field"><label for="chlk-s-slot">Время</label><select id="chlk-s-slot" class="k-in" data-bind="s.slot">'+slotOptions(s.slot)+'</select></div></div>'+
+      addrFields('s',s)+
+      '<div class="k-field"><label for="chlk-s-comment">Комментарий (домофон, питомцы, что важно учесть)</label><textarea id="chlk-s-comment" class="k-in" data-bind="s.comment">'+esc(s.comment)+'</textarea></div></div></div>'+
+    '<aside class="k-card k-sum"><h3>Ваша подписка</h3><div data-ssum>'+subSumHtml(q)+'</div>'+
+      '<div class="k-err" data-serr role="alert" hidden style="margin-top:12px"></div>'+
+      '<button class="k-btn k-block" data-act="submit-sub" style="margin-top:14px"'+(q.ok?'':' disabled')+'>Оформить подписку</button>'+
+      '<p class="k-small k-muted" style="margin-top:10px">Можно поставить на паузу или отменить в любой момент. Онлайн-оплата подключается позже, пока оплату согласует менеджер.</p></aside></div>';
+}
+function submitSub(){
+  var s=S.sform,err=root.querySelector('[data-serr]'),addr=resolveAddr(s);
+  if(!addr){if(err){err.textContent='Укажите адрес.';err.hidden=false}return}
+  if(err)err.hidden=true;
+  var btn=root.querySelector('[data-act=submit-sub]');if(btn){btn.disabled=true;btn.textContent='Оформляем…'}
+  API.createSub({state:{service:PR.subscription.service,area:s.area,tariff:s.tariff,freq:s.freq,months:s.months},weekday:s.weekday,slot:s.slot,startDate:isoDate(tomorrow()),address:addr,comment:s.comment.trim()})
+    .then(function(r){
+      S.subDone={sub:r.subscription,paymentUrl:r.paymentUrl||r.subscription.paymentUrl||null};S.subNew=false;
+      return Promise.all([API.subs(),API.orders()]).then(function(x){S.subs=x[0]||[];S.orders=x[1]||[]});
+    })
+    .then(function(){render();root.scrollIntoView({behavior:'smooth',block:'start'})})
+    .catch(function(e){if(btn){btn.disabled=false;btn.textContent='Оформить подписку'}if(err){err.textContent=(e&&e.message)||'Не удалось оформить подписку. Попробуйте ещё раз.';err.hidden=false}});
+}
+function subCard(s){
+  var st=SUBST[s.status]||SUBST.active,wdn=WEEKDAYS[s.weekday-1];
+  var btns='';
+  if(s.status==='pending_payment'&&s.paymentUrl)btns+='<a class="k-btn k-sm" href="'+esc(s.paymentUrl)+'">Оплатить</a>';
+  if(S.confirm===s.id)btns+='<span class="k-small">Отменить подписку?</span><button class="k-btn k-sm k-danger" data-act="sub-do" data-id="'+esc(s.id)+'" data-v="cancel">Да, отменить</button><button class="k-btn k-ghost k-sm" data-act="sub-no">Не отменять</button>';
+  else{
+    if(s.status==='active')btns+='<button class="k-btn k-ghost k-sm" data-act="sub-do" data-id="'+esc(s.id)+'" data-v="pause">Поставить на паузу</button>';
+    if(s.status==='paused')btns+='<button class="k-btn k-sm" data-act="sub-do" data-id="'+esc(s.id)+'" data-v="resume">Возобновить</button>';
+    if(s.status==='active'||s.status==='paused'||s.status==='pending_payment')btns+='<button class="k-btn k-ghost k-sm" data-act="sub-ask" data-id="'+esc(s.id)+'">Отменить подписку</button>';
+  }
+  var dates=(s.nextVisits||[]).map(function(d){return'<span class="k-chip ok">'+esc(fromISO(d).toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'short'}))+'</span>'}).join('');
+  return'<div class="k-card"><div class="k-row k-between" style="align-items:flex-start"><div><h3 style="margin:0 0 4px">Поддерживающая уборка</h3><p class="k-muted k-small">'+esc(freqName(s.freq))+' по '+wdn+', '+esc(s.slot)+'</p></div><span class="k-chip '+st[1]+'">'+st[0]+'</span></div>'+
+    '<dl class="k-meta"><div><dt>Адрес</dt><dd>'+esc(s.address)+'</dd></div><div><dt>Площадь и тариф</dt><dd>'+s.area+' м², '+esc(PR.tariffs.filter(function(t){return t.id===s.tariff})[0].title)+'</dd></div>'+
+    '<div><dt>Стоимость</dt><dd>'+money(s.perCleaning)+' за уборку · '+money(s.perMonth)+' в месяц</dd></div><div><dt>Срок</dt><dd>до '+dFmt(s.endDate,true)+'</dd></div></dl>'+
+    (dates?'<p class="k-small k-muted" style="margin-bottom:6px">Ближайшие уборки</p><div class="k-dates">'+dates+'</div>':'')+
+    (btns?'<div class="k-row" style="margin-top:14px">'+btns+'</div>':'')+'</div>';
+}
+function subsTab(){
+  if(S.subDone){
+    var d=S.subDone,s=d.sub;
+    return'<div class="k-card k-done"><span class="k-okc">'+ic('check',28)+'</span><h3 style="margin:0;font-size:22px">Подписка оформлена</h3>'+
+      '<p class="k-muted">'+esc(freqName(s.freq))+' по '+WEEKDAYS[s.weekday-1]+', '+esc(s.slot)+'<br>'+esc(s.address)+'</p>'+
+      '<p><b>'+money(s.perCleaning)+' за уборку</b> · '+money(s.perMonth)+' в месяц</p>'+
+      '<p class="k-plus">Первая уборка: '+(s.nextVisits&&s.nextVisits[0]?dFmt(s.nextVisits[0],true):'—')+'</p>'+
+      (d.paymentUrl?'<a class="k-btn" href="'+esc(d.paymentUrl)+'">Перейти к оплате</a>':'<p class="k-muted k-small">Менеджер свяжется с вами и согласует оплату. Онлайн-оплата появится позже.</p>')+
+      '<div class="k-row"><button class="k-btn k-ghost" data-act="sub-close">Мои подписки</button><button class="k-btn k-ghost" data-act="tab" data-v="orders">Мои заказы</button></div></div>';
+  }
+  var list=S.subs.map(subCard).join(''),showForm=S.subNew||!S.subs.length;
+  var head='<div class="k-row k-between"><h3 style="font-size:22px">Подписка на уборку</h3>'+(S.subs.length&&!S.subNew?'<button class="k-btn k-sm" data-act="new-sub">'+ic('plus',16)+' Новая подписка</button>':'')+'</div>';
+  var intro=!S.subs.length?'<div class="k-card k-intro"><b>Регулярная уборка дешевле разовой.</b><p class="k-muted">Выберите частоту и срок: скидка до '+money(PR.subscription.discounts[12])+' с каждой уборки. Приедем в удобный день и время, подписку можно поставить на паузу или отменить.</p></div>':'';
+  return'<div class="k-stack">'+head+intro+(list?'<div class="k-stack">'+list+'</div>':'')+(showForm?(S.sform=S.sform||sformDefaults(),subForm()):'')+'</div>';
+}
+
+/* ---------- друзья и реферальная программа ---------- */
+function refText(){var R=S.ref;return'Рекомендую CleanHub: клининг, которому я доверяю. По моему промокоду '+R.code+' вы получите '+bonus(R.friendBonus)+' после первой уборки.'}
+function referralCard(){
+  var R=S.ref,link=encodeURIComponent(R.link),txt=encodeURIComponent(refText());
+  var refst={registered:['Зарегистрировался','blue'],ordered:['Ждём первую уборку','warn'],rewarded:['Бонусы начислены','ok']};
+  var list=R.invited.length?'<ul class="k-hist">'+R.invited.map(function(i){var st=refst[i.status]||refst.registered;return'<li><span>'+esc(i.name)+'<br><span class="k-muted k-small">'+dFmt(i.date,true)+'</span></span><span class="k-row" style="gap:8px;flex-wrap:nowrap"><span class="k-chip '+st[1]+'">'+st[0]+'</span>'+(i.reward?'<b class="k-plus k-num">+'+i.reward.toLocaleString('ru-RU')+'</b>':'')+'</span></li>'}).join('')+'</ul>':'<p class="k-muted">Пока никого. Отправьте промокод другу, и здесь появится его статус.</p>';
+  return'<div class="k-card k-ref" id="chlk-friends"><div class="k-grid k-refgrid"><div class="k-stack" style="gap:14px"><div><h3 style="margin:0 0 6px;font-size:20px">Приведи друга: по '+bonus(R.ownerBonus)+' вам обоим</h3>'+
+    '<p class="k-muted">Отправьте друзьям свой промокод. Когда друг сделает первую уборку, вы получите '+bonus(R.ownerBonus)+', а друг '+bonus(R.friendBonus)+'.</p></div>'+
+    '<div class="k-refcode"><span class="k-num">'+esc(R.code)+'</span><button class="k-btn k-sm" data-act="copy" data-v="'+esc(R.code)+'">'+ic('copy',16)+' Скопировать</button></div>'+
+    '<div class="k-row" style="gap:8px"><span class="k-small k-muted" style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">'+esc(R.link)+'</span><button class="k-link k-small" data-act="copy" data-v="'+esc(R.link)+'">Скопировать ссылку</button></div>'+
+    '<div class="k-share">'+(navigator.share?'<button class="k-btn k-sm" data-act="share">'+ic('gift',16)+' Поделиться</button>':'')+
+      '<a class="k-btn k-tg k-sm" target="_blank" rel="noopener" href="https://t.me/share/url?url='+link+'&text='+txt+'">'+ic('tg',16)+' Telegram</a>'+
+      '<a class="k-btn k-ghost k-sm" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(refText()+' '+R.link)+'">WhatsApp</a>'+
+      '<a class="k-btn k-ghost k-sm" target="_blank" rel="noopener" href="https://vk.com/share.php?url='+link+'&title='+txt+'">VK</a></div></div>'+
+    '<div class="k-stack" style="gap:14px"><div class="k-stats"><div class="k-stat"><b>'+R.totals.invited+'</b><span class="k-muted k-small">приглашено</span></div><div class="k-stat"><b>'+R.totals.rewarded+'</b><span class="k-muted k-small">сделали заказ</span></div><div class="k-stat"><b>'+R.totals.earned.toLocaleString('ru-RU')+'</b><span class="k-muted k-small">бонусов получено</span></div></div>'+list+'</div></div></div>';
+}
+
 function appView(){
   var u=S.user;
-  var tabs=[['overview','grid','Обзор'],['orders','bag','Заказы'],['bonuses','star','Бонусы'],['profile','user','Профиль']];
+  var tabs=[['overview','grid','Обзор'],['orders','bag','Заказы'],['subs','repeat','Подписка'],['bonuses','star','Бонусы'],['profile','user','Профиль']];
   var nav=tabs.map(function(t){return'<button role="tab" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(S.tab===t[0])+'">'+ic(t[1],18)+t[2]+'</button>'}).join('');
   if(S.tab==='order'&&!S.form)S.form=formDefaults();
-  var body={overview:overviewTab,orders:ordersTab,bonuses:bonusesTab,profile:profileTab,order:orderView}[S.tab]();
+  var body={overview:overviewTab,orders:ordersTab,bonuses:bonusesTab,profile:profileTab,order:orderView,subs:subsTab}[S.tab]();
   return'<div class="k-top"><div class="k-hello"><h2>Здравствуйте'+(u.name?', '+esc(u.name):'')+'!</h2><p class="k-muted">'+esc(u.phone)+'</p></div>'+
     '<div class="k-row"><div class="k-tabs" role="tablist">'+nav+'</div><button class="k-btn k-new" data-act="new-order">'+ic('plus',18)+' Заказать уборку</button><button class="k-btn k-ghost k-out" data-act="logout" aria-label="Выйти" title="Выйти">'+ic('out',18)+'</button></div></div>'+body;
 }
@@ -741,10 +1346,15 @@ function tickResend(restart){
   var cur=root.querySelector('[data-resend]');if(!cur)return;
   cur.innerHTML=T.left>0?'Повторно отправить код можно через '+T.left+' с':'<button class="k-link" data-act="resend">Отправить код ещё раз</button>';
 }
+function applyMe(m){
+  S.user=m.user;S.loy=m.loyalty;
+  S.ref=m.referral||{code:'',link:C.siteUrl,ownerBonus:C.referralOwnerBonus,friendBonus:C.referralFriendBonus,invited:[],totals:{invited:0,rewarded:0,earned:0}};
+  S.user.notify=S.user.notify||{tgOrders:true,tgPromo:false};S.user.addresses=S.user.addresses||[];
+}
 function enterApp(){
   S.busy=true;
-  return Promise.all([API.me(),API.orders()]).then(function(r){
-    S.user=r[0].user;S.loy=r[0].loyalty;S.orders=r[1]||[];S.user.notify=S.user.notify||{tgOrders:true,tgPromo:false};S.user.addresses=S.user.addresses||[];
+  return Promise.all([API.me(),API.orders(),API.subs()]).then(function(r){
+    applyMe(r[0]);S.orders=r[1]||[];S.subs=r[2]||[];
     S.draft={name:S.user.name||'',email:S.user.email||'',birthday:S.user.birthday||''};
     S.view='app';S.tab='overview';S.busy=false;S.err='';S.step='form';S.tg=null;render();
   });
@@ -760,8 +1370,8 @@ function sendCode(){
 function verify(){
   if(S.code.length<4){S.err='Введите 4 цифры из SMS.';return render()}
   S.busy=true;S.err='';render();
-  var reg=S.authTab==='reg'?{name:S.name.trim(),email:S.email.trim()}:null;
-  API.verify(S.phone,S.code,reg).then(function(r){if(r&&r.token)store.set('chlk_token',r.token);return enterApp()}).catch(function(e){S.code='';S.focus='#chlk-code';fail(e)});
+  var reg=S.authTab==='reg'?{name:S.name.trim(),email:S.email.trim(),refCode:(S.refCode||'').trim()}:null;
+  API.verify(S.phone,S.code,reg).then(function(r){if(r&&r.token)store.set('chlk_token',r.token);if(reg)store.del('chlk_ref');return enterApp().then(function(){if(r&&r.referralApplied)toast('Промокод друга применён: бонусы придут после вашей первой уборки')})}).catch(function(e){S.code='';S.focus='#chlk-code';fail(e)});
 }
 function startPoll(kind){
   clearInterval(T.poll);var n=0,tok=S.tg.token;
@@ -770,11 +1380,11 @@ function startPoll(kind){
     (kind==='auth'?API.tgAuthStatus(tok):API.tgStatus(tok)).then(function(r){
       if(!S.tg)return;
       if(kind==='auth'&&r.done){clearInterval(T.poll);if(r.token)store.set('chlk_token',r.token);S.tg=null;enterApp()}
-      if(kind==='link'&&r.connected){clearInterval(T.poll);S.tg=null;API.me().then(function(m){S.user=m.user;S.loy=m.loyalty;S.user.notify=S.user.notify||{tgOrders:true,tgPromo:false};render();toast('Telegram подключён')})}
+      if(kind==='link'&&r.connected){clearInterval(T.poll);S.tg=null;API.me().then(function(m){applyMe(m);render();toast('Telegram подключён')})}
     }).catch(function(){});
   },DEMO?1000:3000);
 }
-function logout(){stopTimers();API.logout();store.del('chlk_token');S={form:null,done:null,view:'auth',authTab:'login',step:'form',phone:'',name:'',email:'',agree:true,code:'',err:'',busy:false,tg:null,tab:'overview',filter:'all',open:{},user:null,loy:null,orders:[],draft:null,newAddr:'',promo:'',focus:null};render()}
+function logout(){stopTimers();API.logout();store.del('chlk_token');S=freshState();S.view='auth';render()}
 function copy(v){
   var done=function(){toast('Скопировано')};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,function(){toast('Не удалось скопировать: '+v)});
@@ -800,11 +1410,24 @@ root.addEventListener('click',function(e){
     case'tg-unlink':API.tgUnlink().then(function(){S.user.tg={connected:false,username:''};render();toast('Telegram отключён')}).catch(fail);break;
     case'demo-quick':API.quick(v).then(enterApp).catch(fail);break;
     case'demo-reset':stopTimers();API.reset();S.view='auth';S.tg=null;render();break;
-    case'tab':S.tab=v;if(v!=='order')S.done=null;render();break;
+    case'tab':S.tab=v;if(v!=='order')S.done=null;if(v!=='subs')S.subDone=null;render();break;
     case'new-order':S.done=null;S.form=formDefaults();S.tab='order';render();root.scrollIntoView({behavior:'smooth',block:'start'});break;
-    case'repeat':var src=S.orders.filter(function(x){return x.id===id})[0];S.done=null;S.form=formDefaults(src);S.tab='order';render();root.scrollIntoView({behavior:'smooth',block:'start'});toast(src&&src.svc?'Данные прошлого заказа подставлены':'Выберите услугу и проверьте детали');break;
-    case'pick-svc':var pv=svcById(S.form.service),ns=svcById(v);if(pv.id!==ns.id&&(pv.unit!==ns.unit||ns.unit!=='m2'))S.form.qty=ns.unit==='m2'?S.lastArea:(ns.def||1);S.form.service=v;render();break;
+    case'repeat':var src=S.orders.filter(function(x){return x.id===id})[0];S.done=null;S.form=formDefaults(src);S.tab='order';render();root.scrollIntoView({behavior:'smooth',block:'start'});toast(src&&src.svc?'Данные прошлого заказа подставлены':'Проверьте детали заказа');break;
+    case'pick-svc':S.form.service=v;render();break;
+    case'pick-tariff':if(S.tab==='subs'){S.sform.tariff=v;refreshSub()}else{S.form.tariff=v;refreshForm()}break;
+    case'qty':var xx=PR.extras.filter(function(q){return q.id===id})[0],nv=Math.max(0,Math.min(xx.max||99,(S.form.extras[id]||0)+Number(el.getAttribute('data-d'))));if(nv)S.form.extras[id]=nv;else delete S.form.extras[id];var qe=root.querySelector('[data-qty="'+id+'"]');if(qe)qe.textContent=nv;refreshForm();break;
+    case'grp':S.grpOpen[id]=!S.grpOpen[id];el.closest('.k-grp').classList.toggle('open',!!S.grpOpen[id]);el.setAttribute('aria-expanded',!!S.grpOpen[id]);break;
     case'submit-order':submitOrder();break;
+    case'new-sub':S.sform=sformDefaults();S.subNew=true;S.subDone=null;render();break;
+    case'sub-close':S.subDone=null;render();break;
+    case'pick-freq':S.sform.freq=Number(v);render();break;
+    case'pick-term':S.sform.months=Number(v);render();break;
+    case'submit-sub':submitSub();break;
+    case'sub-ask':S.confirm=id;render();break;
+    case'sub-no':S.confirm=null;render();break;
+    case'sub-do':S.confirm=null;API.subAction(id,v).then(function(r){S.subs=S.subs.map(function(x){return x.id===id?r.subscription:x});render();toast(v==='pause'?'Подписка поставлена на паузу':v==='resume'?'Подписка возобновлена':'Подписка отменена')}).catch(fail);break;
+    case'share':try{navigator.share({title:'CleanHub',text:refText(),url:S.ref.link}).catch(function(){})}catch(e){}break;
+    case'goto-friends':S.tab='bonuses';render();var fe=root.querySelector('#chlk-friends');if(fe)fe.scrollIntoView({behavior:'smooth',block:'start'});break;
     case'filter':S.filter=v;render();break;
     case'toggle-order':S.open[id]=!S.open[id];render();break;
     case'open-order':S.tab='orders';S.open[id]=true;render();break;
@@ -820,20 +1443,23 @@ root.addEventListener('click',function(e){
     case'promo':
       if(!S.promo.trim()){toast('Введите промокод','bad');break}
       S.busy=true;render();
-      API.promo(S.promo).then(function(){S.promo='';return API.me()}).then(function(m){S.busy=false;S.user=m.user;S.loy=m.loyalty;render();toast('Промокод применён, бонусы начислены')}).catch(fail);break;
+      API.promo(S.promo).then(function(){S.promo='';return API.me()}).then(function(m){S.busy=false;applyMe(m);render();toast('Промокод принят')}).catch(fail);break;
     case'logout':logout();break;
   }
 });
+var NUM={'f.area':1,'f.bonus':1,'s.area':1,'s.weekday':1};
+function onSubChange(b){if(b==='s.addrId'){render();return}refreshSub()}
 root.addEventListener('input',function(e){
   var el=e.target,b=el.getAttribute&&el.getAttribute('data-bind');if(!b)return;
-  if(b.indexOf('f.ex.')===0){S.form.extras[b.slice(5)]=el.checked;refreshForm();return}
-  if(el.type==='checkbox'){if(b.indexOf('f.')===0){S.form[b.slice(2)]=el.checked;onFormChange(b)}else S[b]=el.checked;return}
-  var val=el.value;
-  if(b==='f.qty'||b==='f.bonus')val=Number(val)||0;
+  if(b.indexOf('f.ex.')===0){var xid=b.slice(5);if(el.checked)S.form.extras[xid]=1;else delete S.form.extras[xid];refreshForm();return}
+  var val=el.type==='checkbox'?el.checked:el.value;
   if(b==='phone'){val=fmtPhone(val);el.value=val}
   if(b==='code'){val=digits(val).slice(0,4);el.value=val}
-  if(b.indexOf('f.')===0){S.form[b.slice(2)]=val;onFormChange(b);return}
-  if(b.indexOf('d.')===0)S.draft[b.slice(2)]=val;else S[b]=val;
+  if(b==='refCode'){val=val.toUpperCase();el.value=val}
+  if(NUM[b])val=Number(val)||0;
+  var m=b.match(/^([fds])\.(.+)$/);
+  if(m){({f:S.form,d:S.draft,s:S.sform})[m[1]][m[2]]=val;if(m[1]==='f')onFormChange(b);if(m[1]==='s')onSubChange(b);return}
+  S[b]=val;
   if(b==='code'&&val.length===4&&!S.busy)verify();
 });
 root.addEventListener('change',function(e){
