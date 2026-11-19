@@ -1351,8 +1351,21 @@ function applyMe(m){
   S.ref=m.referral||{code:'',link:C.siteUrl,ownerBonus:C.referralOwnerBonus,friendBonus:C.referralFriendBonus,invited:[],totals:{invited:0,rewarded:0,earned:0}};
   S.user.notify=S.user.notify||{tgOrders:true,tgPromo:false};S.user.addresses=S.user.addresses||[];
 }
+var lastRefresh=0;
+/* Подтягивает свежие данные из Битрикса (новые сделки, смена статусов) при заходе на вкладки. В демо не нужно. */
+function refreshData(){
+  if(DEMO||Date.now()-lastRefresh<8000)return;
+  lastRefresh=Date.now();
+  var tab=S.tab;
+  Promise.all([API.me(),API.orders(),API.subs()]).then(function(r){
+    if(S.view!=='app'||S.tab!==tab||S.confirm)return;
+    var a=document.activeElement,typing=a&&root.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName);
+    applyMe(r[0]);S.orders=r[1]||[];S.subs=r[2]||[];
+    if(!typing)render();
+  }).catch(function(){});
+}
 function enterApp(){
-  S.busy=true;
+  S.busy=true;lastRefresh=Date.now();
   return Promise.all([API.me(),API.orders(),API.subs()]).then(function(r){
     applyMe(r[0]);S.orders=r[1]||[];S.subs=r[2]||[];
     S.draft={name:S.user.name||'',email:S.user.email||'',birthday:S.user.birthday||''};
@@ -1410,7 +1423,7 @@ root.addEventListener('click',function(e){
     case'tg-unlink':API.tgUnlink().then(function(){S.user.tg={connected:false,username:''};render();toast('Telegram отключён')}).catch(fail);break;
     case'demo-quick':API.quick(v).then(enterApp).catch(fail);break;
     case'demo-reset':stopTimers();API.reset();S.view='auth';S.tg=null;render();break;
-    case'tab':S.tab=v;if(v!=='order')S.done=null;if(v!=='subs')S.subDone=null;render();break;
+    case'tab':S.tab=v;if(v!=='order')S.done=null;if(v!=='subs')S.subDone=null;render();if(v!=='order'&&v!=='profile')refreshData();break;
     case'new-order':S.done=null;S.form=formDefaults();S.tab='order';render();root.scrollIntoView({behavior:'smooth',block:'start'});break;
     case'repeat':var src=S.orders.filter(function(x){return x.id===id})[0];S.done=null;S.form=formDefaults(src);S.tab='order';render();root.scrollIntoView({behavior:'smooth',block:'start'});toast(src&&src.svc?'Данные прошлого заказа подставлены':'Проверьте детали заказа');break;
     case'pick-svc':S.form.service=v;render();break;
